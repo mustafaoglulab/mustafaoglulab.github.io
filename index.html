@@ -1,1 +1,94 @@
-Hello world!
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta content="Mustafaoglu Lab" name="Mustafaoglu Lab @ Sabanci University">
+        <meta content="Nur Mustafaoglu, Sabanci University" name="keywords">
+        <meta content="Copyright (c) 2020 Onur Varol" name="Copyright">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta property="og:title" content="Mustafaoglu Lab @ Sabanci University">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="http://mustafaoglulab.com/">
+        <meta property="og:image" content="http://mustafaoglulab.com/img/mustafaoglu-lab-logo.png">
+        <meta property="og:image:type" content="image/png">
+        <meta property="og:image:width" content="400">
+        <meta property="og:image:height" content="400">
+        <meta property="og:description" content="This site contains information about Mustafaoglu Lab.">
+        <link id="page_favicon" href="img/favicon.ico" rel="icon" type="image/x-icon" />
+        
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="css/custom.css" />
+        <link type="text/css" rel="stylesheet" href="css/hover-min.css" />
+
+        <title>Mustafaoglu Lab Website</title>
+
+        <style>
+            ul{
+              margin-left:3px;
+              padding-left: 15px;
+            }
+        </style>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('[data-toggle="tooltip"]').tooltip(); 
+                $('#header-container').load('template_header.html');
+                $('#footer-container').load('template_footer.html');
+            });
+        </script>
+
+    </head>
+
+    <body>
+        <div id="header-container"></div>
+        <div class="jumbotron" style="background-image: url(img/brains-banner-6.png);"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <h4>Lab news 📢</h4>
+                    <hr/>
+                    <ul>
+                        <li>
+                        	Nilufer Cakir joined us as a PhD student with 2244 program! 
+                        </li>
+                        <li>
+                        	Alireza Tajeddin joined us as a MSc student! 
+                        </li>
+                        <li>
+                        	Mustafaoglu Lab officially opened in January 1st, 2021!
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-7 col-md-7">
+                    <h2>Mustafaoglu Lab</h2>
+                     <p>
+                    	<img src="img/MustafaogluLab.png" width="100%"/>
+                    </p>
+                    <p>
+                        We are an interdisiciplinary group consists of molecular biologists, chemists, nano scientists, and engineers from different focuses. Our aim is to understand the brain and its diseases forms so that we can offer novel therapeutic solutions for them.
+                    </p>
+                    <p>
+                    	<img src="img/BrainProjects.png" width="100%"/>
+                    </p>
+                    <p>    
+                        We are also believe in "beauty of simplicity". We are finding simple solutions to complex diagnostic problems by designing inexpensive, sensitive, and easy to use biosensor systems that can be used in underdeveloped countries.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <a class="twitter-timeline" data-height="500" href="https://twitter.com/mustafaoglulab?ref_src=twsrc%5Etfw">Tweets by Mustafaoglu Lab</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="footer-container"></div>
+    </body>
+
+</html>

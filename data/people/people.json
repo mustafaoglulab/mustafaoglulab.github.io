@@ -1,0 +1,56 @@
+[
+    {
+        "name": "Nur",
+        "surname": "Mustafaoglu",
+        "role": "Principle Investigator",
+        "img": "pictures/Nur-Mustafaoglu.jpg",
+        "about": "the PI of the lab, carries scientific curiosity, friend of a cat (Yoda)",
+        "links": {
+            "email": "nur.mustafaoglu@sabanciuniv.edu",
+            "website": "http://www.nurmustafaoglu.com",
+            "scholar": "https://scholar.google.com/citations?user=-YfEr4cAAAAJ",
+            "twitter": "https://twitter.com/nurmustafaoglu",
+            "linkedin": "https://www.linkedin.com/in/nurmustafaoglu/"
+        }
+    },
+
+    {
+        "name": "Alireza",
+        "surname": "Tajeddin",
+        "role": "MSc student",
+        "img": "pictures/AlirezaTajeddin-2.jpg",
+        "about": "is a graduate student in the Mechatronics department. He has a background in Mechanical Engineering and Computational Fluid Dynamics",
+        "links": {
+            "email": "tajeddin@sabanciuniv.edu",
+            "website": "http://myweb.sabanciuniv.edu/tajeddin/",
+            "scholar": "https://scholar.google.com/citations?user=dStW4zYAAAAJ&hl=en"
+        }
+    },
+    {
+        "name": "Nilufer",
+        "surname": "Cakir",
+        "role": "MSc student",
+        "img": "pictures/NiluferCakir-3.jpg",
+        "about": "received her bachelor's degree in Bioengineering from Istanbul Technical University, Istanbul, in 2015. She completed her Master's studies in Bioengineering from Marmara University in 2019 and joined Sabanci University as a Ph.D. candidate in the BIO program",
+        "links": {
+            "email": "nilufercakir@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/nilufer-cakir-36321172/"
+        }
+    },
+    {
+        "name": "Ceren",
+        "surname": "Celebi",
+        "role": "BSc student",
+        "img": "pictures/CerenCelebi-2.jpg",
+        "about": "Hello, this is Ceren and I'm a senior who is studying Molecular Biology Genetics & Bioengieneering. I desire to become a successful  neuroscientist in the future. Sailing, dancing, traveling and modern art are among my hobbies :) ",
+        "links": {
+            "email": "cerencelebi@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/ceren-%C3%A7elebi-06a9161a3/"
+        }
+    }
+]
+
+
+
+
+
