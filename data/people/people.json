@@ -47,6 +47,18 @@
             "email": "cerencelebi@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/ceren-%C3%A7elebi-06a9161a3/"
         }
+    },
+    {
+        "name": "Jana",
+        "surname": "Al Khodor",
+        "role": "MSc student",
+        "img": "pictures/JanaAlKhodor-2.jpg",
+        "about": "So proud, been offered a place at Sabanci University as a MS candidate in the department of molecular biology, genetics and bioengineering after my bachelor degree in Biology from Beirut Arab University, Lebanon. An aspiring passionate scientist hoping to make real achievements in the near future with the good team!",
+        "links": {
+            "email": "jana.khodor@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/jana-al-khodor-8915261b5/",
+            "twitter": "https://twitter.com/janaalkhodor"
+        }
     }
 ]
 
