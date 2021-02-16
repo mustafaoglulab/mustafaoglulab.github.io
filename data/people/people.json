@@ -38,6 +38,17 @@
         }
     },
     {
+        "name": "Eda",
+        "surname": "Kus",
+        "role": "MSc student",
+        "img": "pictures/EdaKus.jpeg",
+        "about": "Genetics and Bioengineering graduate of Istanbul Bilgi University. Pursuing Master's in Molecular Biology, Genetics and Bioengineering program at Sabancı University",
+        "links": {
+            "email": "eda.kus@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/edakus/",
+        }
+    },
+    {
         "name": "Ceren",
         "surname": "Celebi",
         "role": "BSc student",
