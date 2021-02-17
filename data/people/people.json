@@ -60,6 +60,17 @@
         }
     },
     {
+        "name": "Yomna",
+        "surname": "Soliman",
+        "role": "MSc student",
+        "img": "pictures/YomnaSoliman.jpeg",
+        "about": "is a graduate student aims to understand the brain and its disease forms in order to offer novel therapeutic solutions for them. She has worked as a TA in Biochemistry at Mansoura University, Egypt since 2018. She has previously worked as a Pharmacist after graduation. She has graduated from the Faculty of Pharmacy, Mansoura University, Egypt with a BSc in Pharmaceutical Sciences in 2017",
+        "links": {
+            "email": "yomna@sabanciuniv.edu",
+            "twitter": "https://twitter.com/YomnaSoliman94"
+        }
+    },
+    {
         "name": "Jana",
         "surname": "Al Khodor",
         "role": "MSc student",
