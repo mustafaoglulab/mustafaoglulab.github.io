@@ -60,6 +60,18 @@
         }
     },
     {
+        "name": "Gulin",
+        "surname": "Baran",
+        "role": "PhD student",
+        "img": "pictures/GulinBaran.jpg",
+        "about": "is graduate student in BIO program at Sabancı University, having a bachelors degree from Yeditepe University and master degree from Acibadem University. She is interested in understanding of neurodegenerative and neuropsychiatric diseases by creating disease models, and using pharmacogenomic approches to find novel treatment methods. She is crazy about theater and movies.",
+        "links": {
+            "email": "gulinbaran@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=stUItLAAAAAJ&hl=en",
+            "linkedin": "https://www.linkedin.com/in/g%C3% BClin-baran-6b683297"
+        }
+    },
+    {
         "name": "Yomna",
         "surname": "Soliman",
         "role": "MSc student",
