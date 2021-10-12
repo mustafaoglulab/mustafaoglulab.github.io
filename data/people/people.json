@@ -86,10 +86,10 @@
         "name": "Fereshteh",
         "surname": "Ramezani",
         "role": "Visiting PhD student",
-        "img": "pictures/FereshtehRamezani.jpg",
+        "img": "pictures/FereshtehRamezani.png",
         "about": "is a visiting student from the Tarbiat Modares University of Iran. She has a background in biotechnology, biochemistry, and molecular biology techniques also she is interested in Brain and neurological science. Her master thesis was on the bacterial surface display.",
         "links": {
-            "email": "fereshteh.ramezani@sabanciuniv.edu",
+            "email": "fereshteh.ramezani@sabanciuniv.edu"
         }
     }
 ]
