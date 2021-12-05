@@ -75,3 +75,9 @@ a:before {
 a:hover:before, .hvr-underline-from-left:focus:before, .hvr-underline-from-left:active:before {
     right: 0;
 }
+
+ul.no-bullets {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
