@@ -86,7 +86,7 @@
         "name": "Efe",
         "surname": "Caferoglu",
         "role": "BSc student",
-        "img": "pictures/EfeCaferoglu.jpeg",
+        "img": "pictures/EfeCaferoglu.jpg",
         "about": "is a senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. He loves science, philosophy and his bass guitar.",
         "links": {
             "email": "efecaferoglu@sabanciuniv.edu",
@@ -97,7 +97,7 @@
         "name": "Melis",
         "surname": "Konar",
         "role": "BSc student",
-        "img": "pictures/MelisKonar.jpeg",
+        "img": "pictures/MelisKonar.jpg",
         "about": "Senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. Always excited to learn new things and is very passionate about art history.",
         "links": {
             "email": "konarmelis@sabanciuniv.edu",
