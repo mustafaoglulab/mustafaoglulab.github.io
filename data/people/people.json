@@ -51,7 +51,7 @@
     {
         "name": "Ceren",
         "surname": "Celebi",
-        "role": "BSc student",
+        "role": "Alumni - BSc Student",
         "img": "pictures/CerenCelebi-2.jpg",
         "about": "is a senior Molecular Biology Genetics & Bioengieneering student. She desires to become a successful neuroscientist in the future. Sailing, dancing, traveling and modern art are among her hobbies :) ",
         "links": {
@@ -83,9 +83,31 @@
         }
     },
     {
+        "name": "Efe",
+        "surname": "Caferoglu",
+        "role": "BSc student",
+        "img": "pictures/EfeCaferoglu.jpeg",
+        "about": "is a senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. He loves science, philosophy and his bass guitar.",
+        "links": {
+            "email": "efecaferoglu@sabanciuniv.edu",
+            "twitter": "https://twitter.com/efe_cfrgl"
+        }
+    },
+    {
+        "name": "Melis",
+        "surname": "Konar",
+        "role": "BSc student",
+        "img": "pictures/MelisKonar.jpeg",
+        "about": "Senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. Always excited to learn new things and is very passionate about art history.",
+        "links": {
+            "email": "konarmelis@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
+        }
+    },
+    {
         "name": "Fereshteh",
         "surname": "Ramezani",
-        "role": "Visiting PhD student",
+        "role": "Alumni - Visiting PhD student",
         "img": "pictures/FereshtehRamezani.png",
         "about": "is a visiting student from the Tarbiat Modares University of Iran. She has a background in biotechnology, biochemistry, and molecular biology techniques also she is interested in Brain and neurological science. Her master thesis was on the bacterial surface display.",
         "links": {
