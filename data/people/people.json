@@ -113,6 +113,16 @@
         "links": {
             "email": "fereshteh.ramezani@sabanciuniv.edu"
         }
+    },
+    {
+        "name": "Nafisa",
+        "surname": "Tanjia",
+        "role": "PhD student",
+        "img": "pictures/NafisaTanjia.jpg",
+        "about": "Nafisa is a PhD student in the BIO program at Sabancı University. She completed her bachelor’s degree in Pharmacy and master’s degree in Clinical Pharmacy and Molecular Pharmacology from East West University, Dhaka, Bangladesh.",
+        "links": {
+            "email": "nafisa.tanjia@sabanciuniv.edu"
+        }
     }
 ]
 
