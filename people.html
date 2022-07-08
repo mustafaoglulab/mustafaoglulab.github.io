@@ -122,7 +122,12 @@
                 plist = _.filter(profiles, function(p){ return p['role'] !== "Principle Investigator"; });
                 plist = _.sortBy(plist, function(p){ return p['name']; });
                 for (var i=0; i<plist.length; i++){
-                    $('#member-container').append(draw_card(plist[i]));
+                    if(plist[i]['code'] == "Alumni"){
+                        $('#alumni-container').append(draw_card(plist[i]));
+                    }
+                    else{
+                        $('#member-container').append(draw_card(plist[i]));
+                    }
                 }
             }
 
@@ -147,6 +152,10 @@
         <div class="container">
             <div class="row">
                 <div id="member-container" class="card-deck"></div>
+            </div>
+            <h2>Lab Alumni</h2><br/>
+            <div class="row">
+                <div id="alumni-container" class="card-deck"></div>
             </div>
         </div>
         <br>

@@ -2,6 +2,7 @@
     {
         "name": "Nur",
         "surname": "Mustafaoglu",
+        "code": "PI",
         "role": "Principle Investigator",
         "img": "pictures/Nur-Mustafaoglu.jpg",
         "about": "the PI of the lab, carries scientific curiosity, friend of a cat (Yoda)",
@@ -17,6 +18,7 @@
     {
         "name": "Alireza",
         "surname": "Tajeddin",
+        "code": "MSc",
         "role": "MSc student",
         "img": "pictures/AlirezaTajeddin-2.jpg",
         "about": "is a graduate student in the Mechatronics department. He has a background in Mechanical Engineering and Computational Fluid Dynamics",
@@ -29,6 +31,7 @@
     {
         "name": "Nilufer",
         "surname": "Cakir",
+        "code": "PhD",
         "role": "PhD student",
         "img": "pictures/NiluferCakir-3.jpg",
         "about": "received her bachelor's degree in Bioengineering from Istanbul Technical University in 2015. She completed her Master's studies in Bioengineering from Marmara University in 2019 and joined Sabanci University as a Ph.D. candidate in the BIO program",
@@ -40,6 +43,7 @@
     {
         "name": "Eda",
         "surname": "Kus",
+        "code": "MSc",
         "role": "MSc student",
         "img": "pictures/EdaKus.jpeg",
         "about": "Genetics and Bioengineering graduate of Istanbul Bilgi University. Pursuing Master's in Molecular Biology, Genetics and Bioengineering program at Sabancı University",
@@ -51,17 +55,18 @@
     {
         "name": "Ceren",
         "surname": "Celebi",
+        "code": "Alumni",
         "role": "Alumni - BSc Student",
         "img": "pictures/CerenCelebi-2.jpg",
         "about": "is a senior Molecular Biology Genetics & Bioengieneering student. She desires to become a successful neuroscientist in the future. Sailing, dancing, traveling and modern art are among her hobbies :) ",
         "links": {
-            "email": "cerencelebi@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/ceren-%C3%A7elebi-06a9161a3/"
         }
     },
     {
         "name": "Gulin",
         "surname": "Baran",
+        "code": "PhD",
         "role": "PhD student",
         "img": "pictures/GulinBaran.jpg",
         "about": "is graduate student in BIO program at Sabancı University, having a bachelors degree from Yeditepe University and master degree from Acibadem University. She is interested in understanding of neurodegenerative and neuropsychiatric diseases by creating disease models, and using pharmacogenomic approches to find novel treatment methods. She is crazy about theater and movies.",
@@ -74,6 +79,7 @@
     {
         "name": "Yomna",
         "surname": "Soliman",
+        "code": "MSc",
         "role": "MSc student",
         "img": "pictures/YomnaSoliman.jpeg",
         "about": "is a graduate student aims to understand the brain and its disease forms in order to offer novel therapeutic solutions for them. She has worked as a TA in Biochemistry at Mansoura University, Egypt since 2018. She has previously worked as a Pharmacist after graduation. She has graduated from the Faculty of Pharmacy, Mansoura University, Egypt with a BSc in Pharmaceutical Sciences in 2017",
@@ -85,6 +91,7 @@
     {
         "name": "Efe",
         "surname": "Caferoglu",
+        "code": "BSc",
         "role": "BSc student",
         "img": "pictures/EfeCaferoglu.jpg",
         "about": "is a senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. He loves science, philosophy and his bass guitar.",
@@ -96,6 +103,7 @@
     {
         "name": "Melis",
         "surname": "Konar",
+        "code": "BSc",
         "role": "BSc student",
         "img": "pictures/MelisKonar.jpg",
         "about": "Senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. Always excited to learn new things and is very passionate about art history.",
@@ -107,16 +115,17 @@
     {
         "name": "Fereshteh",
         "surname": "Ramezani",
+        "code": "Alumni",
         "role": "Alumni - Visiting PhD student",
         "img": "pictures/FereshtehRamezani.png",
         "about": "is a visiting student from the Tarbiat Modares University of Iran. She has a background in biotechnology, biochemistry, and molecular biology techniques also she is interested in Brain and neurological science. Her master thesis was on the bacterial surface display.",
         "links": {
-            "email": "fereshteh.ramezani@sabanciuniv.edu"
         }
     },
     {
         "name": "Nafisa",
         "surname": "Tanjia",
+        "code": "PhD",
         "role": "PhD student",
         "img": "pictures/NafisaTanjia.jpg",
         "about": "Nafisa is a PhD student in the BIO program at Sabancı University. She completed her bachelor’s degree in Pharmacy and master’s degree in Clinical Pharmacy and Molecular Pharmacology from East West University, Dhaka, Bangladesh.",
