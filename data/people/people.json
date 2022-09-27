@@ -56,7 +56,7 @@
         "name": "Ceren",
         "surname": "Celebi",
         "code": "Alumni",
-        "role": "BSc Student (Jan 2021 - Jan 2022)",
+        "role": "BSc Student (01/2021 - 01/2022)",
         "img": "pictures/CerenCelebi-2.jpg",
         "about": "Next Position: Clinical Trial Assistant & Application Specialist at Pfizer",
         "links": {
@@ -91,10 +91,10 @@
     {
         "name": "Efe",
         "surname": "Caferoglu",
-        "code": "BSc",
-        "role": "BSc student",
+        "code": "Alumni",
+        "role": "BSc student (09/2021 - 09/2022)",
         "img": "pictures/EfeCaferoglu.jpg",
-        "about": "is a senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. He loves science, philosophy and his bass guitar.",
+        "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg",
         "links": {
             "email": "efecaferoglu@sabanciuniv.edu",
             "twitter": "https://twitter.com/efe_cfrgl"
@@ -103,10 +103,10 @@
     {
         "name": "Melis",
         "surname": "Konar",
-        "code": "BSc",
-        "role": "BSc student",
+        "code": "Alumni",
+        "role": "BSc student (09/2021 - 09/2022)",
         "img": "pictures/MelisKonar.jpg",
-        "about": "Senior Molecular Biology, Genetics and Bioengineering undergrad from Sabanci University. Always excited to learn new things and is very passionate about art history.",
+        "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg",
         "links": {
             "email": "konarmelis@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
@@ -116,7 +116,7 @@
         "name": "Fereshteh",
         "surname": "Ramezani",
         "code": "Alumni",
-        "role": "Visiting PhD student (Oct 2021 - Jan 2022)",
+        "role": "Visiting PhD student (10/2021 - 01/2022)",
         "img": "pictures/FereshtehRamezani.png",
         "about": "Next Position: PhD Student at Tarbiat Modares University",
         "links": {
