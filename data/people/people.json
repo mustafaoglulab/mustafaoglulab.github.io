@@ -5,7 +5,7 @@
         "code": "PI",
         "role": "Principle Investigator",
         "img": "pictures/Nur-Mustafaoglu.jpg",
-        "about": "the PI of the lab, carries scientific curiosity, friend of a cat (Yoda)",
+        "about": "the PI of the lab, carries scientific curiosity, friend of cats",
         "links": {
             "email": "nur.mustafaoglu@sabanciuniv.edu",
             "website": "http://www.nurmustafaoglu.com",
@@ -18,8 +18,21 @@
     {
         "name": "Alireza",
         "surname": "Tajeddin",
-        "code": "MSc",
-        "role": "MSc student",
+        "code": "Alumni",
+        "role": "MSc student (01/2021 - 08/2022)",
+        "img": "pictures/AlirezaTajeddin-2.jpg",
+        "about": "Next Position: PhD Student in Mustafaoglu Lab at Sabanci University",
+        "links": {
+            "email": "tajeddin@sabanciuniv.edu",
+            "website": "http://myweb.sabanciuniv.edu/tajeddin/",
+            "scholar": "https://scholar.google.com/citations?user=dStW4zYAAAAJ&hl=en"
+        }
+    },
+    {
+        "name": "Alireza",
+        "surname": "Tajeddin",
+        "code": "PhD",
+        "role": "PhD student",
         "img": "pictures/AlirezaTajeddin-2.jpg",
         "about": "is a graduate student in the Mechatronics department. He has a background in Mechanical Engineering and Computational Fluid Dynamics",
         "links": {
@@ -28,6 +41,7 @@
             "scholar": "https://scholar.google.com/citations?user=dStW4zYAAAAJ&hl=en"
         }
     },
+
     {
         "name": "Nilufer",
         "surname": "Cakir",
