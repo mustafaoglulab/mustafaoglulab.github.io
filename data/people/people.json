@@ -116,7 +116,6 @@
         "img": "pictures/EfeCaferoglu.jpg",
         "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg",
         "links": {
-            "email": "efecaferoglu@sabanciuniv.edu",
             "twitter": "https://twitter.com/efe_cfrgl"
         }
     },
@@ -129,7 +128,6 @@
         "img": "pictures/MelisKonar.jpg",
         "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg",
         "links": {
-            "email": "konarmelis@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
         }
     },
@@ -156,6 +154,19 @@
         "links": {
             "email": "cerenuslu@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/cerenuslu/"
+        }
+    },
+
+    {
+        "name": "Ozan",
+        "surname": "Selcuk",
+        "code": "Undergrad",
+        "role": "STAR Intern",
+        "img": "pictures/OzanSelcuk.jpeg",
+        "about": "is an undergraduate student in Sabancı University. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
+        "links": {
+            "email": "ozanselcuk@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
         }
     },
     
