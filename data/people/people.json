@@ -169,6 +169,18 @@
             "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
         }
     },
+
+    {
+        "name": "Gulnaz",
+        "surname": "Yildirim Koken",
+        "code": "Postdoc",
+        "role": "Postdoctoral Researcher",
+        "img": "pictures/GulnazYildirimKoken.jpg",
+        "about": "Gülnaz is a postdoctoral researcher at Sabancı University Nanotechnology Research and Application Center. After completing her undergraduate and graduate studies in biology at Istanbul University, she graduated from Yıldız Technical University, Department of Bioengineering",
+        "links": {
+            "email": "gulnaz.koken@sabanciuniv.edu"
+        }
+    },
     
     {
         "name": "Nafisa",
