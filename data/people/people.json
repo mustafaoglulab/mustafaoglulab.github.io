@@ -166,7 +166,7 @@
         "about": "is an undergraduate student in Sabancı University. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
         "links": {
             "email": "ozanselcuk@sabanciuniv.edu",
-            "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
+            "linkedin": "https://www.linkedin.com/in/zeynep-do%C4%9Fan-528b93151"
         }
     },
 
@@ -179,6 +179,20 @@
         "about": "Gülnaz is a postdoctoral researcher at Sabancı University Nanotechnology Research and Application Center. After completing her undergraduate and graduate studies in biology at Istanbul University, she graduated from Yıldız Technical University, Department of Bioengineering",
         "links": {
             "email": "gulnaz.koken@sabanciuniv.edu"
+        }
+    },
+
+    {
+        "name": "Zeynep",
+        "surname": "Dogan",
+        "code": "MSc",
+        "role": "Msc Student",
+        "img": "pictures/ZeynepDogan.jpg",
+        "about": "received her bachelor's degrees from the BIO and MAT programs of Sabancı University. As a master's student, she is now searching for the peptide shuttles that can cross the blood-brain barrier, for drug delivery. She loves stem cells, flowers and playing basketball.",
+        "links": {
+            "email": "zeynepdogan@sabanciuniv.edu",
+            "twitter": "https://twitter.com/eflatun_hucre?t=grlLtMMNwQpU0sWKH6XRdg&s=09",
+            "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
         }
     },
     
