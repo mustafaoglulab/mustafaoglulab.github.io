@@ -183,6 +183,20 @@
     },
 
     {
+        "name": "Gulsah",
+        "surname": "Sevimli",
+        "code": "PhD",
+        "role": "PhD student",
+        "img": "pictures/GulsahSevimli.jpg",
+        "about": "Gülşah Sevimli accomplished her BA from Istanbul Bilgi University in 2019 and her MSc at Sabanci University in 2022. Now, she joined Mustafaoglu Lab to continue her research as a PhD student in the BIO program.",
+        "links": {
+            "email": "gulsahsevimli@sabanciuniv.edu",
+           	"linkedin": "https://www.linkedin.com/in/g%C3%BCl%C5%9Fah-sevimli-b38495243/",
+           	"scholar": "https://scholar.google.com/citations?user=eXCWUC4AAAAJ&hl=en&oi=ao"
+        }
+    },
+
+    {
         "name": "Zeynep",
         "surname": "Dogan",
         "code": "MSc",
