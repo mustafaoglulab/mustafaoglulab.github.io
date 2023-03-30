@@ -76,8 +76,23 @@
               color: gray;*/
               transform: rotateY(180deg);
             }
-            #member-container {width: 100%;}
-            #alumni-container {width: 70%;}
+
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .member-container {
+                flex: 1;
+                background-color: lightblue;
+            }
+
+            .alumni-container {
+            flex: 0.5;
+            background-color: lightgreen;
+            }
+
+            
         </style>
 
         <script type="text/javascript">
