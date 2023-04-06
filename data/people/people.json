@@ -190,9 +190,10 @@
         "img": "pictures/IremKiris.jpeg",
         "about": "is a postdoctoral researcher at Sabancı University Nanotechnology Research and Application Center. After completing her undergraduate and graduate studies in biology at Istanbul University, she graduated from Yıldız Technical University, Department of Bioengineering",
         "links": {
-            "email": "irem.kiris@sabanciuniv.edu"
-            "linkedin": "https://www.linkedin.com/in/irem-kırış-0529b8aa/"
+            "email": "irem.kiris@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/irem-kırış-0529b8aa/",
             "scholar": "https://scholar.google.com/citations?user=K9WGzpAAAAAJ&hl=en"
+
         }
     },
 
