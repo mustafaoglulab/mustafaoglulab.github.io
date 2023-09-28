@@ -59,8 +59,8 @@
     {
         "name": "Eda",
         "surname": "Kus",
-        "code": "MSc",
-        "role": "MSc student",
+        "code": "Alumni",
+        "role": "MSc student (02/2021 - 06/2023)",
         "img": "pictures/EdaKus.jpeg",
         "about": "Genetics and Bioengineering graduate of Istanbul Bilgi University. Pursuing Master's in Molecular Biology, Genetics and Bioengineering program at Sabancı University",
         "links": {
@@ -98,8 +98,8 @@
     {
         "name": "Yomna",
         "surname": "Soliman",
-        "code": "MSc",
-        "role": "MSc student",
+        "code": "Alumni",
+        "role": "MSc student (02/2021 - 06/2023",
         "img": "pictures/YomnaSoliman.jpeg",
         "about": "is a graduate student aims to understand the brain and its disease forms in order to offer novel therapeutic solutions for them. She has worked as a TA in Biochemistry at Mansoura University, Egypt since 2018. She has previously worked as a Pharmacist after graduation. She has graduated from the Faculty of Pharmacy, Mansoura University, Egypt with a BSc in Pharmaceutical Sciences in 2017",
         "links": {
@@ -173,10 +173,10 @@
     {
         "name": "Gulnaz",
         "surname": "Yildirim Koken",
-        "code": "Postdoc",
-        "role": "Postdoctoral Researcher",
+        "code": "Alumni",
+        "role": "Postdoctoral Researcher (10/2022 - 09/2023)",
         "img": "pictures/GulnazYildirimKoken.jpg",
-        "about": "is a postdoctoral researcher at Sabancı University Nanotechnology Research and Application Center. After completing her undergraduate and graduate studies in biology at Istanbul University, she graduated from Yıldız Technical University, Department of Bioengineering",
+        "about": "Next Position: Postdoc at Czech Academy of Sciences, Institute of Physiology, Laboratory of Adipose Tissue Biolog",
         "links": {
             "email": "gulnaz.koken@sabanciuniv.edu"
         }
@@ -225,6 +225,20 @@
         }
     },
     
+    {
+        "name": "Sahar",
+        "surname": "Porrang",
+        "code": "Postdoc",
+        "role": "Postdoctoral Researcher",
+        "img": "pictures/SaharPorrang.jpg",
+        "about": "is a postdoctoral researcher funded by Marie Skłodowska-Curie Actions. Her research interests are in biocompatible and green advance nanomaterials and their surface engineering for diseases treatment and tumor-targeted stimuli-responsive drug delivery systems.",
+        "links": {
+            "email": "sahar.porrang@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=shzgXrsAAAAJ&hl=en",
+            "linkedin": "https://www.linkedin.com/in/sahar-porrang-765a6a23b/"
+        }
+    },
+
     {
         "name": "Nafisa",
         "surname": "Tanjia",
