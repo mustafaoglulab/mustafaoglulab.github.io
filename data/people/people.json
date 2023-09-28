@@ -278,6 +278,19 @@
     },
 
     {
+        "name": "Ahmet Baki",
+        "surname": "Sahin",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/AhmetBakiSahin.jpg",
+        "about": "is a master's student in the BIO program at Sabancı University and received his bachelor's degree from the KFAU. His research interests are neurobiology and drug delivery.",
+        "links": {
+            "email": "ahmet.sahin@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/ahmet-baki-%C5%9Fahin/"
+        }
+    },
+
+    {
         "name": "Zulal",
         "surname": "Muganli",
         "code": "PhD",
