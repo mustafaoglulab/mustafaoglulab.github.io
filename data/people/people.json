@@ -245,9 +245,22 @@
         "code": "PhD",
         "role": "PhD student",
         "img": "pictures/NafisaTanjia.jpg",
-        "about": "Nafisa is a PhD student in the BIO program at Sabancı University. She completed her bachelor’s degree in Pharmacy and master’s degree in Clinical Pharmacy and Molecular Pharmacology from East West University, Dhaka, Bangladesh.",
+        "about": "is a PhD student in the BIO program at Sabancı University. She completed her bachelor’s degree in Pharmacy and master’s degree in Clinical Pharmacy and Molecular Pharmacology from East West University, Dhaka, Bangladesh.",
         "links": {
             "email": "nafisa.tanjia@sabanciuniv.edu"
+        }
+    },
+
+    {
+        "name": "Gizem",
+        "surname": "Celebi Torabfam",
+        "code": "PhD",
+        "role": "PhD student",
+        "img": "pictures/GizemCelebiTorabfam.jpg",
+        "about": "is a PhD candidate at Sabancı University. She completed her BSc at ITU and her MSc in Genetics at Istanbul University. Her research interests are biophysics and molecular biology.",
+        "links": {
+            "email": "nizemcelebi@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=jtv0qZEAAAAJ&hl=en"
         }
     }
 ]
