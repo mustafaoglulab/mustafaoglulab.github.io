@@ -19,23 +19,9 @@
         "name": "Alireza",
         "surname": "Tajeddin",
         "code": "Alumni",
-        "role": "MSc student (01/2021 - 08/2022)",
+        "role": "MSc student (01/2021 - 06/2023)",
         "img": "pictures/AlirezaTajeddin-2.jpg",
-        "about": "Next Position: PhD Student in Mustafaoglu Lab at Sabanci University",
-        "links": {
-            "email": "tajeddin@sabanciuniv.edu",
-            "website": "http://myweb.sabanciuniv.edu/tajeddin/",
-            "scholar": "https://scholar.google.com/citations?user=dStW4zYAAAAJ&hl=en"
-        }
-    },
-
-    {
-        "name": "Alireza",
-        "surname": "Tajeddin",
-        "code": "Alumni",
-        "role": "PhD student (08/2022 - 06/2023)",
-        "img": "pictures/AlirezaTajeddin-2.jpg",
-        "about": "Next Position: PhD Student at TU Delft",
+        "about": "Next Position: PhD Student at TU Delft, Netherlands",
         "links": {
             "email": "tajeddin@sabanciuniv.edu",
             "website": "http://myweb.sabanciuniv.edu/tajeddin/",
@@ -60,7 +46,7 @@
         "name": "Eda",
         "surname": "Kus",
         "code": "Alumni",
-        "role": "MSc student (02/2021 - 06/2023)",
+        "role": "MSc student (02/2021 - 07/2023)",
         "img": "pictures/EdaKus.jpeg",
         "about": "Genetics and Bioengineering graduate of Istanbul Bilgi University. Pursuing Master's in Molecular Biology, Genetics and Bioengineering program at Sabancı University",
         "links": {
@@ -99,7 +85,7 @@
         "name": "Yomna",
         "surname": "Soliman",
         "code": "Alumni",
-        "role": "MSc student (02/2021 - 06/2023",
+        "role": "MSc student (02/2021 - 07/2023)",
         "img": "pictures/YomnaSoliman.jpeg",
         "about": "is a graduate student aims to understand the brain and its disease forms in order to offer novel therapeutic solutions for them. She has worked as a TA in Biochemistry at Mansoura University, Egypt since 2018. She has previously worked as a Pharmacist after graduation. She has graduated from the Faculty of Pharmacy, Mansoura University, Egypt with a BSc in Pharmaceutical Sciences in 2017",
         "links": {
