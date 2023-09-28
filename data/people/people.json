@@ -262,6 +262,19 @@
             "email": "gizemcelebi@sabanciuniv.edu",
             "scholar": "https://scholar.google.com/citations?user=jtv0qZEAAAAJ&hl=en"
         }
+    },
+
+    {
+        "name": "Zulal",
+        "surname": "Muganli",
+        "code": "PhD",
+        "role": "PhD student",
+        "img": "pictures/ZulalMuganli.jpg",
+        "about": "is a PhD student in the BIO program at Sabancı University. She is interested in designing novel gut-on-a-chip platforms to utilize them in organ/disease modeling. She loves planting and hiking.",
+        "links": {
+            "email": "zulalmuganli@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=jnJnO00AAAAJ&hl=en&oi=ao"
+        }
     }
 ]
 
