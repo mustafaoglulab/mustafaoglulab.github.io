@@ -215,7 +215,7 @@
         "name": "Zeynep",
         "surname": "Dogan",
         "code": "MSc",
-        "role": "Msc Student",
+        "role": "MSc Student",
         "img": "pictures/ZeynepDogan.jpg",
         "about": "received her bachelor's degrees from the BIO and MAT programs of Sabancı University. As a master's student, she is now searching for the peptide shuttles that can cross the blood-brain barrier, for drug delivery. She loves stem cells, flowers and playing basketball.",
         "links": {
@@ -261,6 +261,19 @@
         "links": {
             "email": "gizemcelebi@sabanciuniv.edu",
             "scholar": "https://scholar.google.com/citations?user=jtv0qZEAAAAJ&hl=en"
+        }
+    },
+
+    {
+        "name": "Sumeyra Nuran",
+        "surname": "Ozmen",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/SumeyraNuran.jpg",
+        "about": "is completed her bachelor's degree in molecular biology & genetics at METU. She is curious about brain diseases, blood-brain barrier, and organ-on-a-chip models. She loves animals and playing theatre.",
+        "links": {
+            "email": "sumeyra.ozmen@sabanciuniv.edu",
+            "linkedin": "linkedin.com/in/sumeyra-nuran-ozmen/"
         }
     },
 
