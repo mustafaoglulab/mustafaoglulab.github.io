@@ -277,6 +277,20 @@
     },
 
     {
+        "name": "Nima",
+        "surname": "Muhammadi",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/NimaMohammadi.jpg",
+        "about": "an M.Sc. student in the MAT program at Sabanci University, holds a B.Sc. in Chemical Engineering with a research background focusing on adsorptive water treatment. He has joined the Mustafaoglu lab to contribute to the development of lignin-based biocomposite surgical patches.",
+        "links": {
+            "email": "nima.mohammadi@sabanciuniv.edu ",
+            "scholar": "https://scholar.google.com/citations?user=tvUFLqEAAAAJ&amp;hl=en",
+            "linkedin": "https://www.linkedin.com/in/nima-mohammadi-958322172/"
+        }
+    },
+
+    {
         "name": "Zulal",
         "surname": "Muganli",
         "code": "PhD",
