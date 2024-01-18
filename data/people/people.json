@@ -48,7 +48,7 @@
         "code": "Alumni",
         "role": "MSc student (02/2021 - 07/2023)",
         "img": "pictures/EdaKus.jpeg",
-        "about": "Genetics and Bioengineering graduate of Istanbul Bilgi University. Pursuing Master's in Molecular Biology, Genetics and Bioengineering program at Sabancı University",
+        "about": "Next Position: Senior Site Activation Coordinator at IQVIA",
         "links": {
             "email": "eda.kus@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/edakus/"
@@ -287,6 +287,19 @@
             "email": "nima.mohammadi@sabanciuniv.edu ",
             "scholar": "https://scholar.google.com/citations?user=tvUFLqEAAAAJ&amp;hl=en",
             "linkedin": "https://www.linkedin.com/in/nima-mohammadi-958322172/"
+        }
+    },
+
+    {
+        "name": "Yesim",
+        "surname": "Erdogan",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/YesimErdogan.jpg",
+        "about": "a master's student in the BIO program at SU and received her Bachelor's degree from Gebze Technical University. Her research interests are 3D bioprinting and neurobiology.",
+        "links": {
+            "email": "yesim.erdogan1@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/yesim-erdogan/"
         }
     },
 
