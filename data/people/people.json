@@ -32,10 +32,10 @@
     {
         "name": "Nilufer",
         "surname": "Cakir",
-        "code": "PhD",
-        "role": "PhD student",
+        "code": "Alumni",
+        "role": "PhD student (01/2021 - 01/2024)",
         "img": "pictures/NiluferCakir-3.jpg",
-        "about": "received her bachelor's degree in Bioengineering from Istanbul Technical University in 2015. She completed her Master's studies in Bioengineering from Marmara University in 2019 and joined Sabanci University as a Ph.D. candidate in the BIO program",
+        "about": "Next Position: Project and Quality Assurance Specialist at İlko Pharmaceuticals and parttime postdoctoral fellow at Mustafaoglu Lab at Sabanci University",
         "links": {
             "email": "nilufercakir@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/nilufer-cakir-36321172/"
@@ -146,7 +146,7 @@
     {
         "name": "Ozan",
         "surname": "Selcuk",
-        "code": "Undergrad",
+        "code": "Alumni",
         "role": "STAR Intern",
         "img": "pictures/OzanSelcuk.jpeg",
         "about": "is an undergraduate student in SU. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
@@ -200,12 +200,12 @@
     {
         "name": "Zeynep",
         "surname": "Dogan",
-        "code": "MSc",
-        "role": "MSc Student",
+        "code": "Alumni",
+        "role": "MSc Student (09/2022 - 07/2024)",
         "img": "pictures/ZeynepDogan.jpg",
-        "about": "received her bachelor's degrees from the BIO and MAT programs of SU. As a master's student, she is now searching for the peptide shuttles that can cross the blood-brain barrier, for drug delivery. She loves stem cells, flowers and playing basketball.",
+        "about": "Next Position: PhD Student at Penn State University, Biomedical Engineering",
         "links": {
-            "email": "zeynepdogan@sabanciuniv.edu",
+            "email": "zeynepdogan@alumni.sabanciuniv.edu",
             "twitter": "https://twitter.com/eflatun_hucre?t=grlLtMMNwQpU0sWKH6XRdg&s=09",
             "linkedin": "https://www.linkedin.com/in/zeynep-do%C4%9Fan-528b93151"
         }
@@ -302,6 +302,47 @@
             "linkedin": "https://www.linkedin.com/in/yesim-erdogan/"
         }
     },
+
+    {
+        "name": "Aysenur Berra",
+        "surname": "Keklik",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/AysenurBerraKeklik.jpeg",
+        "about": "a MSc student in the BIO program at SU. She received her BSc in Molecular Biology and Genetics from KFAU. Her research interests are neurobiology, and 3D bioprinting.",
+        "links": {
+            "email": "aysenur.keklik@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/ayşenur-berra-keklik-99b580223/"
+        }
+    },
+
+    {
+        "name": "Ceylan",
+        "surname": "Demir",
+        "code": "PhD",
+        "role": "PhD Student",
+        "img": "pictures/CeylanDemir.jpeg",
+        "about": "is passionate about micro-physiologic systems, and neuroscience. Her BSc. (research on Neurodegeneration) & MSc. (research on 3D BBB chips) from IZTECH BIO. She is a constantly thinking science and art enthusiast. She loves nature and creativity inextinguishably.",
+        "links": {
+            "email": "ceylan.demir@sabanciuniv.edu",
+            "twitter": "https://x.com/cdemir_demir ",
+            "linkedin": "https://www.linkedin.com/in/ceylan-demir-605594101"
+        }
+    },
+
+    {
+        "name": "Emir",
+        "surname": "Aktan",
+        "code": "Undergrad",
+        "role": "Undergraduate Researcher",
+        "img": "pictures/EmirAktan.jpg",
+        "about": "an undergraduate Molecular Biology, Genetics and Bioengineering student. I am interested in neurodegeneretive diseases and drug delivery systems.",
+        "links": {
+            "email": "aemir@sabanciuniv.edu",
+            "linkedin": "http://linkedin.com/in/emir-aktan-75017822b"
+        }
+    },
+
 
     {
         "name": "Zulal",
