@@ -344,6 +344,18 @@
         }
     },
 
+    {
+        "name": "Gokdeniz",
+        "surname": "Caglayan",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/GokdenizCaglayan.jpg",
+        "about": "a Master's student in the BIO program at SU. She received her BSc from Bilkent University. Her research interests include neuroscience and bioengineering. In her free time, she loves playing with her cat and reading fantasy-romance books",
+        "links": {
+            "email": "gokdeniz.caglayan@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/g%C3%B6kdeniz-%C3%A7a%C4%9Flayan-24a7a01b6/"
+        }
+    },
 
     {
         "name": "Zulal",
