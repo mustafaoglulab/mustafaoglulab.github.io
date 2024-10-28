@@ -358,6 +358,19 @@
     },
 
     {
+        "name": "Zeynep Nur",
+        "surname": "Bicakci",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/ZeynepNurBicakci.jpeg",
+        "about": "is a master's student in BIO program at SU. She completed her BSc at Bogazici University in Molecular Biology and Genetics. Her research interests are drug delivery and neurobiology.",
+        "links": {
+            "email": "zeynep.bicakci@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/zeynep-nur-bıçakçı-4aa751200/"
+        }
+    },
+
+    {
         "name": "Zulal",
         "surname": "Muganli",
         "code": "PhD",
