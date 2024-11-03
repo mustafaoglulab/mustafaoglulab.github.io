@@ -339,8 +339,8 @@
         "img": "pictures/EmirAktan.jpg",
         "about": "an undergraduate Molecular Biology, Genetics and Bioengineering student at SU. Emir is interested in neurodegeneretive diseases and drug delivery systems.",
         "links": {
-            "email": "aemir@sabanciuniv.edu",
-            "linkedin": "http://linkedin.com/in/emir-aktan-75017822b"
+            "email": "ihsan.saglam@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/saglam-ihsan/"
         }
     },
 
@@ -364,6 +364,19 @@
         "role": "MSc Student",
         "img": "pictures/ZeynepNurBicakci.jpeg",
         "about": "is a master's student in BIO program at SU. She completed her BSc at Bogazici University in Molecular Biology and Genetics. Her research interests are drug delivery and neurobiology.",
+        "links": {
+            "email": "zeynep.bicakci@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/zeynep-nur-bıçakçı-4aa751200/"
+        }
+    },
+
+    {
+        "name": "Ihsan",
+        "surname": "Saglam",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/IhsanSaglam.png",
+        "about": "is a master’s student in the BIO program at SU. He completed his BSc in Molecular Biology and Genetics at Middle East Technical University (METU). His research interests include neurobiology and drug delivery systems.",
         "links": {
             "email": "zeynep.bicakci@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/zeynep-nur-bıçakçı-4aa751200/"
