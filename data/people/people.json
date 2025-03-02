@@ -334,8 +334,8 @@
     {
         "name": "Emir",
         "surname": "Aktan",
-        "code": "Undergrad",
-        "role": "Undergraduate Researcher",
+        "code": "MSc",
+        "role": "MSc Student",
         "img": "pictures/EmirAktan.jpg",
         "about": "an undergraduate Molecular Biology, Genetics and Bioengineering student at SU. Emir is interested in neurodegeneretive diseases and drug delivery systems.",
         "links": {
@@ -380,6 +380,21 @@
         "links": {
             "email": "ihsan.saglam@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/saglam-ihsan/"
+        }
+    },
+
+    {
+        "name": "Shoeb",
+        "surname": "Ansari",
+        "code": "Postdoc",
+        "role": "Postdoctoral Researcher",
+        "img": "pictures/ShoebAnsari.jpg",
+        "about": "is a researcher in the fields of nanomedicine, drug delivery, and neurodegenerative disorders. He received his Ph.D. in Complex Systems of Life Sciences from the University of Turin, Italy.",
+        "links": {
+            "email": "shoeb.ansari@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/shoeb-anwar-ansari-98774938/",
+            "scholar": "https://scholar.google.com/citations?user=FK5f8pAAAAAJ&hl=en&oi=ao"
+
         }
     },
 
