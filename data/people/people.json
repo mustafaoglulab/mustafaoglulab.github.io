@@ -241,10 +241,10 @@
     {
         "name": "Gizem",
         "surname": "Celebi Torabfam",
-        "code": "PhD",
-        "role": "PhD student",
+        "code": "Alumni",
+        "role": "PhD student (09/2023 - 07/2025)",
         "img": "pictures/GizemCelebiTorabfam.jpg",
-        "about": "is a PhD candidate at Sabancı University. She completed her BSc at ITU and her MSc in Genetics at Istanbul University. Her research interests are biophysics and molecular biology.",
+        "about": "Next Position: Research Analyst at New Jersey Institute of Technology",
         "links": {
             "email": "gizemcelebi@sabanciuniv.edu",
             "scholar": "https://scholar.google.com/citations?user=jtv0qZEAAAAJ&hl=en"
@@ -280,8 +280,8 @@
     {
         "name": "Nima",
         "surname": "Muhammadi",
-        "code": "MSc",
-        "role": "MSc Student",
+        "code": "PhD",
+        "role": "PhD student",
         "img": "pictures/NimaMohammadi.jpg",
         "about": "an M.Sc. student in the MAT program at SU, holds a B.Sc. in Chemical Engineering with a research background focusing on adsorptive water treatment. He has joined the Mustafaoglu lab to contribute to the development of lignin-based biocomposite surgical patches.",
         "links": {
