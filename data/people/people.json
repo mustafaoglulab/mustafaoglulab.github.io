@@ -384,6 +384,19 @@
     },
 
     {
+        "name": "Gulten",
+        "surname": "Yesilurdu",
+        "code": "MSc",
+        "role": "MSc Student",
+        "img": "pictures/GultenYesilurdu.png",
+        "about": "completed her BSc in MBG at Boğaziçi University. Her research interests are neurobiology and stem cell research",
+        "links": {
+            "email": "gulten.yesilurdu@sabanciuniv.edu",
+            "linkedin": "www.linkedin.com/in/gülten-y-8650861b7"
+        }
+    },
+
+    {
         "name": "Shoeb",
         "surname": "Ansari",
         "code": "Postdoc",
