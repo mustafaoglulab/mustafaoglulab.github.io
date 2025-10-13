@@ -332,6 +332,20 @@
     },
 
     {
+        "name": "Busra",
+        "surname": "Gundogdu",
+        "code": "PhD",
+        "role": "PhD Student",
+        "img": "pictures/BusraGundogdu.jpg",
+        "about": "is a PhD student in the BIO program at SU. She received her BSc and MSc in Molecular Biology and Genetics at Yıldız Technical University. She is interested in modeling cancer metastasis using microfluidic systems. She enjoys horse riding.",
+        "links": {
+            "email": "busra.gundogdu@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=yckHQCsAAAAJ&hl=tr&oi=ao",
+            "linkedin": "www.linkedin.com/in/büşra-gündoğdu-4b6122213"
+        }
+    },
+
+    {
         "name": "Emir",
         "surname": "Aktan",
         "code": "MSc",
