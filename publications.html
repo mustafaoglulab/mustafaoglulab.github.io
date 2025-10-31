@@ -71,12 +71,13 @@
                         <p><b>Gulsah Sevimli</b>, <b>Eda Kus</b>, <b>Gulin Baran</b>, Mahya Marashian, Nasrollah Tabatabaei, <b>Nur Mustafaoglu</b> (2025). Graphene nanoplatelets enhance neuronal differentiation of human bone marrow mesenchymal stem cells, <i>Biological Research</i>, 58, 32.<br/>
                         <a href="https://doi.org/10.1186/s40659-025-00616-3" target="_blank">DOI: 10.1186/s40659-025-00616-3</a>
                         </p>
-                    </div> 
-                </div>
+                    </div>
+                </div>    
 
                 <div class="row article">
                     <div class="col-md-3" style="margin-top:10px; margin-bottom:10px;"> 
-                        <img width="100%" alt="" src="img/research/TOC-2025-COLSUA.png"> 
+                        <img width="70%" alt="" src="img/research/Cover-2025_COLSUA_kapak3.jpg">
+                        <p style="color:#666; font-size:10px; margin-top:5px;">Click to enlarge</p> 
                     </div> 
                     <div class="col-md-9" style="margin-top:10px; margin-bottom:10px;"> 
                         <p><b>Nilufer Cakir</b><sup>*</sup>, Burcu Okmen Altas<sup>*</sup>, Gokce Dicle Kalaycioglu, <b>Nur Mustafaoglu</b><sup><b>**</b></sup>, Nihal Aydogan<sup><b>**</b></sup>, (2025). Development and Characterization of DHA-Integrated Nanostructured Lipid Carrier Formulations for Enhanced Cellular Binding and Uptake, <i>Colloids and Surfaces A: Physicochemical and Engineering Aspects</i>, 137122.<br/>
@@ -84,8 +85,50 @@
                         <sup><b>**</b></sup>Co-coresponding authors<br/>
                         <a href="https://doi.org/10.1016/j.colsurfa.2025.137122" target="_blank">DOI: 10.1016/j.colsurfa.2025.137122</a>
                         </p>
+                        <span style="color:green;">Journal Cover:</span>
+                        <a href="https://www.sciencedirect.com/journal/colloids-and-surfaces-a-physicochemical-and-engineering-aspects/vol/720/suppl/C">COLSUA, Volume 720</a>
+
+                    <!-- 🔍 Modal yapı: sadece yukarıdaki resim için geçerli -->
+                        <div id="imageModal" class="modal" 
+                             style="display:none; position:fixed; z-index:9999; padding-top:60px; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.9);">
+                            <span class="close" 
+                                  style="position:absolute; top:20px; right:35px; color:white; font-size:40px; font-weight:bold; cursor:pointer;">&times;</span>
+                            <img class="modal-content" id="expandedImage" 
+                                 style="margin:auto; display:block; max-width:80%; border-radius:10px;">
+                            <div id="caption" style="text-align:center; color:#ccc; padding:10px 0;"></div>
+                        </div>
+
+                        <script>
+                            // Modal elemanlarını seçiyoruz
+                            const modal = document.getElementById("imageModal");
+                            const img = document.getElementById("clickableImage");
+                            const modalImg = document.getElementById("expandedImage");
+                            const captionText = document.getElementById("caption");
+                            const span = document.getElementsByClassName("close")[0];
+
+                            // Görsele tıklanınca modalı aç
+                            img.onclick = function() {
+                                modal.style.display = "block";
+                                modalImg.src = this.src;
+                                captionText.innerHTML = this.alt;
+                            }
+
+                            // Kapatma butonuna tıklanınca kapat
+                            span.onclick = function() {
+                                modal.style.display = "none";
+                            }
+
+                            // Modal dışına tıklanınca kapat
+                            modal.onclick = function(event) {
+                                if (event.target === modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        </script>
                     </div> 
                 </div>
+
+                    
 
                 <div class="row article">
                     <div class="col-md-3" style="margin-top:10px; margin-bottom:10px;"> 
