@@ -346,6 +346,20 @@
     },
 
     {
+        "name": "Damla",
+        "surname": "Albayrak",
+        "code": "PhD",
+        "role": "PhD Student",
+        "img": "pictures/DamlaAlbayrak.jpeg",
+        "about": "ireceived her B.Sc. in Biology from METU. She completed her M.Sc. in Materials Science and Nanotechnology at Bilkent University. Her research interests focus on neurobiology and bioengineering. Outside the lab, she enjoys painting and is a devoted cat lover.",
+        "links": {
+            "email": "damla.albayrak@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=yckHQCsAAAAJ&hl=tr&oi=ao",
+            "linkedin": "https://www.linkedin.com/in/damla-albayrak-b49609234/"
+        }
+    },
+
+    {
         "name": "Emir",
         "surname": "Aktan",
         "code": "MSc",
