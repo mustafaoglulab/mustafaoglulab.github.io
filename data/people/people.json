@@ -95,7 +95,7 @@
         }
     },
 
-    /*{
+    {
         "name": "Efe",
         "surname": "Caferoglu",
         "code": "Alumni",
@@ -105,9 +105,9 @@
         "links": {
             "twitter": "https://twitter.com/efe_cfrgl"
         }
-    },*/
+    },
 
-    /*{
+    {
         "name": "Melis",
         "surname": "Konar",
         "code": "Alumni",
@@ -117,7 +117,7 @@
         "links": {
             "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
         }
-    },*/
+    },
 
     {
         "name": "Fereshteh",
@@ -144,7 +144,7 @@
         }
     },
 
-    /*{
+    {
         "name": "Ceren",
         "surname": "Uslu",
         "code": "Alumni",
@@ -168,7 +168,7 @@
             "email": "ozanselcuk@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
         }
-    },*/
+    },
 
     {
         "name": "Gulnaz",
