@@ -65,7 +65,8 @@
         "about": "Next Position: Clinical Trial Assistant & Application Specialist at Pfizer",
         "links": {
             "linkedin": "https://www.linkedin.com/in/ceren-%C3%A7elebi-06a9161a3/"
-        }
+        },
+        "hidden": true
     },
 
     {
@@ -104,7 +105,8 @@
         "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg, Germany",
         "links": {
             "twitter": "https://twitter.com/efe_cfrgl"
-        }
+        },
+        "hidden": true
     },
 
     {
@@ -116,7 +118,8 @@
         "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg, Germany",
         "links": {
             "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
-        }
+        },
+        "hidden": true
     },
 
     {
@@ -154,7 +157,8 @@
         "links": {
             "email": "cerenuslu@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/cerenuslu/"
-        }
+        },
+        "hidden": true
     },
 
     {
@@ -167,7 +171,8 @@
         "links": {
             "email": "ozanselcuk@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
-        }
+        },
+        "hidden": true
     },
 
     {
