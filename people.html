@@ -204,7 +204,9 @@
                 $('#member-container').append(draw_card(plist[0]));
 
                 plist = _.filter(profiles, function(p){ return p['role'] !== "Principle Investigator"; });
-                plist = _.filter(plist, function(p){ return !p['hidden']; });
+                plist = _.filter(plist, function(p){
+                    return !(p.hidden === true || String(p.hidden).toLowerCase() === "true" || String(p.hidden) === "1");
+                });
                 plist = _.sortBy(plist, function(p){ return p['name']; });
                 for (var i=0; i<plist.length; i++){
                     if(plist[i]['code'] == "Alumni"){
