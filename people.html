@@ -168,10 +168,19 @@
             divStr += '<p class="card-text">' + profile['about'] + '</p>';
             divStr += '</div></div></div>';
 
+            // --- role + duration formatting (supports both new and old JSON formats) ---
+            const rawRole = profile['role'] || '';
+            const durationFromRole = (rawRole.match(/\(([^)]+)\)/) || [])[1];   // text inside (...)
+            const roleTitle = rawRole.replace(/\s*\([^)]+\)\s*/, '').trim();    // remove (...) from role
+
+            const durationText = (profile['duration'] && String(profile['duration']).trim())
+              ? String(profile['duration']).trim()
+              : (durationFromRole ? durationFromRole.trim() : '');
+
             divStr += '<div class="' + metaClass + '"><h5 class="card-title text-center">'
               + profile['name'] + ' ' + profile['surname']
-              + '<br><small>' + profile['role'] + '</small>'
-              + (profile['duration'] ? '<br><small>' + profile['duration'] + '</small>' : '')
+              + '<br><small>' + roleTitle + '</small>'
+              + (durationText ? '<br><small>' + durationText + '</small>' : '')
               + '</h5>';
 
             if('email' in profile['links']) {
