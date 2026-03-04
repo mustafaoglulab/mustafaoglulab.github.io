@@ -95,29 +95,29 @@
         }
     },
 
-    //{
-    //    "name": "Efe",
-    //    "surname": "Caferoglu",
-    //    "code": "Alumni",
-    //    "role": "BSc student (09/2021 - 09/2022)",
-    //    "img": "pictures/EfeCaferoglu.jpg",
-    //    "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg, Germany",
-    //    "links": {
-    //        "twitter": "https://twitter.com/efe_cfrgl"
-    //    }
-    //},
+    /*{
+        "name": "Efe",
+        "surname": "Caferoglu",
+        "code": "Alumni",
+        "role": "BSc student (09/2021 - 09/2022)",
+        "img": "pictures/EfeCaferoglu.jpg",
+        "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg, Germany",
+        "links": {
+            "twitter": "https://twitter.com/efe_cfrgl"
+        }
+    },*/
 
-    //{
-    //    "name": "Melis",
-    //    "surname": "Konar",
-    //    "code": "Alumni",
-    //    "role": "BSc student (09/2021 - 09/2022)",
-    //    "img": "pictures/MelisKonar.jpg",
-    //    "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg, Germany",
-    //    "links": {
-    //        "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
-    //    }
-    //},
+    /*{
+        "name": "Melis",
+        "surname": "Konar",
+        "code": "Alumni",
+        "role": "BSc student (09/2021 - 09/2022)",
+        "img": "pictures/MelisKonar.jpg",
+        "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg, Germany",
+        "links": {
+            "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
+        }
+    },*/
 
     {
         "name": "Fereshteh",
@@ -144,31 +144,31 @@
         }
     },
 
-    //{
-    //    "name": "Ceren",
-    //    "surname": "Uslu",
-    //    "code": "Alumni",
-    //    "role": "STAR Intern",
-    //    "img": "pictures/CerenUslu.jpg",
-    //    "about": "Next Position: MSc Student at Wageningen University, Netherlands",
-    //    "links": {
-    //        "email": "cerenuslu@sabanciuniv.edu",
-    //        "linkedin": "https://www.linkedin.com/in/cerenuslu/"
-    //    }
-    //},
+    /*{
+        "name": "Ceren",
+        "surname": "Uslu",
+        "code": "Alumni",
+        "role": "STAR Intern",
+        "img": "pictures/CerenUslu.jpg",
+        "about": "Next Position: MSc Student at Wageningen University, Netherlands",
+        "links": {
+            "email": "cerenuslu@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/cerenuslu/"
+        }
+    },
 
-    //{
-    //    "name": "Ozan",
-    //    "surname": "Selcuk",
-    //    "code": "Alumni",
-    //    "role": "STAR Intern",
-    //    "img": "pictures/OzanSelcuk.jpeg",
-    //    "about": "is an undergraduate student in SU. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
-    //    "links": {
-    //        "email": "ozanselcuk@sabanciuniv.edu",
-    //        "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
-    //    }
-    //},
+    {
+        "name": "Ozan",
+        "surname": "Selcuk",
+        "code": "Alumni",
+        "role": "STAR Intern",
+        "img": "pictures/OzanSelcuk.jpeg",
+        "about": "is an undergraduate student in SU. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
+        "links": {
+            "email": "ozanselcuk@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
+        }
+    },*/
 
     {
         "name": "Gulnaz",
