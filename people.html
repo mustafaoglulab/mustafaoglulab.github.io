@@ -111,13 +111,20 @@
             font-size: 0.75rem;
             }
 
-            /* smaller icons only for alumni cards */
-            .alumni-meta i {
-                font-size: 0.8rem !important;
+            /* smaller icons only for alumni cards (Font Awesome becomes SVG) */
+            .alumni-meta .svg-inline--fa {
+              width: 0.85em !important;
+              height: 0.85em !important;
             }
 
+            /* Academicons remain <i> */
+            .alumni-meta i.ai {
+              font-size: 0.85rem !important;
+            }
+
+            /* optional: tighter spacing */
             .alumni-meta a {
-                margin-right: 3px !important;
+              margin-right: 3px !important;
             }
   
         </style>
@@ -138,6 +145,8 @@
             const cardSize = isAlumni ? 120 : 250;
             const flipCardClass = isAlumni ? 'flip-card alumni-card' : 'flip-card';
             const metaClass = isAlumni ? 'text-center alumni-meta' : 'text-center';
+            const faSizeClass = isAlumni ? '' : 'fa-2x';
+            const aiSizeClass = isAlumni ? '' : 'ai-2x';
 
             let divStr = '';
             divStr += wrapperStart;
@@ -157,22 +166,22 @@
             divStr += '<div class="' + metaClass + '"><h5 class="card-title text-center">' + profile['name'] + ' ' + profile['surname'] + '<br><small>' + profile['role'] + '</small></h5>';
 
             if('email' in profile['links']) {
-                divStr += '<a href="mailto:' + profile['links']['email'] + '" target="_blank" style="margin-right:5px;"><i class="fas fa-envelope fa-2x" style="color:#4d9de3;"></i></a>'
+                divStr += '<a href="mailto:' + profile['links']['email'] + '" target="_blank"><i class="fas fa-envelope ' + faSizeClass + '" style="color:#4d9de3;"></i></a>'
             }
             if('website' in profile['links']) {
-                divStr += '<a href="' + profile['links']['website'] + '" style="margin-right:5px;"><i class="fas fa-home fa-2x" style="color:#0ca1cf;"></i></a>'
+                divStr += '<a href="' + profile['links']['website'] + '"><i class="fas fa-home ' + faSizeClass + '" style="color:#0ca1cf;"></i></a>'
             }
             if('scholar' in profile['links']) {
-                divStr += '<a href="' + profile['links']['scholar'] + '" style="margin-right:5px;"><i class="ai ai-google-scholar ai-2x" style="color:#0e48cf;"></i></a>'
+                divStr += '<a href="' + profile['links']['scholar'] + '"><i class="ai ai-google-scholar ' + aiSizeClass + '" style="color:#0e48cf;"></i></a>'
             }
             if('orcid' in profile['links']) {
-                divStr += '<a href="' + profile['links']['orcid'] + '" style="margin-right:5px;"><i class="ai ai-orcid ai-2x"></i></a>'
+                divStr += '<a href="' + profile['links']['orcid'] + '"><i class="ai ai-orcid ' + aiSizeClass + '"></i></a>'
             }
             if('twitter' in profile['links']) {
-                divStr += '<a href="' + profile['links']['twitter'] + '" style="margin-right:5px;"><i class="fab fa-twitter fa-2x" style="color:#1DA1F2;"></i></a>'
+                divStr += '<a href="' + profile['links']['twitter'] + '"><i class="fab fa-twitter ' + faSizeClass + '" style="color:#1DA1F2;"></i></a>'
             }
             if('linkedin' in profile['links']) {
-                divStr += '<a href="' + profile['links']['linkedin'] + '" style="margin-right:5px;"><i class="fab fa-linkedin fa-2x" style="color:#0e76a8;"></i></a>'
+                divStr += '<a href="' + profile['links']['linkedin'] + '"><i class="fab fa-linkedin ' + faSizeClass + '" style="color:#0e76a8;"></i></a>'
             }
             divStr += '</div>';
 
