@@ -82,45 +82,99 @@
             width: 50px;
             }
 
-            
+            /* --- Alumni-only sizing + responsive layout --- */
+            .alumni-col {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+
+            /* smaller flip-card only for alumni */
+            .flip-card.alumni-card {
+                width: 120px;
+                height: 120px;
+                margin: 0 auto;
+            }
+
+            .flip-card.alumni-card img {
+              width: 120px !important;
+              height: 120px !important;
+              object-fit: cover;
+            }
+
+            /* optional: make alumni text a bit tighter */
+            .alumni-meta h5 {
+                font-size: 0.95rem;
+                margin-top: 0.5rem;
+            }
+
+            .alumni-meta small {
+            font-size: 0.75rem;
+            }
+  
         </style>
 
         <script type="text/javascript">
-            function draw_card(profile){
-                //console.log(profile);
-                divStr = '<div class="card mb-3" style="min-width: 250px; width: 250px; margin-left:1em; margin-bottom:3em; border-width:0;"><div class="flip-card"><div class="flip-card-inner"><div class="flip-card-front">';
-                divStr += '<img class="rounded-circle" src="data/people/' + profile['img'] + '" style="width:250px;"></div>';
-                divStr += '<div class="flip-card-back"><h3>' + profile['name'] + '</h3>';
-                divStr += '<p class="card-text">' + profile['about'] + '</p>';
-                divStr += '</div></div></div><div class="text-center" style="width:250px;"><h5 class="card-title text-center">' + profile['name'] + ' ' + profile['surname'] + '<br><small>' + profile['role'] + '</small></h5>';
+            function draw_card(profile, isAlumni=false){
+            // Wrapper: keep members as-is, make alumni responsive grid (6 per row on lg)
+            let wrapperStart = '';
+            let wrapperEnd = '';
 
-                if('email' in profile['links']) {
-                    divStr += '<a href="mailto:' + profile['links']['email'] + '" target="_blank" style="margin-right:5px;"><i class="fas fa-envelope fa-2x" style="color:#4d9de3;"></i></a>'
-                }
-
-                if('website' in profile['links']) {
-                    divStr += '<a href="' + profile['links']['website'] + '" style="margin-right:5px;"><i class="fas fa-home fa-2x" style="color:#0ca1cf;"></i></a>'
-                }
-
-                if('scholar' in profile['links']) {
-                    divStr += '<a href="' + profile['links']['scholar'] + '" style="margin-right:5px;"><i class="ai ai-google-scholar ai-2x" style="color:#0e48cf;"></i></a>'
-                }
-
-                if('orcid' in profile['links']) {
-                    divStr += '<a href="' + profile['links']['orcid'] + '" style="margin-right:5px;"><i class="ai ai-orcid ai-2x"></i></a>'
-                }
-
-                if('twitter' in profile['links']) {
-                    divStr += '<a href="' + profile['links']['twitter'] + '" style="margin-right:5px;"><i class="fab fa-twitter fa-2x" style="color:#1DA1F2;"></i></a>'
-                }
-
-                if('linkedin' in profile['links']) {
-                    divStr += '<a href="' + profile['links']['linkedin'] + '" style="margin-right:5px;"><i class="fab fa-linkedin fa-2x" style="color:#0e76a8;"></i></a>'
-                }
-                divStr += '</div>';
-
-                return divStr
+            if(isAlumni){
+                // 2 per row on mobile, 3 on small, 4 on md, 6 on lg+
+                wrapperStart = '<div class="col-6 col-sm-4 col-md-3 col-lg-2 alumni-col mb-4">';
+                wrapperEnd = '</div>';
             }
+
+            // Sizes: big for members, small for alumni
+            const cardSize = isAlumni ? 120 : 250;
+            const flipCardClass = isAlumni ? 'flip-card alumni-card' : 'flip-card';
+            const metaClass = isAlumni ? 'text-center alumni-meta' : 'text-center';
+
+            let divStr = '';
+            divStr += wrapperStart;
+
+            // Keep your member "card" wrapper for members; alumni doesn't need the fixed-width card
+            if(!isAlumni){
+                divStr += '<div class="card mb-3" style="min-width: 250px; width: 250px; margin-left:1em; margin-bottom:3em; border-width:0;">';
+            }
+
+            divStr += '<div class="' + flipCardClass + '"><div class="flip-card-inner"><div class="flip-card-front">';
+            divStr += '<img class="rounded-circle" src="data/people/' + profile['img'] + '" style="width:' + cardSize + 'px; height:' + cardSize + 'px;">';
+            divStr += '</div>';
+            divStr += '<div class="flip-card-back"><h3>' + profile['name'] + '</h3>';
+            divStr += '<p class="card-text">' + profile['about'] + '</p>';
+            divStr += '</div></div></div>';
+
+            divStr += '<div class="' + metaClass + '"><h5 class="card-title text-center">' + profile['name'] + ' ' + profile['surname'] + '<br><small>' + profile['role'] + '</small></h5>';
+
+            if('email' in profile['links']) {
+                divStr += '<a href="mailto:' + profile['links']['email'] + '" target="_blank" style="margin-right:5px;"><i class="fas fa-envelope fa-2x" style="color:#4d9de3;"></i></a>'
+            }
+            if('website' in profile['links']) {
+                divStr += '<a href="' + profile['links']['website'] + '" style="margin-right:5px;"><i class="fas fa-home fa-2x" style="color:#0ca1cf;"></i></a>'
+            }
+            if('scholar' in profile['links']) {
+                divStr += '<a href="' + profile['links']['scholar'] + '" style="margin-right:5px;"><i class="ai ai-google-scholar ai-2x" style="color:#0e48cf;"></i></a>'
+            }
+            if('orcid' in profile['links']) {
+                divStr += '<a href="' + profile['links']['orcid'] + '" style="margin-right:5px;"><i class="ai ai-orcid ai-2x"></i></a>'
+            }
+            if('twitter' in profile['links']) {
+                divStr += '<a href="' + profile['links']['twitter'] + '" style="margin-right:5px;"><i class="fab fa-twitter fa-2x" style="color:#1DA1F2;"></i></a>'
+            }
+            if('linkedin' in profile['links']) {
+                divStr += '<a href="' + profile['links']['linkedin'] + '" style="margin-right:5px;"><i class="fab fa-linkedin fa-2x" style="color:#0e76a8;"></i></a>'
+            }
+            divStr += '</div>';
+
+            if(!isAlumni){
+                divStr += '</div>'; // close member card wrapper
+            }
+
+            divStr += wrapperEnd;
+
+            return divStr;
+        }
 
             function prepare_user_cards(profiles){
                 plist = _.filter(profiles, function(p){ return p['role'] == "Principle Investigator"; });
@@ -130,10 +184,10 @@
                 plist = _.sortBy(plist, function(p){ return p['name']; });
                 for (var i=0; i<plist.length; i++){
                     if(plist[i]['code'] == "Alumni"){
-                        $('#alumni-container').append(draw_card(plist[i]));
+                        $('#alumni-container').append(draw_card(plist[i], true)); // small alumni
                     }
                     else{
-                        $('#member-container').append(draw_card(plist[i]));
+                        $('#member-container').append(draw_card(plist[i], false)); // big members
                     }
                 }
             }
@@ -163,8 +217,7 @@
                 <br>
             </div>
             <h2>Lab Alumni</h2><br/>
-            <div class="row">
-                <div id="alumni-container" class="card-deck"></div>
+            <div class="row" id="alumni-container"></div>
             </div>
         </div>
         <br>
