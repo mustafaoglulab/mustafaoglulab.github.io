@@ -95,29 +95,29 @@
         }
     },
 
-    {
-        "name": "Efe",
-        "surname": "Caferoglu",
-        "code": "Alumni",
-        "role": "BSc student (09/2021 - 09/2022)",
-        "img": "pictures/EfeCaferoglu.jpg",
-        "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg, Germany",
-        "links": {
-            "twitter": "https://twitter.com/efe_cfrgl"
-        }
-    },
+    //{
+    //    "name": "Efe",
+    //    "surname": "Caferoglu",
+    //    "code": "Alumni",
+    //    "role": "BSc student (09/2021 - 09/2022)",
+    //    "img": "pictures/EfeCaferoglu.jpg",
+    //    "about": "Next Position: MSc Student in FOKUS Life Sciences program at the University of Würzburg, Germany",
+    //    "links": {
+    //        "twitter": "https://twitter.com/efe_cfrgl"
+    //    }
+    //},
 
-    {
-        "name": "Melis",
-        "surname": "Konar",
-        "code": "Alumni",
-        "role": "BSc student (09/2021 - 09/2022)",
-        "img": "pictures/MelisKonar.jpg",
-        "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg, Germany",
-        "links": {
-            "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
-        }
-    },
+    //{
+    //    "name": "Melis",
+    //    "surname": "Konar",
+    //    "code": "Alumni",
+    //    "role": "BSc student (09/2021 - 09/2022)",
+    //    "img": "pictures/MelisKonar.jpg",
+    //    "about": "Next Position: MSc Student in Biochemistry at the University of Würzburg, Germany",
+    //    "links": {
+    //        "linkedin": "https://www.linkedin.com/in/melis-konar-913b9a180/"
+    //    }
+    //},
 
     {
         "name": "Fereshteh",
@@ -132,30 +132,43 @@
     },
 
     {
-        "name": "Ceren",
-        "surname": "Uslu",
-        "code": "Alumni",
-        "role": "STAR Intern",
-        "img": "pictures/CerenUslu.jpg",
-        "about": "Next Position: MSc Student at Wageningen University, Netherlands",
+        "name": "Mahya",
+        "surname": "Marashian",
+        "code": "PhD",
+        "role": "Erasmus Exchange PhD student (02/2026 - )",
+        "img": "pictures/MahyaMarashian.jpg",
+        "about": "is a Ph.D. candidate in Medical Nanotechnology at Tehran University of Medical Sciences, with a background in Cellular and Molecular Biology. Her research focuses on drug delivery and nanomedicine.",
         "links": {
-            "email": "cerenuslu@sabanciuniv.edu",
-            "linkedin": "https://www.linkedin.com/in/cerenuslu/"
+            "email": "sm.marashiyan@gmail.com",
+            "linkedin": "www.linkedin.com/in/mahya-marashian-670b00b1"
         }
     },
 
-    {
-        "name": "Ozan",
-        "surname": "Selcuk",
-        "code": "Alumni",
-        "role": "STAR Intern",
-        "img": "pictures/OzanSelcuk.jpeg",
-        "about": "is an undergraduate student in SU. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
-        "links": {
-            "email": "ozanselcuk@sabanciuniv.edu",
-            "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
-        }
-    },
+    //{
+    //    "name": "Ceren",
+    //    "surname": "Uslu",
+    //    "code": "Alumni",
+    //    "role": "STAR Intern",
+    //    "img": "pictures/CerenUslu.jpg",
+    //    "about": "Next Position: MSc Student at Wageningen University, Netherlands",
+    //    "links": {
+    //        "email": "cerenuslu@sabanciuniv.edu",
+    //        "linkedin": "https://www.linkedin.com/in/cerenuslu/"
+    //    }
+    //},
+
+    //{
+    //    "name": "Ozan",
+    //    "surname": "Selcuk",
+    //    "code": "Alumni",
+    //    "role": "STAR Intern",
+    //    "img": "pictures/OzanSelcuk.jpeg",
+    //    "about": "is an undergraduate student in SU. He is interested in the blood-brain barrier, mainly in in vitro assesment of the barrier components and stem cell research.",
+    //    "links": {
+    //        "email": "ozanselcuk@sabanciuniv.edu",
+    //        "linkedin": "https://www.linkedin.com/in/ozan-selcuk-1b2b95190/"
+    //    }
+    //},
 
     {
         "name": "Gulnaz",
@@ -173,7 +186,7 @@
         "name": "Irem",
         "surname": "Kiris",
         "code": "Postdoc",
-        "role": "Postdoctoral Researcher",
+        "role": "Postdoctoral Researcher (03/2023 - )",
         "img": "pictures/IremKiris.jpeg",
         "about": "received her Ph.D. in Biochemistry and Molecular Biology from Acibadem Mehmet Ali Aydinlar University. Now, joined the Mustafaoğlu lab to investigate how biomechanical forces affect the BBB model from a proteomics point of view.",
         "links": {
@@ -188,7 +201,7 @@
         "name": "Gulsah",
         "surname": "Sevimli",
         "code": "PhD",
-        "role": "PhD student",
+        "role": "PhD student (12/2022 - )",
         "img": "pictures/GulsahSevimli.jpg",
         "about": "Gülşah Sevimli accomplished her BA from Istanbul Bilgi University in 2019 and her MSc at SU in 2022. Now, she joined Mustafaoglu Lab to continue her research as a PhD student in the BIO program.",
         "links": {
@@ -216,7 +229,7 @@
         "name": "Sahar",
         "surname": "Porrang",
         "code": "Postdoc",
-        "role": "Postdoctoral Researcher",
+        "role": "Postdoctoral Researcher (09/2023 - )",
         "img": "pictures/SaharPorrang.jpg",
         "about": "is a postdoctoral researcher funded by Marie Skłodowska-Curie Actions. Her research interests are in biocompatible and green advance nanomaterials and their surface engineering for diseases treatment and tumor-targeted stimuli-responsive drug delivery systems.",
         "links": {
@@ -230,7 +243,7 @@
         "name": "Nafisa",
         "surname": "Tanjia",
         "code": "PhD",
-        "role": "PhD student",
+        "role": "PhD student (04/2022 - )",
         "img": "pictures/NafisaTanjia.jpg",
         "about": "is a PhD student in the BIO program at SU. She completed her bachelor’s degree in Pharmacy and master’s degree in Clinical Pharmacy and Molecular Pharmacology from East West University, Dhaka, Bangladesh.",
         "links": {
@@ -255,7 +268,7 @@
         "name": "Sumeyra Nuran",
         "surname": "Ozmen",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2023 - )",
         "img": "pictures/SumeyraNuran.jpg",
         "about": "is completed her bachelor's degree in molecular biology & genetics at METU. She is curious about brain diseases, blood-brain barrier, and organ-on-a-chip models. She loves animals and playing theatre.",
         "links": {
@@ -268,7 +281,7 @@
         "name": "Ahmet Baki",
         "surname": "Sahin",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2023 - )",
         "img": "pictures/AhmetBakiSahin.jpg",
         "about": "is a master's student in the BIO program at SU and received his bachelor's degree from the KFAU. His research interests are neurobiology and drug delivery.",
         "links": {
@@ -280,8 +293,8 @@
     {
         "name": "Nima",
         "surname": "Muhammadi",
-        "code": "PhD",
-        "role": "PhD student",
+        "code": "Alumni",
+        "role": "MSc student (09/2023 - 06/2025)",
         "img": "pictures/NimaMohammadi.jpg",
         "about": "an M.Sc. student in the MAT program at SU, holds a B.Sc. in Chemical Engineering with a research background focusing on adsorptive water treatment. He has joined the Mustafaoglu lab to contribute to the development of lignin-based biocomposite surgical patches.",
         "links": {
@@ -295,7 +308,7 @@
         "name": "Yesim",
         "surname": "Erdogan",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2023 - )",
         "img": "pictures/YesimErdogan.jpg",
         "about": "a master's student in the BIO program at SU and received her Bachelor's degree from Gebze Technical University. Her research interests are 3D bioprinting and neurobiology.",
         "links": {
@@ -308,7 +321,7 @@
         "name": "Aysenur Berra",
         "surname": "Keklik",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2024 - )",
         "img": "pictures/AysenurBerraKeklik.jpeg",
         "about": "a MSc student in the BIO program at SU. She received her BSc in Molecular Biology and Genetics from KFAU. Her research interests are neurobiology, and 3D bioprinting.",
         "links": {
@@ -321,7 +334,7 @@
         "name": "Ceylan",
         "surname": "Demir",
         "code": "PhD",
-        "role": "PhD Student",
+        "role": "PhD Student (09/2024 - )",
         "img": "pictures/CeylanDemir.jpeg",
         "about": "is passionate about micro-physiologic systems, and neuroscience. Her BSc. (on Neurodegeneration) & MSc. (on 3D BBB chips) from IZTECH BIO. She is a constantly thinking science and art enthusiast. She loves nature and creativity inextinguishably.",
         "links": {
@@ -335,7 +348,7 @@
         "name": "Busra",
         "surname": "Gundogdu",
         "code": "PhD",
-        "role": "PhD Student",
+        "role": "PhD Student (09/2025 - )",
         "img": "pictures/BusraGundogdu.jpg",
         "about": "is a PhD student in the BIO program at SU. She received her BSc and MSc in Molecular Biology and Genetics at Yıldız Technical University. She is interested in modeling cancer metastasis using microfluidic systems. She enjoys horse riding.",
         "links": {
@@ -349,9 +362,9 @@
         "name": "Damla",
         "surname": "Albayrak",
         "code": "PhD",
-        "role": "PhD Student",
+        "role": "PhD Student (02/2026 - )",
         "img": "pictures/DamlaAlbayrak.jpeg",
-        "about": "ireceived her B.Sc. in Biology from METU. She completed her M.Sc. in Materials Science and Nanotechnology at Bilkent University. Her research interests focus on neurobiology and bioengineering. Outside the lab, she enjoys painting and is a devoted cat lover.",
+        "about": "received her B.Sc. in Biology from METU. She completed her M.Sc. in Materials Science and Nanotechnology at Bilkent University. Her research interests focus on neurobiology and bioengineering. Outside the lab, she enjoys painting and is a devoted cat lover.",
         "links": {
             "email": "damla.albayrak@sabanciuniv.edu",
             "scholar": "https://scholar.google.com/citations?user=yckHQCsAAAAJ&hl=tr&oi=ao",
@@ -363,7 +376,7 @@
         "name": "Emir",
         "surname": "Aktan",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (02/2025 - )",
         "img": "pictures/EmirAktan.jpg",
         "about": "an undergraduate Molecular Biology, Genetics and Bioengineering student at SU. Emir is interested in neurodegeneretive diseases and drug delivery systems.",
         "links": {
@@ -376,7 +389,7 @@
         "name": "Gokdeniz",
         "surname": "Caglayan",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2024 - )",
         "img": "pictures/GokdenizCaglayan.jpg",
         "about": "a Master's student in the BIO program at SU. She received her BSc from Bilkent University. Her research interests include neuroscience and bioengineering. In her free time, she loves playing with her cat and reading fantasy-romance books",
         "links": {
@@ -389,7 +402,7 @@
         "name": "Zeynep Nur",
         "surname": "Bicakci",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2024 - )",
         "img": "pictures/ZeynepNurBicakci.jpeg",
         "about": "is a master's student in BIO program at SU. She completed her BSc at Bogazici University in Molecular Biology and Genetics. Her research interests are drug delivery and neurobiology.",
         "links": {
@@ -402,7 +415,7 @@
         "name": "Ihsan",
         "surname": "Saglam",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2024 - )",
         "img": "pictures/IhsanSaglam.png",
         "about": "is a master’s student in the BIO program at SU. He completed his BSc in Molecular Biology and Genetics at Middle East Technical University (METU). His research interests include neurobiology and drug delivery systems.",
         "links": {
@@ -415,7 +428,7 @@
         "name": "Gulten",
         "surname": "Yesilurdu",
         "code": "MSc",
-        "role": "MSc Student",
+        "role": "MSc Student (09/2025 - )",
         "img": "pictures/GultenYesilurdu.png",
         "about": "completed her BSc in MBG at Boğaziçi University. Her research interests are neurobiology and stem cell research",
         "links": {
@@ -425,10 +438,23 @@
     },
 
     {
+        "name": "Bera",
+        "surname": "Efe",
+        "code": "MSc",
+        "role": "MSc Student (09/2025 - )",
+        "img": "pictures/BeraEfe.jpeg",
+        "about": "Interested in and currently working on engineering and printing of biomaterials, hydrogels and decellularized ECM.",
+        "links": {
+            "email": "ahmetbera@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/a-bera-efe-980993201/"
+        }
+    },
+
+    {
         "name": "Shoeb",
         "surname": "Ansari",
         "code": "Postdoc",
-        "role": "Postdoctoral Researcher",
+        "role": "Postdoctoral Researcher (02/2025 - )",
         "img": "pictures/ShoebAnsari.jpg",
         "about": "is a researcher in the fields of nanomedicine, drug delivery, and neurodegenerative disorders. He received his Ph.D. in Complex Systems of Life Sciences from the University of Turin, Italy.",
         "links": {
@@ -443,7 +469,7 @@
         "name": "Zulal",
         "surname": "Muganli",
         "code": "PhD",
-        "role": "PhD student",
+        "role": "PhD student (02/2023 - )",
         "img": "pictures/ZulalMuganli.jpg",
         "about": "is a PhD student in the BIO program at SU. She is interested in designing novel gut-on-a-chip platforms to utilize them in organ/disease modeling. She loves planting and hiking.",
         "links": {
