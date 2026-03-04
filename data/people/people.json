@@ -19,7 +19,8 @@
         "name": "Alireza",
         "surname": "Tajeddin",
         "code": "Alumni",
-        "role": "MSc student (01/2021 - 06/2023)",
+        "role": "MSc student", 
+        "duration: "(01/2021 - 06/2023)",
         "img": "pictures/AlirezaTajeddin-2.jpg",
         "about": "Next Position: PhD Student at TU Delft, Netherlands",
         "links": {

@@ -168,7 +168,11 @@
             divStr += '<p class="card-text">' + profile['about'] + '</p>';
             divStr += '</div></div></div>';
 
-            divStr += '<div class="' + metaClass + '"><h5 class="card-title text-center">' + profile['name'] + ' ' + profile['surname'] + '<br><small>' + profile['role'] + '</small></h5>';
+            divStr += '<div class="' + metaClass + '"><h5 class="card-title text-center">'
+              + profile['name'] + ' ' + profile['surname']
+              + '<br><small>' + profile['role'] + '</small>'
+              + (profile['duration'] ? '<br><small>' + profile['duration'] + '</small>' : '')
+              + '</h5>';
 
             if('email' in profile['links']) {
                 divStr += '<a href="mailto:' + profile['links']['email'] + '" target="_blank"><i class="fas fa-envelope ' + faSizeClass + '" style="color:#4d9de3;"></i></a>'
