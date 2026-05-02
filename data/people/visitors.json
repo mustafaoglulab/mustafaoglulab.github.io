@@ -1,0 +1,281 @@
+{
+    "visitors": [
+        {
+            "name": "Pınar Şen",
+            "year": 2021,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Ceren Yalçın",
+            "year": 2021,
+            "type": "pure",
+            "country-code": "GB",
+            "institute": "King's College London",
+            "lat": 51.4899914,
+            "lon": -0.1432756
+        },
+        {
+            "name": "Eylül İpçi",
+            "year": 2021,
+            "type": "pure",
+            "country-code": "CH",
+            "institute": "École Polytechnique Fédérale de Lausanne",
+            "lat": 46.5205123,
+            "lon": 6.5675286
+        },
+        {
+            "name": "Ful Belin Korukoğlu",
+            "year": 2021,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Boğaziçi Üniversitesi",
+            "lat": 41.084,
+            "lon": 29.050
+        },
+        {
+            "name": "Özgür Yılmaz Beker",
+            "year": 2021,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Ahsen İlke Özsevim",
+            "year": 2022,
+            "type": "Intern",
+            "country-code": "TR",
+            "institute": "Yeditepe University",
+            "lat": 40.9749284,
+            "lon": 29.1484777
+        },
+        {
+            "name": "Salih Kaya",
+            "year": 2022,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Elif Uzun",
+            "year": 2022,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Gökçe Serttaş",
+            "year": 2022,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Middle East Technical Univerity",
+            "lat": 39.8986261,
+            "lon": 32.7799177
+        },
+        {
+            "name": "Gülten Yeşilürdü",
+            "year": 2022,
+            "type": "Intern",
+            "country-code": "TR",
+            "institute": "Boğaziçi Üniversitesi",
+            "lat": 41.084,
+            "lon": 29.050
+        },
+        {
+            "name": "Emir Aktan",
+            "year": 2024,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Alaa Gihad",
+            "year": 2024,
+            "type": "pure",
+            "country-code": "EG",
+            "institute": "Cairo University",
+            "lat": 30.027,
+            "lon": 31.201
+        },
+        {
+            "name": "Antonella Iannuzzi Filippone",
+            "year": 2024,
+            "type": "pure",
+            "country-code": "CL",
+            "institute": "Pontificia Universidad Católica de Chile",
+            "lat": -33.441,
+            "lon": -70.640
+        },
+        {
+            "name": "Unai Pascual Elexpe",
+            "year": 2024,
+            "type": "pure",
+            "country-code": "ES",
+            "institute": "UIC Barcelona",
+            "lat": 41.403,
+            "lon": 2.122
+        },
+        {
+            "name": "Rana Elmaalawy",
+            "year": 2024,
+            "type": "pure",
+            "country-code": "EG",
+            "institute": "Alexandria university",
+            "lat": 31.200,
+            "lon": 29.901
+        },
+        {
+            "name": "Ada Dördüncü",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Bilkent University",
+            "lat": 39.8711104,
+            "lon": 32.7617072
+        },
+        {
+            "name": "Nil Özde Özgen",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Marthad Al-Harthi",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "OM",
+            "institute": "Sultan Qaboos University",
+            "lat": 23.590,
+            "lon": 58.172
+        },
+        {
+            "name": "Daryna Karpova",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "RU",
+            "institute": "Lomonosov Moscow State University",
+            "lat": 55.702,
+            "lon": 37.530
+        },
+        {
+            "name": "Birsen Beril Bildirici",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Türkan Doğa Gizer",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.892,
+            "lon": 29.378
+        },
+        {
+            "name": "Melissa Erdem",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "US",
+            "institute": "University of Florida",
+            "lat": 29.643,
+            "lon": -82.354
+        },
+        {
+            "name": "Rüçhan Erdoğan",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "TR",
+            "institute": "Boğaziçi Üniversitesi",
+            "lat": 41.084,
+            "lon": 29.050
+        },
+        {
+            "name": "Maryam Aghayeva",
+            "year": 2025,
+            "type": "pure",
+            "country-code": "US",
+            "institute": "University of Minnesota",
+            "lat": 44.974,
+            "lon": -93.227
+        },
+        {
+            "name": "Cagla Rüzgar Kaya",
+            "year": 2025,
+            "type": "Intern",
+            "country-code": "DE",
+            "institute": "University of Cologne",
+            "lat": 50.9282666,
+            "lon": 6.9267805
+        },
+        {
+            "name": "Fereshteh Ramezanikhorsand",
+            "year": 2021,
+            "type": "Visitor",
+            "country-code": "IR",
+            "institute": "Tarbiat Modares University",
+            "lat": 35.7234617,
+            "lon": 51.3813947
+        },
+        {
+            "name": "Seyedeh Mahya Marashiya",
+            "year": 2026,
+            "type": "Visitor",
+            "country-code": "IR",
+            "institute": "Tehran University of Medical Science (TUMS)",
+            "lat": 35.7058231,
+            "lon": 51.3894225
+        }
+    ],
+    "photos": [
+        {
+            "path": "img/research/Antibody-purification.png",
+            "caption": "2024"
+        },
+        {
+            "path": "img/research/BBB-on-chip-illustration-researchImage-2.png",
+            "caption": "2025"
+        },
+        {
+            "path": "img/research/Antibody-purification.png",
+            "caption": "2024"
+        },
+        {
+            "path": "img/research/BBB-on-chip-illustration-researchImage-2.png",
+            "caption": "2025"
+        },
+        {
+            "path": "img/research/Antibody-purification.png",
+            "caption": "2024"
+        },
+        {
+            "path": "img/research/BBB-on-chip-illustration-researchImage-2.png",
+            "caption": "2025"
+        },
+        {
+            "path": "img/research/Antibody-purification.png",
+            "caption": "2024"
+        },
+        {
+            "path": "img/research/BBB-on-chip-illustration-researchImage-2.png",
+            "caption": "2025"
+        }
+    ]
+}

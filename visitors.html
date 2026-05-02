@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta content="Mustafaoglu Lab" name="Mustafaoglu Lab @ Sabanci University">
+    <meta content="Nur Mustafaoglu, Sabanci University" name="keywords">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+    <title>Mustafaoglu Lab Website - Visitors</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/fa-all.js" data-auto-replace-svg="nest"></script>
+
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+
+    <!-- jsvectormap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>
+
+    <style>
+        #map-container {
+            width: 100%;
+            height: 600px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .visitor-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Custom scrollbar for visitor list */
+        .visitor-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #photo-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .visitor-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .visitor-list::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .visitor-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .visitor-card {
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+
+        .visitor-card.active-card,
+        .visitor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: var(--type-color, #0ca1cf);
+        }
+
+        .visitor-card h5 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .visitor-card p {
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            padding: 5px 10px;
+            bottom: 10px;
+        }
+    </style>
+
+    <script>
+        let allVisitors = [];
+        let mapInstance = null;
+        let markersList = [];
+
+        const typeColors = {
+            'pure': '#0ca1cf',   // blue
+            'intern': '#ffc107', // yellow
+            'visitor': '#28a745' // green
+        };
+
+        function renderVisitorList(visitors) {
+            const listContainer = $('#visitor-list-container');
+            listContainer.empty();
+
+            $('#visitor-count').text(visitors.length);
+
+            if (visitors.length === 0) {
+                listContainer.append('<div class="alert alert-light text-center">No visitors found for this selection.</div>');
+                return;
+            }
+
+            visitors.forEach(v => {
+                const typeLower = v.type ? v.type.toLowerCase() : '';
+                const tColor = typeColors[typeLower] || '#6c757d';
+                const card = `
+                        <div class="visitor-card" data-institute="${v.institute}" data-type-color="${tColor}" style="--type-color: ${tColor}; cursor: pointer;">
+                            <h5>
+                                ${v.name}
+                                <span class="badge text-uppercase" style="background-color: ${tColor}; color: #fff; font-size: 0.75rem;">${v.type}</span>
+                            </h5>
+                            <p><strong><i class="fas fa-university mr-1"></i></strong> ${v.institute} (${v['country-code']})</p>
+                            <p><strong><i class="fas fa-calendar-alt mr-1"></i></strong> ${v.year}</p>
+                        </div>
+                    `;
+                listContainer.append(card);
+            });
+        }
+
+        function updateFilters() {
+            const selectedYear = $('#filter-year').val();
+            const selectedType = $('#filter-type').val();
+
+            let filtered = allVisitors;
+            if (selectedYear !== 'all') {
+                filtered = filtered.filter(v => v.year.toString() === selectedYear);
+            }
+            if (selectedType !== 'all') {
+                filtered = filtered.filter(v => v.type === selectedType);
+            }
+
+            renderVisitorList(filtered);
+            $('#reset-filter-btn').show();
+        }
+
+        $(document).ready(function () {
+            $('#header-container').load('template_header.html');
+            $('#footer-container').load('template_footer.html');
+
+            $.getJSON('data/people/visitors.json', function (data) {
+                allVisitors = data.visitors;
+                const photos = data.photos;
+
+                // Populate filter dropdowns
+                const years = [...new Set(allVisitors.map(v => v.year))].sort().reverse();
+                const types = [...new Set(allVisitors.map(v => v.type))].sort();
+
+                years.forEach(y => $('#filter-year').append(`<option value="${y}">${y}</option>`));
+                types.forEach(t => $('#filter-type').append(`<option value="${t}">${t.toUpperCase()}</option>`));
+
+                $('#filter-year, #filter-type').on('change', updateFilters);
+
+                // 1. Process visitors for the map
+                const countriesToHighlight = [];
+
+                allVisitors.forEach(v => {
+                    const ccode = v['country-code'].toUpperCase();
+                    if (!countriesToHighlight.includes(ccode)) {
+                        countriesToHighlight.push(ccode);
+                    }
+
+                    if (v.lat && v.lon) {
+                        const existingMarkerIdx = markersList.findIndex(m => m.name === v.institute);
+                        if (existingMarkerIdx === -1) {
+                            const typeLower = v.type ? v.type.toLowerCase() : '';
+                            markersList.push({
+                                name: v.institute,
+                                coords: [v.lat, v.lon],
+                                style: { initial: { fill: typeColors[typeLower] || '#0ca1cf' } }
+                            });
+                        }
+                    }
+                });
+
+                // 2. Initialize jsvectormap
+                mapInstance = new jsVectorMap({
+                    selector: '#map-container',
+                    map: 'world',
+                    zoomButtons: true,
+                    zoomOnScroll: true,
+                    markers: markersList,
+                    selectedRegions: countriesToHighlight,
+                    regionStyle: {
+                        initial: {
+                            fill: '#e9ecef',
+                            stroke: '#fff',
+                            strokeWidth: 0.5,
+                            strokeOpacity: 1
+                        },
+                        selected: {
+                            fill: '#80cff0' // lighter blue for highlighted countries
+                        },
+                        hover: {
+                            fill: '#a6dcef'
+                        }
+                    },
+                    markerStyle: {
+                        initial: { stroke: '#fff', strokeWidth: 1.5, r: 6 },
+                        hover: { r: 8, cursor: 'pointer' }
+                    },
+                    onMarkerClick: function (event, index) {
+                        const clickedInst = markersList[index].name;
+                        const filtered = allVisitors.filter(v => v.institute === clickedInst);
+                        renderVisitorList(filtered);
+                        $('#reset-filter-btn').show();
+                    },
+                    onRegionClick: function (event, code) {
+                        const filtered = allVisitors.filter(v => v['country-code'].toUpperCase() === code);
+                        if (filtered.length > 0) {
+                            renderVisitorList(filtered);
+                            $('#reset-filter-btn').show();
+                        }
+                    },
+                    onRegionTooltipShow: function (event, tooltip, code) {
+                        tooltip.text('🌍 ' + tooltip.text());
+                    },
+                    onMarkerTooltipShow: function (event, tooltip, index) {
+                        tooltip.text('🏛️ ' + markersList[index].name);
+                    }
+                });
+
+                // Initial render of all visitors
+                renderVisitorList(allVisitors);
+
+                $('#reset-filter-btn').click(function () {
+                    $('#filter-year').val('all');
+                    $('#filter-type').val('all');
+                    renderVisitorList(allVisitors);
+                    $(this).hide();
+                });
+
+                // Helper function to update marker style
+                function setMarkerActive(markerIndex, color) {
+                    if (markerIndex !== -1 && mapInstance) {
+                        const markerEl = mapInstance.markers[markerIndex].element.node;
+                        markerEl.setAttribute('r', '10');
+                        markerEl.setAttribute('fill', color);
+                        markerEl.setAttribute('stroke', '#333');
+                        markerEl.setAttribute('stroke-width', '2');
+                    }
+                }
+
+                function setMarkerInactive(markerIndex) {
+                    if (markerIndex !== -1 && mapInstance) {
+                        const markerEl = mapInstance.markers[markerIndex].element.node;
+                        markerEl.setAttribute('r', '6');
+                        markerEl.setAttribute('fill', markersList[markerIndex].style.initial.fill);
+                        markerEl.setAttribute('stroke', '#fff');
+                        markerEl.setAttribute('stroke-width', '1.5');
+                    }
+                }
+
+                // Hover effects on list interacting with the map
+                $(document).on('mouseenter', '.visitor-card', function () {
+                    if ($(this).hasClass('active-card')) return;
+                    const inst = $(this).attr('data-institute');
+                    const typeColor = $(this).attr('data-type-color');
+                    const markerIndex = markersList.findIndex(m => m.name === inst);
+                    setMarkerActive(markerIndex, typeColor);
+                }).on('mouseleave', '.visitor-card', function () {
+                    if ($(this).hasClass('active-card')) return;
+                    const inst = $(this).attr('data-institute');
+                    const markerIndex = markersList.findIndex(m => m.name === inst);
+                    setMarkerInactive(markerIndex);
+                }).on('click', '.visitor-card', function () {
+                    // Reset previous active card's marker
+                    const prevActive = $('.visitor-card.active-card');
+                    if (prevActive.length > 0) {
+                        const prevInst = prevActive.attr('data-institute');
+                        const prevIndex = markersList.findIndex(m => m.name === prevInst);
+                        setMarkerInactive(prevIndex);
+                        prevActive.removeClass('active-card');
+                    }
+
+                    // Set new active card
+                    $(this).addClass('active-card');
+                    const inst = $(this).attr('data-institute');
+                    const typeColor = $(this).attr('data-type-color');
+                    const markerIndex = markersList.findIndex(m => m.name === inst);
+                    setMarkerActive(markerIndex, typeColor);
+                });
+
+                // 3. Process photos for gallery
+                if (photos && photos.length > 0) {
+                    const gallery = $('#photo-gallery');
+                    gallery.empty();
+
+                    photos.forEach((photo) => {
+                        const safeCaption = (photo.caption || '').replace(/'/g, "\\'");
+                        gallery.append(`
+                            <div class="gallery-item-wrapper" style="flex: 0 0 auto; width: 250px;">
+                                <div class="position-relative overflow-hidden rounded shadow-sm bg-light" style="height: 180px;">
+                                    <img class="img-fluid w-100" src="${photo.path}" alt="${photo.caption}" style="height: 100%; object-fit: cover; cursor: pointer;" onclick="openModal('${photo.path}', '${safeCaption}')">
+                                    <div class="position-absolute text-white text-center w-100 p-2" style="bottom: 0; background: rgba(0,0,0,0.6); pointer-events: none;">
+                                        <small class="d-block text-truncate">${photo.caption}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+
+                    $('#gallery-left').off('click').on('click', () => {
+                        document.getElementById('photo-gallery').scrollBy({ left: -265, behavior: 'smooth' });
+                    });
+                    $('#gallery-right').off('click').on('click', () => {
+                        document.getElementById('photo-gallery').scrollBy({ left: 265, behavior: 'smooth' });
+                    });
+
+                    $('#photos-section').show();
+                }
+            });
+        });
+
+        function openModal(imageSrc, caption) {
+            $('#modalImage').attr('src', imageSrc);
+            if (caption) {
+                $('#modalCaption').text(caption).show();
+            } else {
+                $('#modalCaption').hide();
+            }
+            $('#imageModal').modal('show');
+        }
+    </script>
+</head>
+
+<body>
+    <div id="header-container"></div>
+
+    <div class="container mb-5 mt-4 pt-3">
+        <div class="row">
+            <div class="col-12 text-center mb-4 mt-2">
+                <p class="lead text-muted" style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                    The Mustafaoglu Lab has proudly hosted research visitors from all around the world at different levels (undergraduates, graduates, and collaborators) through various programs, including PURE, STAR, Erasmus, and more.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div id="map-container"></div>
+                <small class="text-muted mt-2 d-block"><i class="fas fa-info-circle mr-1"></i> Click on highlighted
+                    countries or pins to filter the visitor list. Hover over the list to locate them on the map.</small>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <h3 class="mb-0 text-secondary">Research Visitors <span id="visitor-count" class="badge badge-info"
+                            style="font-size: 0.6em; vertical-align: middle; background-color: #0ca1cf; color: white;"></span>
+                    </h3>
+                    <button id="reset-filter-btn" class="btn btn-sm btn-outline-info" style="display: none;">
+                        <i class="fas fa-undo-alt mr-1"></i> Reset
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-3">
+                    <div class="col-6 pr-1">
+                        <select id="filter-year" class="form-control form-control-sm">
+                            <option value="all">All Years</option>
+                        </select>
+                    </div>
+                    <div class="col-6 pl-1">
+                        <select id="filter-type" class="form-control form-control-sm">
+                            <option value="all">All Types</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="visitor-list-container" class="visitor-list pr-2">
+                    <!-- Visitor cards will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Photos Gallery Section -->
+        <div id="photos-section" class="row mt-5 pt-4 border-top" style="display: none;">
+            <div class="col-lg-10 offset-lg-1 position-relative">
+                <h3 class="text-center mb-4 text-secondary">Memories & Group Pictures</h3>
+
+                <button class="btn btn-dark position-absolute" id="gallery-left"
+                    style="left: -15px; top: 60%; transform: translateY(-50%); z-index: 10; border-radius: 50%; width: 45px; height: 45px; opacity: 0.8; padding: 0;">
+                    <i class="fas fa-chevron-left" style="margin-left: -3px;"></i>
+                </button>
+
+                <div id="photo-gallery" class="d-flex"
+                    style="overflow-x: auto; scroll-behavior: smooth; gap: 15px; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none;">
+                </div>
+
+                <button class="btn btn-dark position-absolute" id="gallery-right"
+                    style="right: -15px; top: 60%; transform: translateY(-50%); z-index: 10; border-radius: 50%; width: 45px; height: 45px; opacity: 0.8; padding: 0;">
+                    <i class="fas fa-chevron-right" style="margin-right: -3px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-header border-0 pb-0 z-index-1" style="position: absolute; right: 0; z-index: 10;">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"
+                        style="text-shadow: 0 0 10px rgba(0,0,0,0.8); font-size: 2rem;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center p-0">
+                    <img id="modalImage" src="" alt="Full size photo" class="img-fluid rounded shadow-lg"
+                        style="max-height: 90vh;">
+                    <div id="modalCaption" class="text-white mt-2 p-2"
+                        style="font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta content="Mustafaoglu Lab" name="Mustafaoglu Lab @ Sabanci University">
+    <meta content="Nur Mustafaoglu, Sabanci University" name="keywords">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+    <title>Mustafaoglu Lab Website - UG Thesis</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/fa-all.js" data-auto-replace-svg="nest"></script>
+
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+
+    <script>
+        $(document).ready(function () {
+            $('#header-container').load('template_header.html');
+            $('#footer-container').load('template_footer.html');
+
+            $.getJSON('data/people/UG-thesis.json', function (data) {
+                const years = [...new Set(data.map(item => item.year))].sort((a, b) => b - a);
+                const container = $('#thesis-container');
+                container.empty();
+
+                if (data.length === 0) {
+                    container.append('<div class="col-12 text-center"><p>No thesis data found.</p></div>');
+                    return;
+                }
+
+                years.forEach(year => {
+                    const yearData = data.filter(item => item.year === year);
+
+                    const theses = {};
+                    yearData.forEach(item => {
+                        if (!theses[item.thesis]) {
+                            theses[item.thesis] = {
+                                term: item.term,
+                                students: []
+                            };
+                        }
+                        theses[item.thesis].students.push(item.name);
+                    });
+
+                    let yearHtml = `<div class="col-12 mb-5">
+                        <h2 class="border-bottom pb-2 mb-4" style="color: #0ca1cf;"><i class="fas fa-calendar-alt mr-2"></i>${year}</h2>
+                        <div class="row">`;
+
+                    for (const [thesisTitle, info] of Object.entries(theses)) {
+                        yearHtml += `
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0 thesis-card" style="border-radius: 8px; border-left: 4px solid #0ca1cf !important;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title font-weight-bold" style="color: #2c3e50; line-height: 1.4;">${thesisTitle}</h5>
+                                        <h6 class="card-subtitle mb-4 text-muted" style="font-size: 0.9rem;"><i class="fas fa-clock mr-1"></i> ${info.term}</h6>
+                                        <div class="mt-auto">
+                                            <div class="d-flex flex-wrap" style="gap: 8px;">
+                                                ${info.students.map(student => `<span class="badge badge-light border p-2 shadow-sm" style="font-size: 0.9rem; font-weight: 500; background-color: #fff;"><i class="fas fa-user-graduate mr-2" style="color: #0ca1cf;"></i>${student}</span>`).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    yearHtml += `</div></div>`;
+                    container.append(yearHtml);
+                });
+            });
+        });
+    </script>
+    <style>
+        .thesis-card {
+            transition: all 0.3s ease;
+        }
+
+        .thesis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-container"></div>
+
+    <div class="container mb-5 mt-4 pt-3" style="min-height: 60vh;">
+        <div class="row">
+            <div class="col-12 text-center mb-4 mt-2">
+                <p class="lead text-muted" style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                    Sabancı University senior students perform their graduation projects in the Mustafaoglu Lab, gaining hands-on research experience and contributing to our ongoing scientific work.
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2" id="thesis-container">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-info" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+</body>
+
+</html>
