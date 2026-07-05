@@ -76,8 +76,8 @@
     {
         "name": "Gulin",
         "surname": "Baran",
-        "code": "PhD",
-        "role": "PhD student",
+        "code": "Postdoc",
+        "role": "Postdoctoral Researcher",
         "duration": "(01/2021 - )",
         "img": "pictures/GulinBaran.jpg",
         "about": "is graduate student in BIO program at SU, having a BSc from Yeditepe University and MSc from Acibadem University. Her interest is understanding of neurodegenerative and neuropsychiatric diseases by creating disease models, and using pharmacogenomic approches to find novel treatment methods. She is crazy about theater and movies.",
@@ -289,9 +289,9 @@
     {
         "name": "Sumeyra Nuran",
         "surname": "Ozmen",
-        "code": "MSc",
+        "code": "Alumni",
         "role": "MSc Student",
-        "duration": "(09/2023 - )",
+        "duration": "(09/2023 - 08/2026)",
         "img": "pictures/SumeyraNuran.jpg",
         "about": "is completed her bachelor's degree in molecular biology & genetics at METU. She is curious about brain diseases, blood-brain barrier, and organ-on-a-chip models. She loves animals and playing theatre.",
         "links": {
@@ -332,9 +332,9 @@
     {
         "name": "Yesim",
         "surname": "Erdogan",
-        "code": "MSc",
+        "code": "Alumni",
         "role": "MSc Student",
-        "duration": "(09/2023 - )",
+        "duration": "(09/2023 - 07/2026)",
         "img": "pictures/YesimErdogan.jpg",
         "about": "a master's student in the BIO program at SU and received her Bachelor's degree from Gebze Technical University. Her research interests are 3D bioprinting and neurobiology.",
         "links": {
@@ -499,6 +499,21 @@
             "linkedin": "https://www.linkedin.com/in/shoeb-anwar-ansari-98774938/",
             "scholar": "https://scholar.google.com/citations?user=FK5f8pAAAAAJ&hl=en&oi=ao"
 
+        }
+    },
+
+    {
+        "name": "Gulin",
+        "surname": "Baran",
+        "code": "Alumni",
+        "role": "PhD student",
+        "duration": "(01/2021 - 02/2026)",
+        "img": "pictures/GulinBaran.jpg",
+        "about": "is graduate student in BIO program at SU, having a BSc from Yeditepe University and MSc from Acibadem University. Her interest is understanding of neurodegenerative and neuropsychiatric diseases by creating disease models, and using pharmacogenomic approches to find novel treatment methods. She is crazy about theater and movies.",
+        "links": {
+            "email": "gulinbaran@sabanciuniv.edu",
+            "scholar": "https://scholar.google.com/citations?user=stUItLAAAAAJ&hl=en",
+            "linkedin": "https://www.linkedin.com/in/g%C3%BClin-baran-6b683297/"
         }
     },
 
