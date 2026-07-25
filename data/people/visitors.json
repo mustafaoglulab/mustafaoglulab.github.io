@@ -280,6 +280,87 @@
             "lon": 29.3790
         },
         {
+            "name": "Ozan Selcuk",
+            "year": 2022,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Ceren Uslu",
+            "year": 2022,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Ceren Turgut",
+            "year": 2022,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sakarya University",
+            "lat": 40.7425,
+            "lon": 30.3325
+        },
+        {
+            "name": "Yigit Kemal Keskin",
+            "year": 2023,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Salih Kaya",
+            "year": 2023,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Yesim Erdogan",
+            "year": 2023,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Gebze Technical University",
+            "lat": 40.8126,
+            "lon": 29.3557
+        },
+        {
+            "name": "Mehlika Bitim",
+            "year": 2025,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Pelin Kemikli",
+            "year": 2025,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
+            "name": "Nilay Ayyildiz",
+            "year": 2025,
+            "type": "TUBITAK STAR",
+            "country-code": "TR",
+            "institute": "Istanbul Technical University",
+            "lat": 40.1054,
+            "lon": 29.0256
+        },
+        {
             "name": "Fereshteh Ramezanikhorsand",
             "year": 2021,
             "type": "Visitor",
