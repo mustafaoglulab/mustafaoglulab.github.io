@@ -136,6 +136,15 @@
             "lon": 29.901
         },
         {
+            "name": "Nurselin Kilic",
+            "year": 2024,
+            "type": "Intern",
+            "country-code": "TR",
+            "institute": "Gebze Technical University",
+            "lat": 40.8126,
+            "lon": 29.3557
+        },
+        {
             "name": "Ada Dördüncü",
             "year": 2025,
             "type": "pure",
