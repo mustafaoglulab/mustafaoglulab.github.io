@@ -20,6 +20,82 @@
 
     <link type="text/css" rel="stylesheet" href="css/custom.css" />
 
+    <style>
+        .artist-card {
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .artist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--hover-color, #0ca1cf);
+        }
+        .artist-img-container {
+            height: 320px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+        .artist-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .artist-card:hover .artist-img-container img {
+            transform: scale(1.05);
+        }
+        .artist-body {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .artist-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .artist-meta {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .artist-description {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.65;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .badge-pill {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .collab-intro {
+            max-width: 850px;
+            margin: 0 auto 40px auto;
+            line-height: 1.75;
+            font-size: 1.1rem;
+        }
+    </style>
+
     <script>
         $(document).ready(function () {
             $('#header-container').load('template_header.html');
@@ -34,16 +110,88 @@
     <div class="container mb-5 mt-4 pt-3" style="min-height: 60vh;">
         <div class="row">
             <div class="col-12 text-center mb-4">
-                <h1 class="display-4 font-weight-bold" style="color: #ffc107;"><i class="fas fa-palette mr-3"></i>Lab Artists</h1>
-                <p class="lead text-muted">Celebrating the scientific artists who have visualized our lab's research.</p>
+                <h1 class="display-4 font-weight-bold" style="color: #0ca1cf;"><i class="fas fa-palette mr-3"></i>Lab Artists</h1>
+                <p class="lead text-muted">Celebrating the multidisciplinary dialogue between art, biology, and technology.</p>
+            </div>
+            <div class="col-12 text-center">
+                <p class="collab-intro text-secondary">
+                    The Mustafaoglu Lab actively collaborates with <strong>Gate 27</strong>, an international residency program that facilitates dialogue between art, science, and social impact. By opening our biology laboratories at Sabancı University, we host artists to explore biotechnology, cellular structures, and sustainable biomaterials. Through these week-long residencies, artists and researchers co-create at the interface of science and art.
+                </p>
             </div>
         </div>
         
-        <div class="row mt-5">
-            <div class="col-12 text-center">
-                <div class="alert alert-light text-secondary d-inline-block p-4 shadow-sm">
-                    <i class="fas fa-tools fa-2x mb-3 text-muted"></i>
-                    <p class="mb-0">This page is currently under construction. Content coming soon!</p>
+        <div class="row mt-4">
+            <!-- Esin Avcı Aykanat -->
+            <div class="col-lg-6 mb-4">
+                <div class="artist-card" style="--hover-color: #0ca1cf;">
+                    <div class="artist-img-container">
+                        <img src="img/artists/Esin Aykanat Avci.png" alt="Esin Avcı Aykanat Bio-art Scaffold">
+                        <span class="position-absolute badge badge-info m-3" style="bottom: 0; right: 0; font-size: 0.9rem; padding: 6px 12px; border-radius: 50px;">2023 Resident</span>
+                    </div>
+                    <div class="artist-body">
+                        <h2 class="artist-title">Esin Avcı Aykanat</h2>
+                        <div class="artist-meta">
+                            <span><i class="fas fa-calendar-alt mr-1"></i> April - May 2023</span>
+                            <span><i class="fas fa-university mr-1"></i> Gate 27 Program</span>
+                        </div>
+                        <p class="artist-description">
+                            During her residency, Esin Avcı Aykanat collaborated with Dr. Nur Mustafaoğlu and her research team at Sabancı University to explore biological decellularization techniques. Stripping chlorophyll and other organic matter from plant leaves, she generated translucent cellulose scaffolds that mirror the human vascular network. Her project investigates the boundaries of life and death, human-nature linkages, and serves as a biological archive exploring the potential for cellular re-seeding and future revival.
+                        </p>
+                        <div class="mb-3">
+                            <span class="badge badge-info badge-pill" style="background-color: rgba(12, 161, 207, 0.1); color: #0ca1cf;">Bio-Art</span>
+                            <span class="badge badge-info badge-pill" style="background-color: rgba(12, 161, 207, 0.1); color: #0ca1cf;">Decellularization</span>
+                            <span class="badge badge-info badge-pill" style="background-color: rgba(12, 161, 207, 0.1); color: #0ca1cf;">Plant Scaffolds</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <a href="https://gate-27.com/en/gate-27nin-konugu-esin-aykanat-avci-doga-ve-insan-birlikteligine-yeni-bir-bakis-getiriyor-en/" target="_blank" class="btn btn-outline-info btn-block mt-2" style="font-size: 0.85rem; padding: 6px 4px;">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Gate 27 Release
+                                </a>
+                            </div>
+                            <div class="col-6 pl-1">
+                                <a href="https://sanatkritik.com/soylesi/esin-aykanat-avci-kendimi-sonsuz-bir-kesif-alaninin-icerisinde-sonsuz-yontemler-ve-malzeme-cesidi-arasinda-gezinen-surekli-kesfetmeye-ve-ogrenmeye-calisan-bir-ogrenci-gibi-hissediyorum/" target="_blank" class="btn btn-outline-info btn-block mt-2" style="font-size: 0.85rem; padding: 6px 4px;">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Kritik Interview
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Damla Yalçın -->
+            <div class="col-lg-6 mb-4">
+                <div class="artist-card" style="--hover-color: #f39c12;">
+                    <div class="artist-img-container">
+                        <img src="img/artists/Damla Yalcin.jpeg" alt="Damla Yalçın SCOBY Denim">
+                        <span class="position-absolute badge badge-warning m-3" style="bottom: 0; right: 0; font-size: 0.9rem; padding: 6px 12px; border-radius: 50px; color: #fff; background-color: #f39c12;">2024 Resident</span>
+                    </div>
+                    <div class="artist-body">
+                        <h2 class="artist-title">Damla Yalçın</h2>
+                        <div class="artist-meta">
+                            <span><i class="fas fa-calendar-alt mr-1"></i> May 2024</span>
+                            <span><i class="fas fa-university mr-1"></i> ORTA Bluesky Program</span>
+                        </div>
+                        <p class="artist-description">
+                            As the inaugural artist for the ORTA Bluesky residency program (a collaboration between Gate 27 and ORTA Anadolu), Damla Yalçın researched alternative biomaterials in the Mustafaoglu Lab. Focusing on growing and cultivating SCOBY (Symbiotic Culture of Bacteria and Yeast) sheets, she integrated these bacterial cellulose layers with denim fabrics for her installation "Living Spaces." Her work probes the future of textiles, illustrating how living organisms can be co-opted into fabric fabrication for sustainable manufacturing.
+                        </p>
+                        <div class="mb-3">
+                            <span class="badge badge-warning badge-pill" style="background-color: rgba(243, 156, 18, 0.1); color: #f39c12;">SCOBY</span>
+                            <span class="badge badge-warning badge-pill" style="background-color: rgba(243, 156, 18, 0.1); color: #f39c12;">Living Spaces</span>
+                            <span class="badge badge-warning badge-pill" style="background-color: rgba(243, 156, 18, 0.1); color: #f39c12;">Sustainable Denim</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <a href="https://aposto.com/s/damla-yalcin-ile-biyosanat-uzerine-roportaj" target="_blank" class="btn btn-outline-warning btn-block mt-2" style="color: #f39c12; border-color: #f39c12; font-size: 0.85rem; padding: 6px 4px;">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Aposto Interview
+                                </a>
+                            </div>
+                            <div class="col-6 pl-1">
+                                <a href="https://www.oggusto.com/sanat/sanatci/sanatci-sohbetleri-damla-yalcin" target="_blank" class="btn btn-outline-warning btn-block mt-2" style="color: #f39c12; border-color: #f39c12; font-size: 0.85rem; padding: 6px 4px;">
+                                    <i class="fas fa-external-link-alt mr-1"></i>Oggusto Interview
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
