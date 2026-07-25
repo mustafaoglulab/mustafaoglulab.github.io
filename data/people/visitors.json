@@ -226,6 +226,60 @@
             "lon": 6.9267805
         },
         {
+            "name": "Rania Sabri",
+            "year": 2026,
+            "type": "pure",
+            "country-code": "US",
+            "institute": "New York University",
+            "lat": 40.7295,
+            "lon": -73.9965
+        },
+        {
+            "name": "Stella Stepankova",
+            "year": 2026,
+            "type": "pure",
+            "country-code": "SE",
+            "institute": "Karolinska Institutet",
+            "lat": 59.3499,
+            "lon": 18.0319
+        },
+        {
+            "name": "Ahmet Haidov",
+            "year": 2026,
+            "type": "pure",
+            "country-code": "KR",
+            "institute": "Ulsan National institute of Science and Technology (UNIST)",
+            "lat": 35.5783,
+            "lon": 129.1900
+        },
+        {
+            "name": "Azra Durukan",
+            "year": 2026,
+            "type": "pure",
+            "country-code": "CH",
+            "institute": "University of Lausanne (UNIL)",
+            "lat": 46.5218,
+            "lon": 6.5668
+        },
+        {
+            "name": "Kamilla Iusupova",
+            "year": 2026,
+            "type": "pure",
+            "country-code": "RU",
+            "institute": "Moscow Institute of Physics and Technology",
+            "lat": 55.9298,
+            "lon": 37.5198
+        },
+        {
+            "name": "Esin Araz",
+            "year": 2026,
+            "type": "Intern",
+            "country-code": "TR",
+            "institute": "Sabanci University",
+            "lat": 40.8914,
+            "lon": 29.3790
+        },
+        {
             "name": "Fereshteh Ramezanikhorsand",
             "year": 2021,
             "type": "Visitor",
