@@ -215,17 +215,17 @@
     },
 
     {
-        "name": "Begun",
-        "surname": "Erbaba",
+        "name": "Pedro Antonio",
+        "surname": "Gama Lopez",
         "code": "Postdoc",
         "role": "Postdoctoral Researcher",
-        "duration": "(07/2026 - )",
-        "img": "pictures/BegunErbaba.jpg",
-        "about": "Begun’s research bridges comparative primate neuroscience and microfluidic brain models to investigate neuroplasticity and human brain evolution.",
+        "duration": "(09/2026 - )",
+        "img": "pictures/PedroAntonioGamaLopez.jpeg",
+        "about": "Postdoctoral researcher in the NanoBio4Can MSCA COFUND programme. His research focuses on nanoformulations for cancer treatment based on drug delivery systems. He received his Ph.D. in Nanosciences from the CICESE-CNyN-UNAM postgraduate programme in Mexico.",
         "links": {
-            "email": "begun.erbaba@sabanciuniv.edu",
-            "linkedin": "https://www.linkedin.com/in/begunerbaba",
-            "scholar": "https://scholar.google.com/citations?user=-52Gwo8AAAAJ&hl=en&oi=ao"
+            "email": "pedro.lopez@sabanciuniv.edu",
+            "linkedin": "http://www.linkedin.com/in/pedro-gama-22221428",
+            "scholar": "https://scholar.google.com/citations?user=ESkmdNwAAAAJ&hl=es&oi=ao"
 
         }
     },
