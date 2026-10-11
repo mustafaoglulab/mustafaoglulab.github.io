@@ -652,7 +652,7 @@ const SEED_DATA = {
 // Standardized Dropdown Options for Form and Codebook
 const DROPDOWN_OPTIONS = {
   disease: ["Alzheimer's", "GBM", "Stroke"],
-  phase: ["Phase II", "Phase III", "Phase II–III"],
+  phase: ["Phase I", "Phase I–II", "Phase II", "Phase II–III", "Phase III", "Phase IV"],
   status: ["Completed", "Terminated"],
   therapeuticApproach: ["Small molecule", "Antibody", "Biologic", "Cell therapy", "Other"],
   adminRoute: ["Oral", "Intravenous", "Intrathecal", "Intranasal", "Other"],

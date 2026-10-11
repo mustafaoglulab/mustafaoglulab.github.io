@@ -36,8 +36,8 @@ class AnalyticsController {
 
     const trials = this.getTrials();
     const diseases = ["Alzheimer's", "GBM", "Stroke"];
-    const phases = ["Phase II", "Phase III", "Phase II–III"];
-    const colors = ['#6366f1', '#0047ba', '#0284c7'];
+    const phases = ["Phase I", "Phase I–II", "Phase II", "Phase II–III", "Phase III", "Phase IV"];
+    const colors = ['#8b5cf6', '#a78bfa', '#6366f1', '#3b82f6', '#0047ba', '#0284c7'];
 
     const datasets = phases.map((phase, idx) => ({
       label: phase,
