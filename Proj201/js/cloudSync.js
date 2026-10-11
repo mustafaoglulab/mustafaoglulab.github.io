@@ -3,14 +3,14 @@
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  * 
  * Provides 100% free, real-time multi-user cloud synchronization for all 6 students
- * and supervisor across GitHub Pages static hosting using Google Cloud Firestore.
+ * and supervisor across GitHub Pages static hosting using Google Firebase.
+ * Supports both Firebase Realtime Database and Cloud Firestore.
  */
 
-// If you wish to hardcode the Firebase config so students do not need to configure anything,
-// simply paste your firebaseConfig object below. Otherwise, it can be configured via the UI.
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyCKN_JDUL0bMVDo4tFsq6i_hYM745B9SwQ",
   authDomain: "proj201-trials.firebaseapp.com",
+  databaseURL: "https://proj201-trials-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "proj201-trials",
   storageBucket: "proj201-trials.firebasestorage.app",
   messagingSenderId: "126331434224",
@@ -21,31 +21,24 @@ class CloudSyncAdapter {
   constructor() {
     this.CONFIG_STORAGE_KEY = 'proj201_firebase_config_v1';
     this.DISABLED_KEY = 'proj201_cloud_disabled';
-    this.db = null;
     this.app = null;
+    this.dbMode = 'rtdb'; // 'rtdb' or 'firestore'
+    this.rtdb = null;
+    this.firestore = null;
     this.isConnected = false;
     this.isSyncing = false;
     this.lastError = null;
     this.lastErrorCode = null;
     this.unsubscribes = [];
 
-    // Collections
-    this.COL_TRIALS = 'proj201_trials';
-    this.COL_QC_LOG = 'proj201_qc_log';
-    this.COL_SEARCH_LOGS = 'proj201_search_logs';
-    this.COL_WEEKLY = 'proj201_weekly_progress';
-    this.COL_META = 'proj201_meta';
-
     this.init();
   }
 
   getConfig() {
-    // If user explicitly chose local mode, don't auto-connect
     if (localStorage.getItem(this.DISABLED_KEY) === 'true') {
       return null;
     }
 
-    // 1. User-customized config in localStorage takes top priority
     try {
       const stored = localStorage.getItem(this.CONFIG_STORAGE_KEY);
       if (stored) {
@@ -56,7 +49,6 @@ class CloudSyncAdapter {
       console.error('Error parsing stored Firebase config:', e);
     }
 
-    // 2. Fall back to project default config
     if (DEFAULT_FIREBASE_CONFIG && DEFAULT_FIREBASE_CONFIG.apiKey) {
       return DEFAULT_FIREBASE_CONFIG;
     }
@@ -105,21 +97,43 @@ class CloudSyncAdapter {
       }
 
       this.app = firebase.initializeApp(config);
-      this.db = firebase.firestore();
 
-      // Test connection with heartbeat document
-      await this.db.collection(this.COL_META).doc('heartbeat').set({
-        lastSeen: new Date().toISOString(),
-        client: navigator.userAgent
-      }, { merge: true });
+      // Determine database mode: prefer Realtime Database if databaseURL or SDK available
+      if (typeof firebase.database === 'function' && (config.databaseURL || config.projectId)) {
+        this.dbMode = 'rtdb';
+        this.rtdb = firebase.database();
 
-      this.isConnected = true;
-      this.lastError = null;
-      this.lastErrorCode = null;
-      this.updateStatusUI(true, 'Cloud Synced');
-      this.startRealtimeListeners();
+        // Test connection with heartbeat document
+        await this.rtdb.ref('proj201_meta/heartbeat').set({
+          lastSeen: new Date().toISOString(),
+          client: navigator.userAgent,
+          status: 'Online'
+        });
 
-      return { success: true };
+        this.isConnected = true;
+        this.lastError = null;
+        this.lastErrorCode = null;
+        this.updateStatusUI(true, 'Cloud Synced');
+        this.startRealtimeListeners();
+        return { success: true };
+      } else if (typeof firebase.firestore === 'function') {
+        this.dbMode = 'firestore';
+        this.firestore = firebase.firestore();
+
+        await this.firestore.collection('proj201_meta').doc('heartbeat').set({
+          lastSeen: new Date().toISOString(),
+          client: navigator.userAgent
+        }, { merge: true });
+
+        this.isConnected = true;
+        this.lastError = null;
+        this.lastErrorCode = null;
+        this.updateStatusUI(true, 'Cloud Synced');
+        this.startRealtimeListeners();
+        return { success: true };
+      } else {
+        throw new Error('Neither Firebase Realtime Database nor Firestore SDK is loaded.');
+      }
     } catch (err) {
       console.error('Firebase connection error:', err);
       this.isConnected = false;
@@ -135,6 +149,14 @@ class CloudSyncAdapter {
       try { unsub(); } catch (e) {}
     });
     this.unsubscribes = [];
+    if (this.rtdb) {
+      try {
+        this.rtdb.ref('proj201_trials').off();
+        this.rtdb.ref('proj201_weekly_progress').off();
+        this.rtdb.ref('proj201_search_logs').off();
+        this.rtdb.ref('proj201_meta/searchMatrix').off();
+      } catch (e) {}
+    }
     this.isConnected = false;
   }
 
@@ -148,111 +170,87 @@ class CloudSyncAdapter {
   }
 
   // ==========================================
-  // REAL-TIME FIRESTORE LISTENERS
+  // REAL-TIME LISTENERS
   // ==========================================
   startRealtimeListeners() {
-    if (!this.db || !this.isConnected) return;
-    this.disconnect(); // Clean old listeners
+    if (!this.isConnected) return;
+    this.disconnect();
+    this.isConnected = true;
 
-    // 1. Listen to Clinical Trials
-    const unsubTrials = this.db.collection(this.COL_TRIALS).onSnapshot(
-      snapshot => {
-        if (snapshot.empty && window.storage.getTrials().length > 0) {
-          // If cloud collection is completely empty, offer to push initial seed trials
-          return;
+    if (this.dbMode === 'rtdb' && this.rtdb) {
+      // 1. Trials
+      this.rtdb.ref('proj201_trials').on('value', snapshot => {
+        const val = snapshot.val();
+        if (val) {
+          const cloudTrials = Object.values(val);
+          if (cloudTrials.length > 0) {
+            const currentData = window.storage.getData();
+            currentData.trials = cloudTrials;
+            localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
+            window.storage.notifyUpdate();
+          }
         }
+      });
 
+      // 2. Weekly Progress
+      this.rtdb.ref('proj201_weekly_progress').on('value', snapshot => {
+        const val = snapshot.val();
+        if (val) {
+          const currentData = window.storage.getData();
+          currentData.weeklyProgress = Object.values(val);
+          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
+          window.storage.notifyUpdate();
+        }
+      });
+
+      // 3. Search Logs
+      this.rtdb.ref('proj201_search_logs').on('value', snapshot => {
+        const val = snapshot.val();
+        if (val) {
+          const currentData = window.storage.getData();
+          currentData.searchLogs = Object.values(val);
+          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
+          window.storage.notifyUpdate();
+        }
+      });
+
+      // 4. Search Matrix
+      this.rtdb.ref('proj201_meta/searchMatrix').on('value', snapshot => {
+        const val = snapshot.val();
+        if (val && val.matrix) {
+          const currentData = window.storage.getData();
+          currentData.searchMatrix = val.matrix;
+          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
+          window.storage.notifyUpdate();
+        }
+      });
+    } else if (this.dbMode === 'firestore' && this.firestore) {
+      const unsubTrials = this.firestore.collection('proj201_trials').onSnapshot(snapshot => {
         const cloudTrials = [];
-        snapshot.forEach(doc => {
-          cloudTrials.push(doc.data());
-        });
-
+        snapshot.forEach(doc => cloudTrials.push(doc.data()));
         if (cloudTrials.length > 0) {
           const currentData = window.storage.getData();
           currentData.trials = cloudTrials;
-          // Silent local save without re-triggering cloud write
           localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
           window.storage.notifyUpdate();
         }
-      },
-      err => console.error('Firestore trials subscription error:', err)
-    );
-    this.unsubscribes.push(unsubTrials);
-
-    // 2. Listen to QC Log
-    const unsubQc = this.db.collection(this.COL_QC_LOG).onSnapshot(
-      snapshot => {
-        const cloudLogs = [];
-        snapshot.forEach(doc => cloudLogs.push(doc.data()));
-        if (cloudLogs.length > 0) {
-          cloudLogs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-          const currentData = window.storage.getData();
-          currentData.qcLog = cloudLogs;
-          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
-          window.storage.notifyUpdate();
-        }
-      },
-      err => console.error('Firestore QC log error:', err)
-    );
-    this.unsubscribes.push(unsubQc);
-
-    // 3. Listen to Search Logs
-    const unsubSearch = this.db.collection(this.COL_SEARCH_LOGS).onSnapshot(
-      snapshot => {
-        const logs = [];
-        snapshot.forEach(doc => logs.push(doc.data()));
-        if (logs.length > 0) {
-          const currentData = window.storage.getData();
-          currentData.searchLogs = logs;
-          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
-          window.storage.notifyUpdate();
-        }
-      },
-      err => console.error('Firestore search logs error:', err)
-    );
-    this.unsubscribes.push(unsubSearch);
-
-    // 4. Listen to Weekly Progress
-    const unsubWeekly = this.db.collection(this.COL_WEEKLY).onSnapshot(
-      snapshot => {
-        const reports = [];
-        snapshot.forEach(doc => reports.push(doc.data()));
-        if (reports.length > 0) {
-          const currentData = window.storage.getData();
-          currentData.weeklyProgress = reports;
-          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
-          window.storage.notifyUpdate();
-        }
-      },
-      err => console.error('Firestore weekly reports error:', err)
-    );
-    this.unsubscribes.push(unsubWeekly);
-
-    // 5. Listen to Tasks and Checklist
-    const unsubTasks = this.db.collection(this.COL_META).doc('tasks').onSnapshot(
-      doc => {
-        if (doc.exists) {
-          const meta = doc.data();
-          const currentData = window.storage.getData();
-          if (meta.weeks) currentData.weeks = meta.weeks;
-          if (meta.finalChecklist) currentData.finalChecklist = meta.finalChecklist;
-          localStorage.setItem(window.storage.STORAGE_KEY, JSON.stringify(currentData));
-          window.storage.notifyUpdate();
-        }
-      },
-      err => console.error('Firestore tasks sync error:', err)
-    );
-    this.unsubscribes.push(unsubTasks);
+      });
+      this.unsubscribes.push(unsubTrials);
+    }
   }
 
   // ==========================================
   // CLOUD WRITE DISPATCHERS
   // ==========================================
   async syncTrial(trial) {
-    if (!this.isConnected || !this.db) return;
+    if (!this.isConnected) return;
     try {
       this.updateStatusUI(true, 'Syncing...', true);
-      await this.db.collection(this.COL_TRIALS).doc(trial.id).set(trial, { merge: true });
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        await this.rtdb.ref(`proj201_trials/${trial.id}`).set(trial);
+      } else if (this.firestore) {
+        await this.firestore.collection('proj201_trials').doc(trial.id).set(trial, { merge: true });
+      }
       this.updateStatusUI(true, 'Cloud Synced');
     } catch (e) {
       console.error('Error syncing trial to cloud:', e);
@@ -261,117 +259,105 @@ class CloudSyncAdapter {
   }
 
   async deleteTrial(trialId) {
-    if (!this.isConnected || !this.db) return;
+    if (!this.isConnected) return;
     try {
       this.updateStatusUI(true, 'Syncing...', true);
-      await this.db.collection(this.COL_TRIALS).doc(trialId).delete();
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        await this.rtdb.ref(`proj201_trials/${trialId}`).remove();
+      } else if (this.firestore) {
+        await this.firestore.collection('proj201_trials').doc(trialId).delete();
+      }
       this.updateStatusUI(true, 'Cloud Synced');
     } catch (e) {
       console.error('Error deleting trial from cloud:', e);
     }
   }
 
-  async syncQcEntry(entry) {
-    if (!this.isConnected || !this.db) return;
-    try {
-      await this.db.collection(this.COL_QC_LOG).doc(entry.id).set(entry, { merge: true });
-    } catch (e) {
-      console.error('Error syncing QC log to cloud:', e);
-    }
-  }
-
-  async syncSearchLog(log) {
-    if (!this.isConnected || !this.db) return;
-    try {
-      await this.db.collection(this.COL_SEARCH_LOGS).doc(log.id).set(log, { merge: true });
-    } catch (e) {
-      console.error('Error syncing search log to cloud:', e);
-    }
-  }
-
   async syncWeeklyProgress(row) {
-    if (!this.isConnected || !this.db) return;
+    if (!this.isConnected) return;
     try {
-      await this.db.collection(this.COL_WEEKLY).doc(row.id).set(row, { merge: true });
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        await this.rtdb.ref(`proj201_weekly_progress/${row.id}`).set(row);
+      } else if (this.firestore) {
+        await this.firestore.collection('proj201_weekly_progress').doc(row.id).set(row, { merge: true });
+      }
     } catch (e) {
       console.error('Error syncing weekly progress to cloud:', e);
     }
   }
 
-  async syncSearchMatrix(matrix) {
-    if (!this.isConnected || !this.db) return;
+  async syncSearchLog(log) {
+    if (!this.isConnected) return;
     try {
-      await this.db.collection(this.COL_META).doc('searchMatrix').set({
-        matrix: matrix,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        await this.rtdb.ref(`proj201_search_logs/${log.id}`).set(log);
+      } else if (this.firestore) {
+        await this.firestore.collection('proj201_search_logs').doc(log.id).set(log, { merge: true });
+      }
+    } catch (e) {
+      console.error('Error syncing search log to cloud:', e);
+    }
+  }
+
+  async syncSearchMatrix(matrix) {
+    if (!this.isConnected) return;
+    try {
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        await this.rtdb.ref('proj201_meta/searchMatrix').set({
+          matrix: matrix,
+          updatedAt: new Date().toISOString()
+        });
+      } else if (this.firestore) {
+        await this.firestore.collection('proj201_meta').doc('searchMatrix').set({
+          matrix: matrix,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      }
     } catch (e) {
       console.error('Error syncing search matrix to cloud:', e);
     }
   }
 
-  async syncTasks(weeks, finalChecklist) {
-    if (!this.isConnected || !this.db) return;
-    try {
-      await this.db.collection(this.COL_META).doc('tasks').set({
-        weeks: weeks,
-        finalChecklist: finalChecklist,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
-    } catch (e) {
-      console.error('Error syncing tasks to cloud:', e);
-    }
-  }
-
-  // Push all existing local trials to Firestore in one operation
   async pushAllLocalDataToCloud() {
-    if (!this.isConnected || !this.db) {
+    if (!this.isConnected) {
       return { success: false, error: 'Cloud database is not connected.' };
     }
 
     try {
       this.updateStatusUI(true, 'Pushing Data...', true);
       const data = window.storage.getData();
-      const batch = this.db.batch();
 
-      // Trials
-      (data.trials || []).forEach(t => {
-        const ref = this.db.collection(this.COL_TRIALS).doc(t.id);
-        batch.set(ref, t, { merge: true });
-      });
+      if (this.dbMode === 'rtdb' && this.rtdb) {
+        const updates = {};
+        (data.trials || []).forEach(t => {
+          updates[`proj201_trials/${t.id}`] = t;
+        });
+        (data.weeklyProgress || []).forEach(w => {
+          updates[`proj201_weekly_progress/${w.id}`] = w;
+        });
+        (data.searchLogs || []).forEach(s => {
+          updates[`proj201_search_logs/${s.id}`] = s;
+        });
+        updates['proj201_meta/searchMatrix'] = {
+          matrix: data.searchMatrix || [],
+          updatedAt: new Date().toISOString()
+        };
 
-      // QC Log
-      (data.qcLog || []).forEach(q => {
-        const ref = this.db.collection(this.COL_QC_LOG).doc(q.id);
-        batch.set(ref, q, { merge: true });
-      });
-
-      // Search Logs
-      (data.searchLogs || []).forEach(s => {
-        const ref = this.db.collection(this.COL_SEARCH_LOGS).doc(s.id);
-        batch.set(ref, s, { merge: true });
-      });
-
-      // Weekly Progress
-      (data.weeklyProgress || []).forEach(w => {
-        const ref = this.db.collection(this.COL_WEEKLY).doc(w.id);
-        batch.set(ref, w, { merge: true });
-      });
-
-      // Tasks
-      const metaRef = this.db.collection(this.COL_META).doc('tasks');
-      batch.set(metaRef, {
-        weeks: data.weeks || [],
-        finalChecklist: data.finalChecklist || [],
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
-
-      await batch.commit();
-      this.updateStatusUI(true, 'Cloud Synced');
-      return { success: true, count: (data.trials || []).length };
+        await this.rtdb.ref().update(updates);
+        this.updateStatusUI(true, 'Cloud Synced');
+        return { success: true, count: (data.trials || []).length };
+      } else if (this.firestore) {
+        const batch = this.firestore.batch();
+        (data.trials || []).forEach(t => {
+          const ref = this.firestore.collection('proj201_trials').doc(t.id);
+          batch.set(ref, t, { merge: true });
+        });
+        await batch.commit();
+        this.updateStatusUI(true, 'Cloud Synced');
+        return { success: true, count: (data.trials || []).length };
+      }
     } catch (err) {
       console.error('Batch upload to cloud failed:', err);
-      this.updateStatusUI(false, 'Upload Error');
       return { success: false, error: err.message };
     }
   }
