@@ -20,10 +20,13 @@ const DEFAULT_FIREBASE_CONFIG = {
 class CloudSyncAdapter {
   constructor() {
     this.CONFIG_STORAGE_KEY = 'proj201_firebase_config_v1';
+    this.DISABLED_KEY = 'proj201_cloud_disabled';
     this.db = null;
     this.app = null;
     this.isConnected = false;
     this.isSyncing = false;
+    this.lastError = null;
+    this.lastErrorCode = null;
     this.unsubscribes = [];
 
     // Collections
@@ -37,27 +40,43 @@ class CloudSyncAdapter {
   }
 
   getConfig() {
-    if (DEFAULT_FIREBASE_CONFIG && DEFAULT_FIREBASE_CONFIG.apiKey) {
-      return DEFAULT_FIREBASE_CONFIG;
+    // If user explicitly chose local mode, don't auto-connect
+    if (localStorage.getItem(this.DISABLED_KEY) === 'true') {
+      return null;
     }
+
+    // 1. User-customized config in localStorage takes top priority
     try {
       const stored = localStorage.getItem(this.CONFIG_STORAGE_KEY);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.apiKey) return parsed;
+      }
     } catch (e) {
       console.error('Error parsing stored Firebase config:', e);
     }
+
+    // 2. Fall back to project default config
+    if (DEFAULT_FIREBASE_CONFIG && DEFAULT_FIREBASE_CONFIG.apiKey) {
+      return DEFAULT_FIREBASE_CONFIG;
+    }
+
     return null;
   }
 
   saveConfig(configObj) {
+    localStorage.removeItem(this.DISABLED_KEY);
     localStorage.setItem(this.CONFIG_STORAGE_KEY, JSON.stringify(configObj));
     return this.connect(configObj);
   }
 
   clearConfig() {
+    localStorage.setItem(this.DISABLED_KEY, 'true');
     localStorage.removeItem(this.CONFIG_STORAGE_KEY);
     this.disconnect();
-    this.updateStatusUI(false, 'Disconnected');
+    this.lastError = null;
+    this.lastErrorCode = null;
+    this.updateStatusUI(false, 'Local Mode');
   }
 
   init() {
@@ -72,29 +91,31 @@ class CloudSyncAdapter {
   async connect(config) {
     if (typeof firebase === 'undefined') {
       console.warn('Firebase SDK not loaded.');
+      this.lastError = 'Google Firebase SDK script is not loaded on page.';
       this.updateStatusUI(false, 'SDK Missing');
-      return { success: false, error: 'Firebase SDK not found on page.' };
+      return { success: false, error: this.lastError };
     }
 
     try {
       this.updateStatusUI(false, 'Connecting...', true);
 
-      // Avoid re-initializing duplicate apps
-      if (!firebase.apps.length) {
-        this.app = firebase.initializeApp(config);
-      } else {
-        this.app = firebase.app();
+      // Clean up previous apps before re-initializing
+      if (firebase.apps && firebase.apps.length) {
+        await Promise.all(firebase.apps.map(a => a.delete().catch(() => {})));
       }
 
+      this.app = firebase.initializeApp(config);
       this.db = firebase.firestore();
 
-      // Quick test read/write
+      // Test connection with heartbeat document
       await this.db.collection(this.COL_META).doc('heartbeat').set({
         lastSeen: new Date().toISOString(),
         client: navigator.userAgent
       }, { merge: true });
 
       this.isConnected = true;
+      this.lastError = null;
+      this.lastErrorCode = null;
       this.updateStatusUI(true, 'Cloud Synced');
       this.startRealtimeListeners();
 
@@ -102,8 +123,10 @@ class CloudSyncAdapter {
     } catch (err) {
       console.error('Firebase connection error:', err);
       this.isConnected = false;
-      this.updateStatusUI(false, 'Connection Error');
-      return { success: false, error: err.message };
+      this.lastError = err.message || String(err);
+      this.lastErrorCode = err.code || 'error';
+      this.updateStatusUI(false, 'Cloud Setup');
+      return { success: false, error: this.lastError };
     }
   }
 
@@ -120,7 +143,7 @@ class CloudSyncAdapter {
     const label = document.getElementById('cloudStatusText');
     if (!pill || !label) return;
 
-    pill.className = `cloud-status-pill ${connected ? 'status-connected' : 'status-disconnected'} ${syncing ? 'status-syncing' : ''}`;
+    pill.className = `cloud-pill ${connected ? 'status-connected' : 'status-disconnected'} ${syncing ? 'status-syncing' : ''}`;
     label.textContent = text;
   }
 

@@ -354,20 +354,66 @@ class AppController {
     const modalSubText = document.getElementById('modalCloudSubText');
     const btnDisconnect = document.getElementById('btnDisconnectCloud');
     const configInput = document.getElementById('firebaseConfigInput');
+    const diagBox = document.getElementById('cloudDiagnosticBox');
+    const diagTitle = document.getElementById('diagnosticTitle');
+    const diagMsg = document.getElementById('diagnosticMessage');
+    const diagActions = document.getElementById('diagnosticActionLinks');
+
+    const currentConfig = window.cloudSync ? window.cloudSync.getConfig() : null;
+    const projId = (currentConfig && currentConfig.projectId) ? currentConfig.projectId : 'proj201-trials';
 
     if (window.cloudSync && window.cloudSync.isConnected) {
       modalDot.className = 'status-dot-lg connected';
       modalStatusText.textContent = 'Connected & Synced';
-      modalSubText.textContent = 'Real-time multi-user live synchronization is active.';
+      modalSubText.textContent = 'Real-time multi-user live synchronization is active via Firebase Firestore.';
       if (btnDisconnect) btnDisconnect.classList.remove('d-none');
+      if (diagBox) diagBox.classList.add('d-none');
     } else {
       modalDot.className = 'status-dot-lg';
-      modalStatusText.textContent = 'Operating in Offline / Local Mode';
-      modalSubText.textContent = 'Data is safely preserved in browser localStorage.';
       if (btnDisconnect) btnDisconnect.classList.add('d-none');
+
+      if (window.cloudSync && window.cloudSync.lastError) {
+        modalStatusText.textContent = 'Connection Setup Needed';
+        modalSubText.textContent = 'Firebase reported a setup requirement. See diagnosis below.';
+
+        if (diagBox) {
+          diagBox.classList.remove('d-none');
+          const err = window.cloudSync.lastError;
+
+          if (err.includes('API has not been used') || err.includes('PERMISSION_DENIED') || err.includes('disabled') || err.includes('database')) {
+            diagTitle.textContent = 'Step 1 Needed: Create Firestore Database';
+            diagMsg.innerHTML = `Google Cloud reported: <em>"${err}"</em><br><br><strong>Why this happens:</strong> The Firebase project container exists, but the <strong>Firestore Database</strong> has not been created yet in the Firebase Console (or the Firestore API is disabled).`;
+            diagActions.innerHTML = `
+              <a href="https://console.firebase.google.com/project/${projId}/firestore" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm text-center" style="color: #ffffff; text-decoration: none;">
+                Open Firebase Console to Create Database &nearr;
+              </a>
+              <div class="text-xs text-muted mt-1">
+                Inside Firebase Console: Click <strong>Build</strong> &rarr; <strong>Firestore Database</strong> &rarr; <strong>Create database</strong> &rarr; Choose location &rarr; Select <strong>"Start in test mode"</strong>.
+              </div>
+            `;
+          } else if (err.includes('Missing or insufficient permissions')) {
+            diagTitle.textContent = 'Firestore Security Rules Set to Deny';
+            diagMsg.innerHTML = `Database is created, but security rules currently block read/write access.<br>Inside Firebase Console &rarr; Firestore Database &rarr; <strong>Rules</strong> tab, set to Test mode: <code>allow read, write: if true;</code>`;
+            diagActions.innerHTML = `
+              <a href="https://console.firebase.google.com/project/${projId}/firestore/rules" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm text-center" style="color: #ffffff; text-decoration: none;">
+                Edit Firestore Security Rules in Firebase Console &nearr;
+              </a>
+            `;
+          } else {
+            diagTitle.textContent = 'Firebase Configuration Notice';
+            diagMsg.textContent = err;
+            diagActions.innerHTML = `
+              <span class="text-muted">If you are using your own Firebase project, copy your <code>firebaseConfig</code> from Firebase Project Settings and paste it into the box below.</span>
+            `;
+          }
+        }
+      } else {
+        modalStatusText.textContent = 'Operating in Local Mode';
+        modalSubText.textContent = 'Data is safely stored in local browser storage.';
+        if (diagBox) diagBox.classList.add('d-none');
+      }
     }
 
-    const currentConfig = window.cloudSync ? window.cloudSync.getConfig() : null;
     if (currentConfig && configInput && !configInput.value) {
       configInput.value = JSON.stringify(currentConfig, null, 2);
     }

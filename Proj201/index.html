@@ -1386,6 +1386,16 @@
             <button type="button" class="btn btn-outline btn-sm d-none mt-2" id="btnDisconnectCloud">Disconnect Cloud</button>
           </div>
 
+          <!-- Diagnostic Alert for Firebase Connection Issues -->
+          <div id="cloudDiagnosticBox" class="d-none mb-3 p-3" style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--radius-md); font-size: 0.85rem;">
+            <div class="d-flex align-items-center gap-2 text-danger font-bold mb-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="diagnosticTitle">Connection Diagnosis</span>
+            </div>
+            <div class="text-xs mb-2" id="diagnosticMessage" style="line-height: 1.5; color: #334155;"></div>
+            <div id="diagnosticActionLinks" class="d-flex flex-column gap-2 text-xs"></div>
+          </div>
+
           <div class="form-group">
             <label for="firebaseConfigInput">Paste your <code>firebaseConfig</code> object or JSON here:</label>
             <textarea id="firebaseConfigInput" rows="5" class="form-control font-mono text-xs" placeholder='const firebaseConfig = {
