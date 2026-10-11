@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJ 201: Why Do Brain Drugs Fail? | Mustafaoglu Lab — Sabancı University</title>
+  <meta name="description" content="Collaborative Clinical Trial Research Platform for PROJ 201: Why Do Brain Drugs Fail? Investigating Alzheimer's Disease, Glioblastoma, and Stroke at Sabancı University.">
+  <meta name="author" content="Dr. Nur Mustafaoğlu, Faculty of Engineering and Natural Sciences, Sabancı University">
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for Interactive Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-scientific">
+
+  <!-- TOP APP BANNER / HEADER -->
+  <header class="app-header" id="appHeader">
+    <div class="header-inner">
+      <div class="header-branding">
+        <div class="brand-badge">PROJ 201</div>
+        <div class="brand-text">
+          <h1 class="brand-title">Why Do Brain Drugs Fail?</h1>
+          <p class="brand-subtitle">
+            Learning from Clinical Successes and Failures in Alzheimer's Disease, Glioblastoma, and Stroke
+            <span class="brand-meta">· Sabancı University (FENS) · Supervisor: <strong>Dr. Nur Mustafaoğlu</strong></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Active User Profile Switcher -->
+        <div class="user-selector-card">
+          <label for="activeUserSelect" class="selector-label">
+            <span class="pulse-indicator"></span> Active Profile:
+          </label>
+          <select id="activeUserSelect" class="styled-select" aria-label="Select Active Student or Supervisor Profile">
+            <optgroup label="Group A — Alzheimer's Disease">
+              <option value="student_a1" selected>Student A1 (Group A - AD)</option>
+              <option value="student_a2">Student A2 (Group A - AD)</option>
+            </optgroup>
+            <optgroup label="Group B — Glioblastoma (GBM)">
+              <option value="student_b1">Student B1 (Group B - GBM)</option>
+              <option value="student_b2">Student B2 (Group B - GBM)</option>
+            </optgroup>
+            <optgroup label="Group C — Stroke">
+              <option value="student_c1">Student C1 (Group C - Stroke)</option>
+              <option value="student_c2">Student C2 (Group C - Stroke)</option>
+            </optgroup>
+            <optgroup label="Course Supervision">
+              <option value="supervisor">Dr. Nur Mustafaoğlu (Supervisor)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <button id="btnNewTrial" class="btn btn-primary" title="Add a new clinical trial entry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Clinical Trial
+        </button>
+
+        <div class="dropdown-container">
+          <button id="btnDataActions" class="btn btn-secondary dropdown-toggle" aria-expanded="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Data Tools
+          </button>
+          <div class="dropdown-menu" id="dataActionsDropdown">
+            <button class="dropdown-item" id="btnExportJSON">
+              <span>Export All as JSON (Full Backup)</span>
+            </button>
+            <button class="dropdown-item" id="btnExportCSV">
+              <span>Export Current View as CSV (Excel/Sheets)</span>
+            </button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="btnOpenImportModal">
+              <span>Import Data from File/JSON</span>
+            </button>
+            <button class="dropdown-item dropdown-item-danger" id="btnResetToDefaults">
+              <span>Reload Benchmark Seed Dataset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN NAVIGATION TABS -->
+    <nav class="app-nav" aria-label="Main Navigation">
+      <ul class="nav-tabs" role="tablist">
+        <li role="presentation">
+          <button class="tab-link active" role="tab" aria-selected="true" data-tab="tab-dashboard" id="nav-dashboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-database" id="nav-database">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Clinical Trial Database
+            <span class="nav-counter" id="totalTrialsBadge">0</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-qc" id="nav-qc">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Peer QC & Verification
+            <span class="nav-counter badge-warning" id="pendingQcBadge">0</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-weekly" id="nav-weekly">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Weekly Roadmap & Tasks
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-searchlog" id="nav-searchlog">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search Log & Landscape Funnel
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-analytics" id="nav-analytics">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Comparative Analytics
+          </button>
+        </li>
+        <li role="presentation">
+          <button class="tab-link" role="tab" aria-selected="false" data-tab="tab-codebook" id="nav-codebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Codebook & Guidelines
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- MAIN APPLICATION CONTENT AREA -->
+  <main class="app-main" id="mainContainer">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-pane active" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Research Project Overview & Progress</h2>
+          <p class="section-subtitle">Real-time status of clinical trial collection, peer verification, and semester milestones.</p>
+        </div>
+        <div class="user-greeting-pill" id="userGreetingPill">
+          Logged in as: <strong id="greetingUserName">Student A1</strong>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon icon-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-label">Combined Trials</span>
+            <div class="metric-value-row">
+              <span class="metric-value" id="statTotalTrials">0</span>
+              <span class="metric-target">/ 30–45 target</span>
+            </div>
+            <div class="metric-progress-bar">
+              <div class="metric-progress-fill" id="statTotalProgress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-label">Alzheimer's (Group A)</span>
+            <div class="metric-value-row">
+              <span class="metric-value" id="statAdTrials">0</span>
+              <span class="metric-target">/ 10–15 target</span>
+            </div>
+            <span class="metric-sub" id="statAdVerified">0 verified</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-rose">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-label">Glioblastoma (Group B)</span>
+            <div class="metric-value-row">
+              <span class="metric-value" id="statGbmTrials">0</span>
+              <span class="metric-target">/ 10–15 target</span>
+            </div>
+            <span class="metric-sub" id="statGbmVerified">0 verified</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-label">Stroke (Group C)</span>
+            <div class="metric-value-row">
+              <span class="metric-value" id="statStrokeTrials">0</span>
+              <span class="metric-target">/ 10–15 target</span>
+            </div>
+            <span class="metric-sub" id="statStrokeVerified">0 verified</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon icon-emerald">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-label">Quality Control Status</span>
+            <div class="metric-value-row">
+              <span class="metric-value" id="statQcVerified">0</span>
+              <span class="metric-target">verified</span>
+            </div>
+            <span class="metric-sub text-warning" id="statQcPending">0 pending review</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semester Phase Banner & Key Deadlines -->
+      <div class="semester-phase-card">
+        <div class="phase-header">
+          <div class="phase-title-group">
+            <span class="badge badge-info">Current Phase</span>
+            <h3 class="phase-title">Phase I — Project Design and Proposal (12 Oct – 6 Nov 2026)</h3>
+          </div>
+          <div class="phase-countdown">
+            <span class="countdown-tag">Next Major Milestone:</span>
+            <strong>Friday, November 6 · Proposal Report Submission</strong>
+          </div>
+        </div>
+        <div class="phase-steps-timeline">
+          <div class="timeline-step current">
+            <div class="step-dot">1</div>
+            <div class="step-info">
+              <strong>Phase I (W1–W4)</strong>
+              <span>Search Landscape & Proposal</span>
+            </div>
+          </div>
+          <div class="timeline-divider"></div>
+          <div class="timeline-step">
+            <div class="step-dot">2</div>
+            <div class="step-info">
+              <strong>Phase II (W5–W7)</strong>
+              <span>Full Data Extraction & Peer QC</span>
+            </div>
+          </div>
+          <div class="timeline-divider"></div>
+          <div class="timeline-step">
+            <div class="step-dot">3</div>
+            <div class="step-info">
+              <strong>Phase III (W8–W12)</strong>
+              <span>Comparative Analysis & Reports</span>
+            </div>
+          </div>
+          <div class="timeline-divider"></div>
+          <div class="timeline-step final">
+            <div class="step-dot">★</div>
+            <div class="step-info">
+              <strong>Poster Day (Dec 30)</strong>
+              <span>Final Report (Dec 31) · Talks (Jan 4–8)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-Column Dashboard Section: Quick Action Cards + Handbook Highlights -->
+      <div class="dashboard-split-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Three Core Project Goals</h3>
+          </div>
+          <div class="card-body">
+            <ul class="goals-list">
+              <li>
+                <div class="goal-num">1</div>
+                <div>
+                  <strong>Build a Reliable Clinical Trial Database</strong>
+                  <p>Systematically collect 10–15 well-documented trials per disease (Phase II/III, completed/terminated, 2010–2026).</p>
+                </div>
+              </li>
+              <li>
+                <div class="goal-num">2</div>
+                <div>
+                  <strong>Understand Clinical Successes & Failures</strong>
+                  <p>Investigate why some approaches achieve intended endpoints while others fail to demonstrate efficacy or safety.</p>
+                </div>
+              </li>
+              <li>
+                <div class="goal-num">3</div>
+                <div>
+                  <strong>Identify Translational Lessons for Future Brain Drugs</strong>
+                  <p>Explore biological & technical hurdles: Blood-Brain Barrier (BBB) delivery, disease heterogeneity, and target validation.</p>
+                </div>
+              </li>
+            </ul>
+            <div class="handbook-quote">
+              <em>"Collect carefully. Compare fairly. Interpret cautiously. Communicate clearly."</em>
+              <span>— PROJ 201 Handbook</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Shortcuts & Verification Queue</h3>
+          </div>
+          <div class="card-body">
+            <div class="shortcut-buttons">
+              <button class="btn btn-outline-primary btn-block" onclick="window.app.navigateToTab('tab-database')">
+                Browse Full Database (30–45 Trials)
+              </button>
+              <button class="btn btn-outline-warning btn-block" onclick="window.app.navigateToTab('tab-qc')">
+                Review Pending QC Verifications (<span id="quickPendingCount">0</span>)
+              </button>
+              <button class="btn btn-outline-info btn-block" onclick="window.app.navigateToTab('tab-weekly')">
+                Open Weekly Deliverables Tracker
+              </button>
+              <button class="btn btn-outline-success btn-block" onclick="window.app.navigateToTab('tab-analytics')">
+                View Cross-Disease Failure Analytics
+              </button>
+            </div>
+
+            <div class="team-roster-box mt-4">
+              <h4>Student Team Allocation:</h4>
+              <div class="roster-grid">
+                <div class="roster-item">
+                  <span class="disease-tag tag-ad">Alzheimer's</span>
+                  <span><strong>Group A:</strong> Student A1 &amp; Student A2</span>
+                </div>
+                <div class="roster-item">
+                  <span class="disease-tag tag-gbm">Glioblastoma</span>
+                  <span><strong>Group B:</strong> Student B1 &amp; Student B2</span>
+                </div>
+                <div class="roster-item">
+                  <span class="disease-tag tag-stroke">Stroke</span>
+                  <span><strong>Group C:</strong> Student C1 &amp; Student C2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CLINICAL TRIAL DATABASE -->
+    <section id="tab-database" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Clinical Trial Database</h2>
+          <p class="section-subtitle">Comprehensive registry of Alzheimer's, Glioblastoma, and Stroke Phase II/III trials.</p>
+        </div>
+        <div class="header-tools">
+          <button class="btn btn-primary" onclick="window.trialForm.openNewModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add New Trial
+          </button>
+        </div>
+      </div>
+
+      <!-- Database Filter & Control Toolbar -->
+      <div class="filter-toolbar">
+        <!-- Disease Tabs Filter -->
+        <div class="disease-filter-group" id="diseaseFilterGroup">
+          <button class="filter-chip active" data-disease="ALL">All Diseases (<span id="countFilterAll">0</span>)</button>
+          <button class="filter-chip" data-disease="Alzheimer's Disease">Alzheimer's (<span id="countFilterAd">0</span>)</button>
+          <button class="filter-chip" data-disease="Glioblastoma">Glioblastoma (<span id="countFilterGbm">0</span>)</button>
+          <button class="filter-chip" data-disease="Stroke">Stroke (<span id="countFilterStroke">0</span>)</button>
+        </div>
+
+        <div class="filter-secondary-row">
+          <!-- Search input -->
+          <div class="search-input-wrapper">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="trialSearchInput" placeholder="Search by NCT ID, drug, mechanism, or author...">
+          </div>
+
+          <!-- Outcome Filter -->
+          <div class="select-wrapper">
+            <select id="outcomeFilterSelect" aria-label="Filter by Clinical Outcome">
+              <option value="ALL">All Outcomes</option>
+              <option value="Positive outcome">Positive outcome</option>
+              <option value="Negative outcome">Negative outcome</option>
+              <option value="Mixed / Inconclusive">Mixed / Inconclusive</option>
+              <option value="Terminated / Discontinued">Terminated / Discontinued</option>
+              <option value="Not assessable">Not assessable</option>
+            </select>
+          </div>
+
+          <!-- Verification Filter -->
+          <div class="select-wrapper">
+            <select id="qcFilterSelect" aria-label="Filter by QC Status">
+              <option value="ALL">All QC Statuses</option>
+              <option value="Verified">Verified Only</option>
+              <option value="Pending Verification">Pending Verification</option>
+              <option value="Draft">Draft</option>
+              <option value="Needs Revision">Needs Revision</option>
+            </select>
+          </div>
+
+          <!-- Phase Filter -->
+          <div class="select-wrapper">
+            <select id="phaseFilterSelect" aria-label="Filter by Phase">
+              <option value="ALL">All Phases</option>
+              <option value="Phase 2">Phase 2 / II</option>
+              <option value="Phase 3">Phase 3 / III</option>
+              <option value="Phase 2/3">Phase 2/3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Database Table Container -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table" id="trialsTable">
+            <thead>
+              <tr>
+                <th style="width: 130px;">NCT ID</th>
+                <th>Drug &amp; Study Title</th>
+                <th style="width: 140px;">Disease Area</th>
+                <th style="width: 85px;">Phase</th>
+                <th style="width: 150px;">Outcome</th>
+                <th style="width: 180px;">Primary Endpoint</th>
+                <th style="width: 130px;">QC Status</th>
+                <th style="width: 130px;" class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="trialsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+        <div id="tableEmptyState" class="empty-state d-none">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <h4>No clinical trials found matching criteria</h4>
+          <p>Try modifying your search keywords or resetting filters.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: PEER QC & VERIFICATION -->
+    <section id="tab-qc" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Peer Quality Control & Verification Workflow</h2>
+          <p class="section-subtitle">
+            Section 5 Requirement: Every clinical trial must be extracted by one student and verified independently by a peer before final approval.
+          </p>
+        </div>
+      </div>
+
+      <!-- Pending Verification Review Queue -->
+      <div class="card mb-4">
+        <div class="card-header bg-gradient-amber">
+          <div class="d-flex align-items-center justify-content-between w-100">
+            <h3 class="card-title text-dark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Awaiting Peer Verification Queue
+            </h3>
+            <span class="badge badge-dark" id="qcQueueCount">0 Studies</span>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0">
+              <thead>
+                <tr>
+                  <th>NCT ID</th>
+                  <th>Disease</th>
+                  <th>Intervention</th>
+                  <th>Extractor</th>
+                  <th>Status</th>
+                  <th>Primary Outcome</th>
+                  <th class="text-right">QC Action</th>
+                </tr>
+              </thead>
+              <tbody id="qcQueueTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+          <div id="qcQueueEmptyState" class="empty-state d-none">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <p class="mt-2 text-muted">All trials have been verified! Great job maintaining data quality.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completed QC Log -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Audit Trail &amp; Verification History (QC_LOG)</h3>
+          <p class="text-muted text-sm mb-0">Record of peer verifications, corrections made, and supervisor approvals.</p>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0">
+              <thead>
+                <tr>
+                  <th>Date &amp; Time</th>
+                  <th>NCT ID</th>
+                  <th>Extractor</th>
+                  <th>Verifier</th>
+                  <th>Decision</th>
+                  <th>Verification Notes &amp; Corrections</th>
+                </tr>
+              </thead>
+              <tbody id="qcLogTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: WEEKLY ROADMAP & TASKS -->
+    <section id="tab-weekly" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Weekly Roadmap & Deliverables Tracker</h2>
+          <p class="section-subtitle">12-week structured semester plan aligned with official PROJ 201 milestones.</p>
+        </div>
+        <button class="btn btn-secondary" id="btnSubmitWeeklyReport">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Submit Weekly Progress Update
+        </button>
+      </div>
+
+      <!-- Weekly Accordion / Checklist -->
+      <div class="weekly-accordion" id="weeklyAccordion">
+        <!-- Rendered by weeklyTracker.js -->
+      </div>
+
+      <!-- Section 11 Final Student Checklist -->
+      <div class="card mt-4 border-primary">
+        <div class="card-header bg-primary-subtle">
+          <h3 class="card-title text-primary">Section 11: Final Student Checklist (Before Submission)</h3>
+          <p class="text-sm text-muted mb-0">Review these 9 critical quality criteria before submitting your final report and poster.</p>
+        </div>
+        <div class="card-body" id="finalChecklistContainer">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Weekly Progress Submissions History -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">Weekly Progress Submissions (WEEKLY_PROGRESS Log)</h3>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0">
+              <thead>
+                <tr>
+                  <th>Week #</th>
+                  <th>Group</th>
+                  <th>Submitted By</th>
+                  <th>Trial Counts</th>
+                  <th>Completed Tasks</th>
+                  <th>Challenges &amp; Next Steps</th>
+                </tr>
+              </thead>
+              <tbody id="weeklyProgressTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SEARCH LOG & LANDSCAPE FUNNEL -->
+    <section id="tab-searchlog" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Clinical Trial Landscape & Systematic Search Log</h2>
+          <p class="section-subtitle">
+            Section 6 Week 1 Requirement: Record exact ClinicalTrials.gov search criteria and study counts through the 7 sequential filters.
+          </p>
+        </div>
+        <button class="btn btn-primary" id="btnAddSearchLog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Record Search Log Entry
+        </button>
+      </div>
+
+      <!-- Systematic Attrition Funnel Grid -->
+      <div class="funnel-container-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">7-Step Systematic Filtering Protocol</h3>
+            <span class="badge badge-info">ClinicalTrials.gov</span>
+          </div>
+          <div class="card-body">
+            <ol class="funnel-steps-list">
+              <li><strong>Step 1:</strong> All registered studies for the target disease condition.</li>
+              <li><strong>Step 2:</strong> Interventional studies only (excluding observational registries).</li>
+              <li><strong>Step 3:</strong> Phase II and Phase III trials.</li>
+              <li><strong>Step 4:</strong> Recruitment status: Completed or Terminated.</li>
+              <li><strong>Step 5:</strong> Intervention type: Drug or biological treatment.</li>
+              <li><strong>Step 6:</strong> Completion period: 2010 to 2026.</li>
+              <li><strong>Step 7:</strong> Accessible outcomes, publications, or documented termination reason.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Disease Landscape Attrition Overview</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 260px;">
+              <canvas id="funnelChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Log Records Table -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">Search History &amp; Filter Counts (SEARCH_LOG)</h3>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Disease</th>
+                  <th>Search Query &amp; URL</th>
+                  <th>Step 1 (All)</th>
+                  <th>Step 3 (Ph II/III)</th>
+                  <th>Step 5 (Drug)</th>
+                  <th>Step 7 (Eligible)</th>
+                  <th>Logged By</th>
+                </tr>
+              </thead>
+              <tbody id="searchLogTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: COMPARATIVE ANALYTICS -->
+    <section id="tab-analytics" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Comparative Analysis: Why Do Brain Drugs Fail?</h2>
+          <p class="section-subtitle">Cross-disease patterns across Alzheimer's Disease, Glioblastoma, and Stroke.</p>
+        </div>
+      </div>
+
+      <!-- Analytics Chart Grid -->
+      <div class="analytics-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Clinical Outcomes Distribution by Disease</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="outcomesByDiseaseChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Documented Reasons for Negative Outcomes / Termination</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="failureReasonsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Hypothesized Contributing Factors (Literature-Supported)</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="contributingFactorsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Trial Phases in Dataset</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 280px;">
+              <canvas id="phaseDistributionChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benchmark Comparisons Table -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">Representative Successful vs Unsuccessful Approaches (Benchmark Comparison)</h3>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0">
+              <thead>
+                <tr>
+                  <th>Disease Area</th>
+                  <th>Clinically Successful Benchmark</th>
+                  <th>Target / Mechanism</th>
+                  <th>Failed / Discontinued Approaches</th>
+                  <th>Key Translational Lessons</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="disease-tag tag-ad">Alzheimer's</span></td>
+                  <td><strong>Lecanemab (Leqembi)</strong> / <strong>Donanemab</strong></td>
+                  <td>Protofibril / Plaque clearance (Anti-Aβ IgG1)</td>
+                  <td>Bapineuzumab, Semagacestat (γ-secretase), Verubecestat (BACE1)</td>
+                  <td>Timing matters: intervening at mild/early stage is essential; whole-brain BBB penetration is ~0.1% for mAbs; ARIA safety monitoring required.</td>
+                </tr>
+                <tr>
+                  <td><span class="disease-tag tag-gbm">Glioblastoma</span></td>
+                  <td><strong>Temozolomide (Stupp Protocol)</strong> / <strong>TTFields</strong></td>
+                  <td>Alkylating agent (DNA methylation) / Alternating electric fields</td>
+                  <td>Nivolumab (CheckMate-143), Rilotumumab (MET), Bevacizumab (no OS gain)</td>
+                  <td>Profound immunosuppressive microenvironment; tumor clonal heterogeneity; BBB/Blood-Tumor Barrier variable penetration; pseudoprogression.</td>
+                </tr>
+                <tr>
+                  <td><span class="disease-tag tag-stroke">Stroke</span></td>
+                  <td><strong>Alteplase (IV rtPA)</strong> / <strong>Tenecteplase</strong> / <strong>EVT</strong></td>
+                  <td>Recombinant thrombolysis / Endovascular thrombectomy</td>
+                  <td>NXY-059 (free radical spin trap), Tirilazad, Enlimomab, Gavestinel</td>
+                  <td>"Time is brain": therapeutic window (<4.5h); neuroprotectants demonstrated preclinical efficacy in young rodents but failed in heterogeneous human ischemic cascades without reperfusion.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: CODEBOOK & SCIENTIFIC GUIDELINES -->
+    <section id="tab-codebook" class="tab-pane" role="tabpanel">
+      <div class="content-header">
+        <div>
+          <h2 class="section-title">Standard Data Collection Codebook & Guidelines</h2>
+          <p class="section-subtitle">
+            Handbook Section 4 &amp; 5: Standard definitions, outcome classifications, and distinction between documented findings and possible explanations.
+          </p>
+        </div>
+      </div>
+
+      <div class="codebook-grid">
+        <!-- Classification Rules -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Outcome Classifications (Section 4.3)</h3>
+          </div>
+          <div class="card-body">
+            <div class="definition-item">
+              <span class="badge badge-success">Positive outcome</span>
+              <p>The prespecified primary endpoint was met, according to reported evidence and statistical analysis plan.</p>
+            </div>
+            <div class="definition-item">
+              <span class="badge badge-danger">Negative outcome</span>
+              <p>The primary endpoint was not met, or lack of efficacy was documented in the final published trial results.</p>
+            </div>
+            <div class="definition-item">
+              <span class="badge badge-warning">Mixed / Inconclusive</span>
+              <p>Mixed results (e.g. secondary endpoints showed trends but primary endpoint missed), uncertain findings, or conflicting evidence.</p>
+            </div>
+            <div class="definition-item">
+              <span class="badge badge-dark">Terminated / Discontinued</span>
+              <p>Study stopped early prior to target enrollment. The documented reason (e.g. futility, toxicity, sponsor decision) must be recorded.</p>
+            </div>
+            <div class="definition-item">
+              <span class="badge badge-secondary">Not assessable</span>
+              <p>Insufficient publicly accessible outcome information. Do not guess; record available details.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documented vs Possible Explanations -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Documented Reasons vs Contributing Factors (Section 4.4)</h3>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-important mb-3">
+              <strong>Crucial Scientific Rule:</strong> Students must strictly distinguish between findings explicitly reported in the trial vs hypothesized translational factors!
+            </div>
+            <div class="compare-box">
+              <div class="compare-col">
+                <h4 class="text-primary">1. Documented Reasons</h4>
+                <p>Findings explicitly reported in ClinicalTrials.gov results, peer-reviewed publications, or FDA/EMA regulatory briefing documents.</p>
+                <ul>
+                  <li>Primary endpoint (e.g., ADAS-Cog, mRS, OS) p > 0.05 vs placebo.</li>
+                  <li>Futility threshold crossed during planned interim analysis.</li>
+                  <li>Excess adverse events: intolerable cerebral edema, ARIA-E, hemorrhage.</li>
+                </ul>
+              </div>
+              <div class="compare-col">
+                <h4 class="text-secondary">2. Possible Contributing Factors</h4>
+                <p>Mechanisms suggested by scientific literature and translational neuropharmacology. Must cite supporting evidence.</p>
+                <ul>
+                  <li><strong>Blood-Brain Barrier (BBB) delivery:</strong> Low brain bioavailability (<0.1–0.2% plasma concentration reaching CNS parenchymal targets).</li>
+                  <li><strong>Disease Heterogeneity:</strong> Subtypes (e.g., IDH-wildtype vs mutant GBM; ischemic penumbra variations).</li>
+                  <li><strong>Therapeutic Window &amp; Patient Timing:</strong> Administering intervention after irreversible neuronal death.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inclusion & Selection Strategy -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Study Selection Criteria (Section 4.2)</h3>
+          </div>
+          <div class="card-body">
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Criterion</th>
+                  <th>Preferred Selection</th>
+                  <th>Disease-Specific Considerations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Study Type</strong></td>
+                  <td>Interventional</td>
+                  <td>Exclude purely observational or imaging-only registries.</td>
+                </tr>
+                <tr>
+                  <td><strong>Phase</strong></td>
+                  <td>Phase II or Phase III</td>
+                  <td>Phase IIb or Phase II/III seamless trials are acceptable.</td>
+                </tr>
+                <tr>
+                  <td><strong>Status</strong></td>
+                  <td>Completed or Terminated</td>
+                  <td>Active or recruiting trials should be excluded from outcome analysis.</td>
+                </tr>
+                <tr>
+                  <td><strong>Intervention</strong></td>
+                  <td>Drug or Biological</td>
+                  <td>Small molecules, monoclonal antibodies, gene/cell therapy.</td>
+                </tr>
+                <tr>
+                  <td><strong>Period</strong></td>
+                  <td>2010 – 2026</td>
+                  <td>Studies completed in this window reflect contemporary trial design.</td>
+                </tr>
+                <tr>
+                  <td><strong>Disease Nuances</strong></td>
+                  <td>Specific clinical scope</td>
+                  <td>
+                    <strong>AD:</strong> Specify early vs mild-to-moderate.<br>
+                    <strong>GBM:</strong> Distinguish newly diagnosed from recurrent.<br>
+                    <strong>Stroke:</strong> Focus on acute ischemic treatment.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6 Quality Control Steps -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quality Control 6-Step Verification Protocol (Section 5)</h3>
+          </div>
+          <div class="card-body">
+            <div class="qc-steps-box">
+              <div class="qc-step">
+                <span class="qc-step-badge">1</span>
+                <div><strong>Verify NCT ID &amp; Relevance:</strong> Confirm registration link on ClinicalTrials.gov and target brain disease.</div>
+              </div>
+              <div class="qc-step">
+                <span class="qc-step-badge">2</span>
+                <div><strong>Check Design &amp; Regimen:</strong> Confirm phase, randomization, blinding, and active vs placebo control.</div>
+              </div>
+              <div class="qc-step">
+                <span class="qc-step-badge">3</span>
+                <div><strong>Confirm Reported Outcome:</strong> Check primary endpoint result in publication abstract, results table, or press release.</div>
+              </div>
+              <div class="qc-step">
+                <span class="qc-step-badge">4</span>
+                <div><strong>Trace Supporting Evidence:</strong> Record valid DOI and PMID references.</div>
+              </div>
+              <div class="qc-step">
+                <span class="qc-step-badge">5</span>
+                <div><strong>Independent Peer Check:</strong> Second teammate reviews and marks corrections.</div>
+              </div>
+              <div class="qc-step">
+                <span class="qc-step-badge">6</span>
+                <div><strong>Resolve Disagreements:</strong> Document changes in QC Log and confirm final classification.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- MODAL 1: ADD / EDIT CLINICAL TRIAL -->
+  <div class="modal-backdrop d-none" id="trialModalBackdrop">
+    <div class="modal-dialog modal-xl" role="dialog" aria-modal="true" aria-labelledby="trialModalTitle">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="trialModalTitle">Add Clinical Trial</h3>
+            <p class="modal-subtitle">Follow Section 5 Standard Data Collection specifications.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseTrialModal" aria-label="Close modal">&times;</button>
+        </div>
+        <form id="trialForm">
+          <input type="hidden" id="formTrialId">
+
+          <div class="modal-body">
+            <!-- Form Tabs / Accordion Sections -->
+            <div class="form-section-tabs">
+              <button type="button" class="form-section-tab active" data-section="form-sec-ident">1. Identification &amp; Design</button>
+              <button type="button" class="form-section-tab" data-section="form-sec-patient">2. Population &amp; Intervention</button>
+              <button type="button" class="form-section-tab" data-section="form-sec-outcomes">3. Endpoints &amp; Outcomes</button>
+              <button type="button" class="form-section-tab" data-section="form-sec-reasons">4. Reasons &amp; BBB Factors</button>
+              <button type="button" class="form-section-tab" data-section="form-sec-evidence">5. Evidence &amp; QC</button>
+            </div>
+
+            <!-- SECTION 1: Identification & Design -->
+            <div class="form-section active" id="form-sec-ident">
+              <h4 class="form-section-heading">Identification &amp; Trial Design</h4>
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formNctId">NCT Identifier <span class="required">*</span></label>
+                  <input type="text" id="formNctId" placeholder="e.g. NCT01224106" required pattern="^NCT[0-9]{8}$" title="Must be NCT followed by 8 digits">
+                  <small class="form-hint">Format: NCT followed by 8 digits</small>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formDisease">Disease Category <span class="required">*</span></label>
+                  <select id="formDisease" required>
+                    <option value="">Select Disease...</option>
+                    <option value="Alzheimer's Disease">Alzheimer's Disease (Group A)</option>
+                    <option value="Glioblastoma">Glioblastoma (Group B)</option>
+                    <option value="Stroke">Stroke (Group C)</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formPhase">Trial Phase <span class="required">*</span></label>
+                  <select id="formPhase" required>
+                    <option value="">Select Phase...</option>
+                    <option value="Phase 2">Phase 2 / Phase II</option>
+                    <option value="Phase 3">Phase 3 / Phase III</option>
+                    <option value="Phase 2/3">Phase 2/3</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formTitle">Official Study Title <span class="required">*</span></label>
+                  <textarea id="formTitle" rows="2" placeholder="Full title of the clinical trial protocol" required></textarea>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formRandomization">Randomization</label>
+                  <select id="formRandomization">
+                    <option value="Randomized">Randomized</option>
+                    <option value="Non-randomized">Non-randomized</option>
+                    <option value="Not reported">Not reported</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formBlinding">Blinding / Masking</label>
+                  <select id="formBlinding">
+                    <option value="Double-blind">Double-blind</option>
+                    <option value="Single-blind">Single-blind</option>
+                    <option value="Open-label">Open-label</option>
+                    <option value="Not reported">Not reported</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formComparator">Control / Comparator</label>
+                  <input type="text" id="formComparator" placeholder="e.g. Placebo, Standard of Care (RT+TMZ)">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formStatus">Recruitment Status <span class="required">*</span></label>
+                  <select id="formStatus" required>
+                    <option value="Completed">Completed</option>
+                    <option value="Terminated">Terminated</option>
+                    <option value="Suspended">Suspended</option>
+                    <option value="Withdrawn">Withdrawn</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formStartDate">Start Date (Year or MM/YYYY)</label>
+                  <input type="text" id="formStartDate" placeholder="e.g. 2012 or Oct 2012">
+                </div>
+                <div class="form-group col-4">
+                  <label for="formCompletionDate">Completion Date (Year or MM/YYYY)</label>
+                  <input type="text" id="formCompletionDate" placeholder="e.g. 2016 or Nov 2016">
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: Population & Intervention -->
+            <div class="form-section d-none" id="form-sec-patient">
+              <h4 class="form-section-heading">Patient Population &amp; Therapeutic Intervention</h4>
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formEnrollment">Enrollment (Total Patients N)</label>
+                  <input type="number" id="formEnrollment" placeholder="e.g. 1500" min="1">
+                </div>
+                <div class="form-group col-8">
+                  <label for="formDiseaseStage">Disease Stage &amp; Clinical Subtype <span class="required">*</span></label>
+                  <input type="text" id="formDiseaseStage" placeholder="e.g. Mild-to-moderate AD, Recurrent Glioblastoma, Acute Ischemic Stroke (<4.5h)" required>
+                  <small class="form-hint">AD: Note stage (mild, prodromal). GBM: Newly diagnosed vs Recurrent. Stroke: Ischemic vs Hemorrhagic & window.</small>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formEligibility">Key Eligibility Criteria / Patient Selection</label>
+                  <textarea id="formEligibility" rows="2" placeholder="e.g. MMSE 16-26, amyloid PET positivity, age 50-85..."></textarea>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formDrugName">Investigational Drug Name <span class="required">*</span></label>
+                  <input type="text" id="formDrugName" placeholder="e.g. Aducanumab (BIIB037)" required>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formMechanism">Therapeutic Mechanism / Class <span class="required">*</span></label>
+                  <input type="text" id="formMechanism" placeholder="e.g. Anti-amyloid beta mAb, BACE-1 inhibitor, VEGF inhibitor" required>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formTarget">Molecular Target</label>
+                  <input type="text" id="formTarget" placeholder="e.g. Amyloid beta fibrils, EGFRvIII, PD-1, NMDA receptor">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formAdminRoute">Administration Route</label>
+                  <select id="formAdminRoute">
+                    <option value="Intravenous (IV) infusion">Intravenous (IV) infusion</option>
+                    <option value="Subcutaneous (SC)">Subcutaneous (SC)</option>
+                    <option value="Oral (PO)">Oral (PO)</option>
+                    <option value="Intrathecal (IT)">Intrathecal (IT) / Intracranial</option>
+                    <option value="Other">Other / Not reported</option>
+                  </select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="formDosingRegimen">Dosing Regimen / Schedule</label>
+                  <input type="text" id="formDosingRegimen" placeholder="e.g. 10 mg/kg every 4 weeks">
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 3: Endpoints & Outcomes -->
+            <div class="form-section d-none" id="form-sec-outcomes">
+              <h4 class="form-section-heading">Clinical Endpoints &amp; Outcome Classification</h4>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formPrimaryEndpoint">Primary Endpoint(s) <span class="required">*</span></label>
+                  <textarea id="formPrimaryEndpoint" rows="2" placeholder="e.g. Change from baseline in CDR-SB at Week 78, Overall Survival (OS), mRS at 90 days" required></textarea>
+                </div>
+                <div class="form-group col-6">
+                  <label for="formSecondaryEndpoints">Key Secondary Endpoint(s)</label>
+                  <textarea id="formSecondaryEndpoints" rows="2" placeholder="e.g. ADAS-Cog13, ADCS-ADL, Progression-Free Survival (PFS), Brain volume loss"></textarea>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formOutcomeClass">Outcome Classification <span class="required">*</span></label>
+                  <select id="formOutcomeClass" required>
+                    <option value="">Select Outcome...</option>
+                    <option value="Positive outcome">Positive outcome (Primary endpoint met)</option>
+                    <option value="Negative outcome">Negative outcome (Primary endpoint not met / lack of efficacy)</option>
+                    <option value="Mixed / Inconclusive">Mixed / Inconclusive</option>
+                    <option value="Terminated / Discontinued">Terminated / Discontinued (Stopped early)</option>
+                    <option value="Not assessable">Not assessable</option>
+                  </select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="formPrimaryOutcomeDetail">Primary Endpoint Result Summary</label>
+                  <input type="text" id="formPrimaryOutcomeDetail" placeholder="e.g. Failed to meet primary endpoint (p=0.45), No OS advantage vs placebo">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formEfficacySummary">Reported Clinical Effects (Efficacy)</label>
+                  <textarea id="formEfficacySummary" rows="2" placeholder="Summarize reported numerical or clinical efficacy findings"></textarea>
+                </div>
+                <div class="form-group col-6">
+                  <label for="formSafetySummary">Important Adverse Events &amp; Safety Findings</label>
+                  <textarea id="formSafetySummary" rows="2" placeholder="e.g. ARIA-E / ARIA-H in 35% of patients; intracranial hemorrhage; liver toxicity"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 4: Documented Reasons & BBB Factors -->
+            <div class="form-section d-none" id="form-sec-reasons">
+              <h4 class="form-section-heading">Documented Findings vs Contributing Translational Factors</h4>
+              <div class="alert alert-info mb-3">
+                <strong>Handbook Section 4.4 Rule:</strong> Keep officially documented trial findings distinct from hypothesized literature factors!
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formDocReason">Documented Reason(s) for Failure or Termination <span class="required">*</span></label>
+                  <textarea id="formDocReason" rows="3" placeholder="Explicitly reported explanation in trial results, publications, or registry (e.g. Lack of efficacy at planned futility interim analysis; unacceptable toxicity; sponsor reprioritization)" required></textarea>
+                  <small class="form-hint">If trial was successful, state: 'N/A - Primary endpoint met'. If unavailable, state: 'Not reported'.</small>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formFailureCategory">Primary Failure Category</label>
+                  <select id="formFailureCategory">
+                    <option value="Not applicable (Positive)">Not applicable (Positive outcome)</option>
+                    <option value="Lack of Efficacy">Lack of Efficacy (Endpoint missed)</option>
+                    <option value="Safety / Severe Adverse Events">Safety / Severe Adverse Events</option>
+                    <option value="Recruitment / Accrual Failure">Recruitment / Accrual Failure</option>
+                    <option value="Futility Interim Analysis">Futility Interim Analysis</option>
+                    <option value="Commercial / Sponsor Decision">Commercial / Sponsor Decision</option>
+                    <option value="Other / Not reported">Other / Not reported</option>
+                  </select>
+                </div>
+                <div class="form-group col-6">
+                  <label for="formBbbFactor">Blood-Brain Barrier (BBB) Delivery Factor?</label>
+                  <select id="formBbbFactor">
+                    <option value="Not reported / Unknown">Not reported / Unknown</option>
+                    <option value="High: Suspected insufficient BBB penetration">High: Suspected insufficient BBB penetration (<0.2%)</option>
+                    <option value="Moderate: Variable or compromised BBB permeability">Moderate: Variable or compromised BBB permeability</option>
+                    <option value="Low / Addressed: Good CNS exposure demonstrated">Low / Addressed: Good CNS exposure demonstrated</option>
+                    <option value="Not applicable">Not applicable (Peripheral target)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formContribFactors">Possible Contributing Factors (Literature-Supported Hypotheses)</label>
+                  <textarea id="formContribFactors" rows="3" placeholder="Mechanisms suggested by peer-reviewed literature (e.g. low CSF/brain parenchyma ratio; late disease stage treatment; tumor clonal heterogeneity; rodent preclinical model discrepancy)"></textarea>
+                  <small class="form-hint">Must not be stated as proven fact unless supported by published evidence.</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 5: Evidence & QC -->
+            <div class="form-section d-none" id="form-sec-evidence">
+              <h4 class="form-section-heading">Evidence Traceability &amp; Quality Control</h4>
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="formRegistryUrl">Registry URL (ClinicalTrials.gov link) <span class="required">*</span></label>
+                  <input type="url" id="formRegistryUrl" placeholder="https://clinicaltrials.gov/study/NCT..." required>
+                </div>
+                <div class="form-group col-3">
+                  <label for="formDoi">Publication DOI</label>
+                  <input type="text" id="formDoi" placeholder="e.g. 10.1056/NEJMoa1908481">
+                </div>
+                <div class="form-group col-3">
+                  <label for="formPmid">PubMed ID (PMID)</label>
+                  <input type="text" id="formPmid" placeholder="e.g. 33283281">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formCitation">Full Publication Citation / Primary Reference</label>
+                  <textarea id="formCitation" rows="2" placeholder="Authors, Title, Journal, Year, Volume, Pages"></textarea>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-4">
+                  <label for="formExtractor">Data Extractor (Student) <span class="required">*</span></label>
+                  <select id="formExtractor" required>
+                    <option value="Student A1">Student A1 (Group A)</option>
+                    <option value="Student A2">Student A2 (Group A)</option>
+                    <option value="Student B1">Student B1 (Group B)</option>
+                    <option value="Student B2">Student B2 (Group B)</option>
+                    <option value="Student C1">Student C1 (Group C)</option>
+                    <option value="Student C2">Student C2 (Group C)</option>
+                    <option value="Dr. Nur Mustafaoğlu">Dr. Nur Mustafaoğlu (Supervisor)</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formChecker">Assigned Verifier / Checker <span class="required">*</span></label>
+                  <select id="formChecker" required>
+                    <option value="Student A2">Student A2 (Group A)</option>
+                    <option value="Student A1">Student A1 (Group A)</option>
+                    <option value="Student B2">Student B2 (Group B)</option>
+                    <option value="Student B1">Student B1 (Group B)</option>
+                    <option value="Student C2">Student C2 (Group C)</option>
+                    <option value="Student C1">Student C1 (Group C)</option>
+                    <option value="Dr. Nur Mustafaoğlu">Dr. Nur Mustafaoğlu (Supervisor)</option>
+                  </select>
+                </div>
+                <div class="form-group col-4">
+                  <label for="formQcStatus">Verification Status <span class="required">*</span></label>
+                  <select id="formQcStatus" required>
+                    <option value="Draft">Draft</option>
+                    <option value="Pending Verification" selected>Pending Verification</option>
+                    <option value="Verified">Verified / Approved</option>
+                    <option value="Needs Revision">Needs Revision</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label for="formQcNotes">Verification / Quality Control Notes</label>
+                  <textarea id="formQcNotes" rows="2" placeholder="Document any discrepancy, double-check note, or resolution between extractor and checker"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelTrialModal">Cancel</button>
+            <div class="modal-nav-buttons">
+              <button type="button" class="btn btn-outline-secondary" id="btnFormPrev" disabled>Previous Step</button>
+              <button type="button" class="btn btn-outline-primary" id="btnFormNext">Next Step</button>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnSaveTrial">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save Clinical Trial
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: VIEW FULL TRIAL DETAILS -->
+  <div class="modal-backdrop d-none" id="viewDetailModalBackdrop">
+    <div class="modal-dialog modal-lg" role="dialog" aria-modal="true" aria-labelledby="viewDetailModalTitle">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge" id="detailDiseaseBadge">Disease</span>
+              <span class="badge" id="detailOutcomeBadge">Outcome</span>
+              <span class="badge" id="detailQcBadge">QC</span>
+            </div>
+            <h3 class="modal-title" id="viewDetailModalTitle">NCT00000000: Study Title</h3>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseDetailModal" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body" id="viewDetailModalBody">
+          <!-- Populated by JS -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCloseDetailModalBtn">Close</button>
+          <button type="button" class="btn btn-warning" id="btnDetailVerify">Verify / Review Record</button>
+          <button type="button" class="btn btn-primary" id="btnDetailEdit">Edit Record</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: PEER VERIFICATION & AUDIT SIGN-OFF -->
+  <div class="modal-backdrop d-none" id="verifyModalBackdrop">
+    <div class="modal-dialog modal-md" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-amber">
+          <div>
+            <h3 class="modal-title text-dark" id="verifyModalTitle">Peer Verification Sign-Off</h3>
+            <p class="modal-subtitle text-dark text-opacity-75">Handbook Section 5: Step-by-Step Quality Control</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseVerifyModal" aria-label="Close">&times;</button>
+        </div>
+        <form id="verifyForm">
+          <input type="hidden" id="verifyTrialId">
+          <div class="modal-body">
+            <div class="trial-summary-preview p-3 bg-light rounded mb-3">
+              <strong id="verifyNctId">NCT00000000</strong> · <span id="verifyDrugName">Drug</span>
+              <div class="text-sm text-muted" id="verifyStudyTitle">Title...</div>
+              <div class="text-xs text-muted mt-1">Extracted by: <span id="verifyExtractorName">Student</span></div>
+            </div>
+
+            <h5 class="mb-2">Quality Control Checklist:</h5>
+            <div class="qc-check-item">
+              <input type="checkbox" id="qcCheck1" required>
+              <label for="qcCheck1">1. NCT ID and disease relevance confirmed on ClinicalTrials.gov.</label>
+            </div>
+            <div class="qc-check-item">
+              <input type="checkbox" id="qcCheck2" required>
+              <label for="qcCheck2">2. Study design, Phase II/III classification, and comparator verified.</label>
+            </div>
+            <div class="qc-check-item">
+              <input type="checkbox" id="qcCheck3" required>
+              <label for="qcCheck3">3. Primary endpoint and clinical outcome match published literature.</label>
+            </div>
+            <div class="qc-check-item">
+              <input type="checkbox" id="qcCheck4" required>
+              <label for="qcCheck4">4. Documented reasons distinguished from speculative contributing factors.</label>
+            </div>
+            <div class="qc-check-item">
+              <input type="checkbox" id="qcCheck5" required>
+              <label for="qcCheck5">5. Supporting publication references (DOI/PMID) traced and valid.</label>
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="verifyDecision">Verification Decision <span class="required">*</span></label>
+              <select id="verifyDecision" class="styled-select" required>
+                <option value="Verified">Approve &amp; Mark as Verified</option>
+                <option value="Needs Revision">Request Revision / Document Issues</option>
+              </select>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="verifyNotes">Peer Auditor Notes &amp; Corrections Made <span class="required">*</span></label>
+              <textarea id="verifyNotes" rows="3" placeholder="Summarize what you verified, any corrected fields, or feedback for the extractor..." required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelVerifyModal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSubmitVerification">Submit Peer QC Sign-off</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: WEEKLY PROGRESS REPORT SUBMISSION -->
+  <div class="modal-backdrop d-none" id="weeklyReportModalBackdrop">
+    <div class="modal-dialog modal-md" role="dialog" aria-modal="true" aria-labelledby="weeklyReportModalTitle">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="weeklyReportModalTitle">Weekly Progress Update (Section 10)</h3>
+            <p class="modal-subtitle">Submit end-of-week deliverable update for your research group.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseWeeklyModal" aria-label="Close">&times;</button>
+        </div>
+        <form id="weeklyReportForm">
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="reportWeekNumber">Week Number <span class="required">*</span></label>
+                <select id="reportWeekNumber" required>
+                  <option value="1">Week 1 (Oct 12–18)</option>
+                  <option value="2">Week 2 (Oct 19–25)</option>
+                  <option value="3">Week 3 (Oct 26–Nov 1)</option>
+                  <option value="4">Week 4 (Nov 2–8)</option>
+                  <option value="5">Week 5 (Nov 9–15)</option>
+                  <option value="6">Week 6 (Nov 16–22)</option>
+                  <option value="7">Week 7 (Nov 23–29)</option>
+                  <option value="8">Week 8 (Nov 30–Dec 6)</option>
+                  <option value="9">Week 9 (Dec 7–13)</option>
+                  <option value="10">Week 10 (Dec 14–20)</option>
+                  <option value="11">Week 11 (Dec 21–27)</option>
+                  <option value="12">Week 12 (Dec 28–31)</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="reportGroupSelect">Research Group <span class="required">*</span></label>
+                <select id="reportGroupSelect" required>
+                  <option value="Group A (Alzheimer's)">Group A (Alzheimer's)</option>
+                  <option value="Group B (Glioblastoma)">Group B (Glioblastoma)</option>
+                  <option value="Group C (Stroke)">Group C (Stroke)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label for="reportIdentified">Identified Trials</label>
+                <input type="number" id="reportIdentified" placeholder="e.g. 15" min="0">
+              </div>
+              <div class="form-group col-4">
+                <label for="reportScreened">Screened Trials</label>
+                <input type="number" id="reportScreened" placeholder="e.g. 8" min="0">
+              </div>
+              <div class="form-group col-4">
+                <label for="reportValidated">Validated Trials</label>
+                <input type="number" id="reportValidated" placeholder="e.g. 4" min="0">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reportCompletedTasks">Activities &amp; Deliverables Completed <span class="required">*</span></label>
+              <textarea id="reportCompletedTasks" rows="2" placeholder="List tasks completed this week..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="reportProblems">Difficulties, Inconsistencies or Missing Data</label>
+              <textarea id="reportProblems" rows="2" placeholder="Note any missing outcomes, unclear classifications, or search challenges..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="reportContributions">Individual Contributions (Both Students) <span class="required">*</span></label>
+              <textarea id="reportContributions" rows="2" placeholder="Detail tasks performed by Student 1 and Student 2..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="reportNextSteps">Planned Next Steps for Following Week <span class="required">*</span></label>
+              <textarea id="reportNextSteps" rows="2" placeholder="What will your group focus on next week?" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelWeeklyModal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSaveWeeklyReport">Submit Weekly Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ADD SEARCH LOG ENTRY -->
+  <div class="modal-backdrop d-none" id="searchLogModalBackdrop">
+    <div class="modal-dialog modal-md" role="dialog" aria-modal="true" aria-labelledby="searchLogModalTitle">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="searchLogModalTitle">Record Clinical Trial Search Step</h3>
+            <p class="modal-subtitle">Document ClinicalTrials.gov search criteria and study attrition count.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseSearchLogModal" aria-label="Close">&times;</button>
+        </div>
+        <form id="searchLogForm">
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="searchLogDisease">Disease Topic <span class="required">*</span></label>
+                <select id="searchLogDisease" required>
+                  <option value="Alzheimer's Disease">Alzheimer's Disease (Group A)</option>
+                  <option value="Glioblastoma">Glioblastoma (Group B)</option>
+                  <option value="Stroke">Stroke (Group C)</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="searchLogDate">Search Date <span class="required">*</span></label>
+                <input type="date" id="searchLogDate" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="searchLogQuery">Exact Search Query / Search Terms <span class="required">*</span></label>
+              <input type="text" id="searchLogQuery" placeholder="e.g. 'Alzheimer Disease' AND Phase 2 OR Phase 3" required>
+            </div>
+
+            <div class="form-group">
+              <label for="searchLogUrl">Search Link (ClinicalTrials.gov URL) <span class="required">*</span></label>
+              <input type="url" id="searchLogUrl" placeholder="https://clinicaltrials.gov/search?cond=..." required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-3">
+                <label for="searchLogStep1">Step 1 (All)</label>
+                <input type="number" id="searchLogStep1" placeholder="n = ?">
+              </div>
+              <div class="form-group col-3">
+                <label for="searchLogStep3">Step 3 (Ph II/III)</label>
+                <input type="number" id="searchLogStep3" placeholder="n = ?">
+              </div>
+              <div class="form-group col-3">
+                <label for="searchLogStep5">Step 5 (Drug)</label>
+                <input type="number" id="searchLogStep5" placeholder="n = ?">
+              </div>
+              <div class="form-group col-3">
+                <label for="searchLogStep7">Step 7 (Eligible)</label>
+                <input type="number" id="searchLogStep7" placeholder="n = ?">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="searchLogNotes">Notes &amp; Screening Observations</label>
+              <textarea id="searchLogNotes" rows="2" placeholder="Observations regarding filter changes or excluded study types..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelSearchLogModal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSaveSearchLog">Save Search Log Entry</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: IMPORT DATA MODAL -->
+  <div class="modal-backdrop d-none" id="importModalBackdrop">
+    <div class="modal-dialog modal-md" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="importModalTitle">Import Data Backup</h3>
+            <p class="modal-subtitle">Restore or merge clinical trials from a JSON backup file.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseImportModal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="importFileInput">Select JSON Backup File:</label>
+            <input type="file" id="importFileInput" accept=".json" class="form-control">
+          </div>
+          <div class="form-group mt-3">
+            <label for="importJsonTextarea">Or Paste JSON Content Directly:</label>
+            <textarea id="importJsonTextarea" rows="6" class="form-control font-mono text-xs" placeholder='{"trials": [...]}'></textarea>
+          </div>
+          <div class="form-group mt-3">
+            <label>Import Mode:</label>
+            <div class="d-flex gap-3 mt-1">
+              <label class="radio-label">
+                <input type="radio" name="importMode" value="merge" checked> Merge (Update existing, add new)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="importMode" value="replace"> Replace Entire Database
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelImportModal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnExecuteImport">Import Database</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- JAVASCRIPT APPLICATION MODULES -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/trialTable.js"></script>
+  <script src="js/trialForm.js"></script>
+  <script src="js/qcWorkflow.js"></script>
+  <script src="js/weeklyTracker.js"></script>
+  <script src="js/searchLog.js"></script>
+  <script src="js/codebook.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
