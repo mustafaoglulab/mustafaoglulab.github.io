@@ -306,7 +306,7 @@ class AppController {
           btnSave.textContent = 'Test & Connect';
 
           if (res.success) {
-            this.showToast('Connected to Firebase Firestore Cloud Database!', 'success');
+            this.showToast('Connected to Firebase Realtime Database!', 'success');
             this.closeCloudModal();
           } else {
             alert('Firebase Connection failed: ' + res.error);
@@ -365,7 +365,7 @@ class AppController {
     if (window.cloudSync && window.cloudSync.isConnected) {
       modalDot.className = 'status-dot-lg connected';
       modalStatusText.textContent = 'Connected & Synced';
-      modalSubText.textContent = 'Real-time multi-user live synchronization is active via Firebase Firestore.';
+      modalSubText.textContent = 'Real-time multi-user live synchronization is active via Firebase Realtime Database.';
       if (btnDisconnect) btnDisconnect.classList.remove('d-none');
       if (diagBox) diagBox.classList.add('d-none');
     } else {
