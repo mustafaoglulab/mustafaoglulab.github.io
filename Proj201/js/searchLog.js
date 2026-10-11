@@ -60,13 +60,13 @@ class SearchLogController {
     const logs = (window.storage && window.storage.getSearchLogs()) || [];
 
     const steps = typeof SEARCH_STEPS_DEF !== 'undefined' ? SEARCH_STEPS_DEF : [
-      { stepNumber: 1, stepName: "All registered trials", defaultAd: 3120, defaultGbm: 1850, defaultStroke: 4200 },
-      { stepNumber: 2, stepName: "Interventional studies", defaultAd: 2240, defaultGbm: 1420, defaultStroke: 2900 },
-      { stepNumber: 3, stepName: "Phase II / III (and Phase I / IV)", defaultAd: 840, defaultGbm: 490, defaultStroke: 920 },
-      { stepNumber: 4, stepName: "Completed / Terminated", defaultAd: 510, defaultGbm: 320, defaultStroke: 610 },
-      { stepNumber: 5, stepName: "Drug / Biological", defaultAd: 435, defaultGbm: 285, defaultStroke: 410 },
-      { stepNumber: 6, stepName: "Completion 2010–2026", defaultAd: 295, defaultGbm: 195, defaultStroke: 280 },
-      { stepNumber: 7, stepName: "Outcomes / Reasons Available", defaultAd: 180, defaultGbm: 125, defaultStroke: 160 }
+      { stepNumber: 1, stepName: "All registered trials", defaultAd: 4309, defaultGbm: 2273, defaultStroke: 11262 },
+      { stepNumber: 2, stepName: "Interventional studies", defaultAd: 3402, defaultGbm: 2024, defaultStroke: 8266 },
+      { stepNumber: 3, stepName: "Early Phase 1, Phase 1, Phase 2, Phase 3, Phase 4", defaultAd: 1809, defaultGbm: 1765, defaultStroke: 2270 },
+      { stepNumber: 4, stepName: "Completed, Terminated, Withdrawn", defaultAd: 1352, defaultGbm: 1166, defaultStroke: 1413 },
+      { stepNumber: 5, stepName: "Drug / Biological", defaultAd: 1239, defaultGbm: 1094, defaultStroke: 1001 },
+      { stepNumber: 6, stepName: "Completion 2000–2026", defaultAd: 1183, defaultGbm: 1006, defaultStroke: 962 },
+      { stepNumber: 7, stepName: "Outcomes / Reasons Available", defaultAd: 469, defaultGbm: 354, defaultStroke: 266 }
     ];
 
     this.matrixBody.innerHTML = steps.map(stepDef => {
@@ -230,13 +230,13 @@ class SearchLogController {
 
     if (filterInput) {
       const stepFilterDefaults = {
-        1: "All registered trials (no additional filters applied)",
+        1: "All registered trials (condition search on ClinicalTrials.gov)",
         2: "Study Type: Interventional",
-        3: "Study Type: Interventional | Phase: Phase 2, Phase 3 (and Phase 1, Phase 4)",
-        4: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated",
-        5: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated | Intervention: Drug, Biological",
-        6: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated | Drug, Biological | Study Completion: 2010–2026",
-        7: "Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010–2026 | Outcomes / Failure Reasons Available"
+        3: "Study Type: Interventional | Phase: Early Phase 1, Phase 1, Phase 2, Phase 3, Phase 4",
+        4: "Study Type: Interventional | Phases 1–4 | Status: Completed, Terminated, Withdrawn",
+        5: "Study Type: Interventional | Phases 1–4 | Status: Completed, Terminated, Withdrawn | Intervention: Drug, Biological",
+        6: "Study Type: Interventional | Phases 1–4 | Completed, Terminated, Withdrawn | Drug, Biological | Completion: 2000–2026",
+        7: "Interventional | Phases 1–4 | Completed, Terminated, Withdrawn | Drug, Biological | 2000–2026 | Outcomes / Reasons Available"
       };
       filterInput.value = stepFilterDefaults[stepNum] || "";
     }
