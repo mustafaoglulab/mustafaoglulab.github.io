@@ -589,12 +589,65 @@
             </div>
           </div>
         </div>
+
+        <!-- Figure 5: BBB Delivery by Modality -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">5. BBB Delivery Hurdle by Therapeutic Modality</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-box">
+              <canvas id="chartBbbByApproach"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Figure 6: BBB Hurdle by Disease -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">6. BBB Delivery Failure Rate across Diseases</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-box">
+              <canvas id="chartBbbByDisease"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated BBB Cross-Tabulation Analysis Matrix -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">Blood-Brain Barrier (BBB) Delivery Analysis Matrix by Disease &amp; Modality</h3>
+            <span class="text-xs text-muted">Proportion of clinical trials documenting BBB passage / delivery hurdles (Category E) by therapeutic approach</span>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="data-table mb-0" id="tableBbbMatrix">
+              <thead>
+                <tr>
+                  <th style="width: 160px;">Therapeutic Modality</th>
+                  <th style="width: 140px;" class="text-center">Alzheimer's</th>
+                  <th style="width: 140px;" class="text-center">GBM</th>
+                  <th style="width: 140px;" class="text-center">Stroke</th>
+                  <th style="width: 150px;" class="text-center">Combined Dataset</th>
+                  <th>Key Pharmacokinetic / Endothelial Barrier Mechanism</th>
+                </tr>
+              </thead>
+              <tbody id="bodyBbbMatrix">
+                <!-- Dynamically populated by analytics.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- Summary Comparison Table -->
       <div class="card mt-4">
         <div class="card-header">
-          <h3 class="card-title">5. Summary Comparison of Common and Disease-Specific Challenges</h3>
+          <h3 class="card-title">7. Summary Comparison of Common and Disease-Specific Challenges</h3>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
