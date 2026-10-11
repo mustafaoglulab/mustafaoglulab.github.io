@@ -1,6 +1,6 @@
 /**
  * PROJ 201: Search Log Controller (02_SEARCH_LOG)
- * Manages the 7-Step Cumulative Filter Matrix & Search Query Log
+ * Automatically derives the 7-Step Cumulative Filter Funnel from student search queries.
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
@@ -10,6 +10,7 @@ class SearchLogController {
     this.listBody = document.getElementById('searchLogListBody');
     this.modalBackdrop = document.getElementById('searchLogModalBackdrop');
     this.form = document.getElementById('searchEntryForm');
+    this.stepSelect = document.getElementById('slStep');
 
     this.initEventListeners();
   }
@@ -27,6 +28,11 @@ class SearchLogController {
     if (btnClose) btnClose.addEventListener('click', () => this.closeModal());
     if (btnCancel) btnCancel.addEventListener('click', () => this.closeModal());
 
+    // Step change helper: pre-fill suggested filters when step changes
+    if (this.stepSelect) {
+      this.stepSelect.addEventListener('change', () => this.onStepChanged());
+    }
+
     // Form submit
     if (this.form) {
       this.form.addEventListener('submit', (e) => {
@@ -35,7 +41,7 @@ class SearchLogController {
       });
     }
 
-    // React to data changes
+    // React to data changes across app or cloud sync
     window.addEventListener('proj201:datachange', () => {
       this.render();
     });
@@ -46,73 +52,90 @@ class SearchLogController {
     this.renderLogs();
   }
 
+  // ==========================================
+  // 1. AUTOMATICALLY DERIVED CUMULATIVE FUNNEL
+  // ==========================================
   renderMatrix() {
     if (!this.matrixBody) return;
-    const matrix = window.storage.getSearchMatrix();
+    const logs = (window.storage && window.storage.getSearchLogs()) || [];
 
-    if (!matrix || matrix.length === 0) {
-      this.matrixBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted p-3">No search matrix data found.</td></tr>`;
-      return;
-    }
+    const steps = typeof SEARCH_STEPS_DEF !== 'undefined' ? SEARCH_STEPS_DEF : [
+      { stepNumber: 1, stepName: "All registered trials", defaultAd: 3120, defaultGbm: 1850, defaultStroke: 4200 },
+      { stepNumber: 2, stepName: "Interventional studies", defaultAd: 2240, defaultGbm: 1420, defaultStroke: 2900 },
+      { stepNumber: 3, stepName: "Phase II / III (and Phase I / IV)", defaultAd: 840, defaultGbm: 490, defaultStroke: 920 },
+      { stepNumber: 4, stepName: "Completed / Terminated", defaultAd: 510, defaultGbm: 320, defaultStroke: 610 },
+      { stepNumber: 5, stepName: "Drug / Biological", defaultAd: 435, defaultGbm: 285, defaultStroke: 410 },
+      { stepNumber: 6, stepName: "Completion 2010–2026", defaultAd: 295, defaultGbm: 195, defaultStroke: 280 },
+      { stepNumber: 7, stepName: "Outcomes / Reasons Available", defaultAd: 180, defaultGbm: 125, defaultStroke: 160 }
+    ];
 
-    this.matrixBody.innerHTML = matrix.map((step, idx) => {
-      const isFinal = (step.stepNumber === 7);
+    this.matrixBody.innerHTML = steps.map(stepDef => {
+      const isFinal = (stepDef.stepNumber === 7);
+
+      // Match the most recent student search log for each disease & step
+      const adLog = logs.find(l => parseInt(l.stepNumber, 10) === stepDef.stepNumber && l.disease === "Alzheimer's");
+      const gbmLog = logs.find(l => parseInt(l.stepNumber, 10) === stepDef.stepNumber && l.disease === "GBM");
+      const strokeLog = logs.find(l => parseInt(l.stepNumber, 10) === stepDef.stepNumber && l.disease === "Stroke");
+
+      const adCount = adLog ? adLog.resultsCount : stepDef.defaultAd;
+      const gbmCount = gbmLog ? gbmLog.resultsCount : stepDef.defaultGbm;
+      const strokeCount = strokeLog ? strokeLog.resultsCount : stepDef.defaultStroke;
+
+      const adBadge = adLog 
+        ? `<span class="badge-source" title="Derived from student search log (${adLog.date})">Logged</span>` 
+        : `<span class="badge-ref" title="Initial reference baseline">Ref</span>`;
+
+      const gbmBadge = gbmLog 
+        ? `<span class="badge-source" title="Derived from student search log (${gbmLog.date})">Logged</span>` 
+        : `<span class="badge-ref" title="Initial reference baseline">Ref</span>`;
+
+      const strokeBadge = strokeLog 
+        ? `<span class="badge-source" title="Derived from student search log (${strokeLog.date})">Logged</span>` 
+        : `<span class="badge-ref" title="Initial reference baseline">Ref</span>`;
+
       const highlightClass = isFinal ? 'font-bold text-primary' : '';
 
       return `
         <tr class="${isFinal ? 'bg-subtle font-bold' : ''}">
-          <td class="font-mono text-xs text-center"><span class="badge badge-secondary">${step.stepNumber}</span></td>
+          <td class="font-mono text-xs text-center">
+            <span class="badge ${isFinal ? 'badge-primary' : 'badge-secondary'}">${stepDef.stepNumber}</span>
+          </td>
           <td>
-            <strong>${step.stepName}</strong>
-            ${isFinal ? '<div class="text-xs text-muted">Final pool with published results or documented outcome reasons</div>' : ''}
+            <strong>${stepDef.stepName}</strong>
+            ${isFinal ? '<div class="text-xs text-muted">Final study cohort with posted results or documented termination reasons</div>' : ''}
           </td>
           <td class="text-right font-mono ${highlightClass}">
-            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'adCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
-              ${(step.adCount || 0).toLocaleString()}
-            </span>
+            <div class="d-flex align-center justify-end gap-1">
+              <span>${(adCount || 0).toLocaleString()}</span>
+              ${adBadge}
+            </div>
           </td>
           <td class="text-right font-mono ${highlightClass}">
-            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'gbmCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
-              ${(step.gbmCount || 0).toLocaleString()}
-            </span>
+            <div class="d-flex align-center justify-end gap-1">
+              <span>${(gbmCount || 0).toLocaleString()}</span>
+              ${gbmBadge}
+            </div>
           </td>
           <td class="text-right font-mono ${highlightClass}">
-            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'strokeCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
-              ${(step.strokeCount || 0).toLocaleString()}
-            </span>
+            <div class="d-flex align-center justify-end gap-1">
+              <span>${(strokeCount || 0).toLocaleString()}</span>
+              ${strokeBadge}
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   }
 
-  editStepCount(stepIndex, diseaseField) {
-    const matrix = window.storage.getSearchMatrix();
-    const step = matrix[stepIndex];
-    if (!step) return;
-
-    const disName = diseaseField === 'adCount' ? "Alzheimer's" : diseaseField === 'gbmCount' ? "GBM" : "Stroke";
-    const current = step[diseaseField] || 0;
-    const val = prompt(`Update Step ${step.stepNumber} count for ${disName} (${step.stepName}):`, current);
-
-    if (val !== null) {
-      const parsed = parseInt(val.replace(/,/g, ''), 10);
-      if (!isNaN(parsed) && parsed >= 0) {
-        step[diseaseField] = parsed;
-        window.storage.updateSearchMatrix(matrix);
-        if (window.app && window.app.showToast) {
-          window.app.showToast(`Updated Step ${step.stepNumber} ${disName} count to ${parsed.toLocaleString()}`, 'success');
-        }
-      }
-    }
-  }
-
+  // ==========================================
+  // 2. DETAILED SEARCH LOG ENTRIES LIST
+  // ==========================================
   renderLogs() {
     if (!this.listBody) return;
-    const logs = window.storage.getSearchLogs();
+    const logs = (window.storage && window.storage.getSearchLogs()) || [];
 
     if (logs.length === 0) {
-      this.listBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-3">No search queries logged yet. Click "Record Search Query" to add one.</td></tr>`;
+      this.listBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-3">No search queries logged yet. Click "Record Search Query" to log one.</td></tr>`;
       return;
     }
 
@@ -120,10 +143,13 @@ class SearchLogController {
       const disClass = l.disease === "Alzheimer's" ? 'pill-ad' :
                        l.disease === "GBM" ? 'pill-gbm' : 'pill-stroke';
 
+      const stepNum = l.stepNumber || 7;
+
       return `
         <tr>
           <td class="font-mono text-xs text-muted" style="white-space: nowrap;">${l.date || ''}</td>
           <td><span class="pill ${disClass}">${l.disease || 'All'}</span></td>
+          <td><span class="badge badge-secondary font-mono text-xs">Step ${stepNum}</span></td>
           <td>
             <div class="text-sm font-bold font-mono text-main">${this.escapeHtml(l.searchTerms || '')}</div>
             <div class="text-xs text-muted mt-1">Filters: ${this.escapeHtml(l.filtersApplied || 'Standard filters')}</div>
@@ -131,18 +157,35 @@ class SearchLogController {
           </td>
           <td class="text-right font-mono font-bold">${(l.resultsCount || 0).toLocaleString()}</td>
           <td><span class="text-xs text-muted">${l.student || l.loggedBy || 'Student'}</span></td>
-          <td class="text-right">
-            ${l.sourceUrl ? `
-              <a href="${l.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm font-mono text-xs" title="Open ClinicalTrials.gov query">
-                View &nearr;
-              </a>
-            ` : '—'}
+          <td class="text-right" style="white-space: nowrap;">
+            <div class="d-flex justify-end gap-1">
+              ${l.sourceUrl ? `
+                <a href="${l.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm font-mono text-xs" title="Open ClinicalTrials.gov query">
+                  View &nearr;
+                </a>
+              ` : ''}
+              <button type="button" class="btn btn-outline btn-sm text-danger" onclick="window.searchLog.deleteEntry('${l.id}')" title="Delete log entry" style="padding: 0.2rem 0.45rem;">
+                &times;
+              </button>
+            </div>
           </td>
         </tr>
       `;
     }).join('');
   }
 
+  deleteEntry(id) {
+    if (confirm('Are you sure you want to delete this recorded search query? The funnel table counts will update automatically.')) {
+      window.storage.deleteSearchLog(id);
+      if (window.app && window.app.showToast) {
+        window.app.showToast('Search query deleted.', 'info');
+      }
+    }
+  }
+
+  // ==========================================
+  // 3. RECORD SEARCH STEP MODAL
+  // ==========================================
   openModal() {
     if (!this.modalBackdrop) return;
     if (this.form) this.form.reset();
@@ -156,6 +199,11 @@ class SearchLogController {
       diseaseSelect.value = activeProfile.diseaseScope;
     }
 
+    if (this.stepSelect) {
+      this.stepSelect.value = "7";
+      this.onStepChanged();
+    }
+
     this.modalBackdrop.classList.remove('d-none');
   }
 
@@ -163,10 +211,48 @@ class SearchLogController {
     if (this.modalBackdrop) this.modalBackdrop.classList.add('d-none');
   }
 
+  onStepChanged() {
+    const stepNum = parseInt(this.stepSelect.value, 10);
+    const filterInput = document.getElementById('slFilters');
+    const termsInput = document.getElementById('slTerms');
+    const diseaseSelect = document.getElementById('slDisease');
+    const dis = diseaseSelect ? diseaseSelect.value : "Alzheimer's";
+
+    const conditionMap = {
+      "Alzheimer's": '"Alzheimer Disease" [Condition]',
+      "GBM": '"Glioblastoma" OR "GBM" [Condition]',
+      "Stroke": '"Stroke" OR "Acute Ischemic Stroke" [Condition]'
+    };
+
+    if (termsInput && !termsInput.value) {
+      termsInput.value = conditionMap[dis] || 'Condition Search';
+    }
+
+    if (filterInput) {
+      const stepFilterDefaults = {
+        1: "All registered trials (no additional filters applied)",
+        2: "Study Type: Interventional",
+        3: "Study Type: Interventional | Phase: Phase 2, Phase 3 (and Phase 1, Phase 4)",
+        4: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated",
+        5: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated | Intervention: Drug, Biological",
+        6: "Study Type: Interventional | Phase 2, Phase 3 | Status: Completed, Terminated | Drug, Biological | Study Completion: 2010–2026",
+        7: "Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010–2026 | Outcomes / Failure Reasons Available"
+      };
+      filterInput.value = stepFilterDefaults[stepNum] || "";
+    }
+  }
+
   saveEntry() {
     const activeProfile = window.storage.getActiveUserProfile();
+    const stepNum = parseInt(document.getElementById('slStep').value, 10) || 7;
+    const stepDef = typeof SEARCH_STEPS_DEF !== 'undefined' 
+      ? SEARCH_STEPS_DEF.find(s => s.stepNumber === stepNum) 
+      : null;
 
     const entry = {
+      id: 'search-' + Date.now(),
+      stepNumber: stepNum,
+      stepName: stepDef ? stepDef.stepName : `Step ${stepNum}`,
       date: document.getElementById('slDate').value,
       disease: document.getElementById('slDisease').value,
       searchTerms: document.getElementById('slTerms').value.trim(),
@@ -181,7 +267,7 @@ class SearchLogController {
     this.closeModal();
 
     if (window.app && window.app.showToast) {
-      window.app.showToast(`Search query logged for ${entry.disease} (${entry.resultsCount} trials)!`, 'success');
+      window.app.showToast(`Search query logged for Step ${stepNum} (${entry.disease}): ${entry.resultsCount.toLocaleString()} trials!`, 'success');
     }
   }
 

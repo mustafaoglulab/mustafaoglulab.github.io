@@ -415,6 +415,20 @@ class CloudSyncAdapter {
     }
   }
 
+  async deleteSearchLog(logId) {
+    const dbUrl = (this.getConfig() && this.getConfig().databaseURL) || DEFAULT_FIREBASE_CONFIG.databaseURL;
+    try {
+      if (this.rtdb) {
+        this.rtdb.ref(`proj201_search_logs/${logId}`).remove().catch(() => {});
+      }
+      if (dbUrl) {
+        fetch(`${dbUrl}/proj201_search_logs/${logId}.json`, { method: 'DELETE' }).catch(() => {});
+      }
+    } catch (e) {
+      console.error('Error deleting search log:', e);
+    }
+  }
+
   async syncSearchMatrix(matrix) {
     const dbUrl = (this.getConfig() && this.getConfig().databaseURL) || DEFAULT_FIREBASE_CONFIG.databaseURL;
     try {

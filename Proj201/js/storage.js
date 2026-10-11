@@ -115,6 +115,16 @@ class StorageManager {
     return log;
   }
 
+  deleteSearchLog(id) {
+    const data = this.getData();
+    data.searchLogs = (data.searchLogs || []).filter(s => s.id !== id);
+    this.saveData(data);
+    if (window.cloudSync && typeof window.cloudSync.deleteSearchLog === 'function') {
+      window.cloudSync.deleteSearchLog(id);
+    }
+    return true;
+  }
+
   // ==========================================
   // WEEKLY PROGRESS (08_WEEKLY_PROGRESS)
   // 1 row per student per week

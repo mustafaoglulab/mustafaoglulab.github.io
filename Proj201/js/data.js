@@ -4,6 +4,17 @@
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
+// Canonical 7-Step Search Strategy Definitions (ClinicalTrials.gov)
+const SEARCH_STEPS_DEF = [
+  { stepNumber: 1, stepName: "All registered trials", defaultAd: 3120, defaultGbm: 1850, defaultStroke: 4200, defaultFilters: "Condition search only" },
+  { stepNumber: 2, stepName: "Interventional studies", defaultAd: 2240, defaultGbm: 1420, defaultStroke: 2900, defaultFilters: "Study Type: Interventional" },
+  { stepNumber: 3, stepName: "Phase II / III (and Phase I / IV)", defaultAd: 840, defaultGbm: 490, defaultStroke: 920, defaultFilters: "Phase: 1, 2, 3, 4" },
+  { stepNumber: 4, stepName: "Completed / Terminated", defaultAd: 510, defaultGbm: 320, defaultStroke: 610, defaultFilters: "Status: Completed, Terminated" },
+  { stepNumber: 5, stepName: "Drug / Biological", defaultAd: 435, defaultGbm: 285, defaultStroke: 410, defaultFilters: "Intervention: Drug, Biological" },
+  { stepNumber: 6, stepName: "Completion 2010–2026", defaultAd: 295, defaultGbm: 195, defaultStroke: 280, defaultFilters: "Study Completion: 2010 to 2026" },
+  { stepNumber: 7, stepName: "Outcomes / Reasons Available", defaultAd: 180, defaultGbm: 125, defaultStroke: 160, defaultFilters: "Results or termination reason published" }
+];
+
 const SEED_DATA = {
   // Clinical Trials Database — All tabs share this identical schema (Categories A–G)
   trials: [
@@ -536,21 +547,12 @@ const SEED_DATA = {
     }
   ],
 
-  // 02_SEARCH_LOG cumulative filter matrix (Handbook Section 6 Week 1)
-  searchMatrix: [
-    { stepNumber: 1, stepName: "All registered trials", adCount: 3120, gbmCount: 1850, strokeCount: 4200 },
-    { stepNumber: 2, stepName: "Interventional studies", adCount: 2240, gbmCount: 1420, strokeCount: 2900 },
-    { stepNumber: 3, stepName: "Phase II / III", adCount: 840, gbmCount: 490, strokeCount: 920 },
-    { stepNumber: 4, stepName: "Completed / Terminated", adCount: 510, gbmCount: 320, strokeCount: 610 },
-    { stepNumber: 5, stepName: "Drug / Biological", adCount: 435, gbmCount: 285, strokeCount: 410 },
-    { stepNumber: 6, stepName: "Completion 2010–2026", adCount: 295, gbmCount: 195, strokeCount: 280 },
-    { stepNumber: 7, stepName: "Outcomes / Reasons Available", adCount: 180, gbmCount: 125, strokeCount: 160 }
-  ],
-
-  // 02_SEARCH_LOG search log entries (exact search terms, dates, filters, URL)
+  // 02_SEARCH_LOG search log entries (exact search terms, dates, filters, URL, stepNumber)
   searchLogs: [
     {
       id: "search-1",
+      stepNumber: 7,
+      stepName: "Outcomes / Reasons Available",
       date: "2026-10-12",
       disease: "Alzheimer's",
       searchTerms: '"Alzheimer Disease" [Condition]',
@@ -562,6 +564,8 @@ const SEED_DATA = {
     },
     {
       id: "search-2",
+      stepNumber: 7,
+      stepName: "Outcomes / Reasons Available",
       date: "2026-10-13",
       disease: "GBM",
       searchTerms: '"Glioblastoma" OR "GBM" [Condition]',
@@ -573,6 +577,8 @@ const SEED_DATA = {
     },
     {
       id: "search-3",
+      stepNumber: 7,
+      stepName: "Outcomes / Reasons Available",
       date: "2026-10-13",
       disease: "Stroke",
       searchTerms: '"Stroke" OR "Acute Ischemic Stroke" [Condition]',

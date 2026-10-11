@@ -687,6 +687,53 @@ a:hover { text-decoration: underline; }
   font-weight: 700;
 }
 
+/* Badges for Funnel and Meta */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.badge-secondary {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+}
+
+.badge-primary {
+  background: #eff6ff;
+  color: var(--primary);
+  border: 1px solid #bfdbfe;
+}
+
+.badge-source {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm);
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  letter-spacing: 0.02em;
+}
+
+.badge-ref {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
 /* ==========================================================================
    ANALYTICS GRID
    ========================================================================== */
