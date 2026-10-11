@@ -1,11 +1,13 @@
 /**
- * PROJ 201: Comparative Analytics & Visualization
+ * PROJ 201: Comparative Analytics & Visualization (07_ANALYSIS)
+ * Renders the 6 Target Figures & Comparisons across Diseases
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 class AnalyticsController {
   constructor() {
     this.charts = {};
+
     window.addEventListener('proj201:datachange', () => {
       this.render();
     });
@@ -16,152 +18,183 @@ class AnalyticsController {
       console.warn('Chart.js not loaded, skipping chart rendering.');
       return;
     }
-    this.renderOutcomesByDisease();
-    this.renderFailureReasons();
-    this.renderContributingFactors();
-    this.renderPhaseDistribution();
+
+    this.renderDiseasePhaseChart();
+    this.renderOutcomeDistChart();
+    this.renderApproachDistChart();
+    this.renderFailureFactorsChart();
   }
 
   getTrials() {
-    return window.storage.getTrials();
+    return (window.storage && window.storage.getTrials) ? window.storage.getTrials() : [];
   }
 
-  // Chart 1: Outcomes Breakdown by Disease
-  renderOutcomesByDisease() {
-    const canvas = document.getElementById('outcomesByDiseaseChart');
+  // Figure 1: Number of Trials by Disease and Phase (Stacked Bar)
+  renderDiseasePhaseChart() {
+    const canvas = document.getElementById('chartDiseasePhase');
     if (!canvas) return;
 
     const trials = this.getTrials();
-    const diseases = ["Alzheimer's Disease", "Glioblastoma", "Stroke"];
-    const outcomes = ['Positive outcome', 'Negative outcome', 'Mixed / Inconclusive', 'Terminated / Discontinued'];
+    const diseases = ["Alzheimer's", "GBM", "Stroke"];
+    const phases = ["Phase II", "Phase III", "Phase II–III"];
+    const colors = ['#6366f1', '#0047ba', '#0284c7'];
 
-    const datasets = outcomes.map((outcome, idx) => {
-      const colors = ['#10b981', '#ef4444', '#f59e0b', '#1e293b'];
-      const counts = diseases.map(dis => {
-        return trials.filter(t => t.disease === dis && t.outcomeClass === outcome).length;
-      });
+    const datasets = phases.map((phase, idx) => ({
+      label: phase,
+      data: diseases.map(dis => trials.filter(t => t.disease === dis && t.phase === phase).length),
+      backgroundColor: colors[idx],
+      borderRadius: 4
+    }));
 
-      return {
-        label: outcome,
-        data: counts,
-        backgroundColor: colors[idx % colors.length]
-      };
-    });
-
-    if (this.charts.outcomes) {
-      this.charts.outcomes.destroy();
+    if (this.charts.diseasePhase) {
+      this.charts.diseasePhase.destroy();
     }
 
-    this.charts.outcomes = new Chart(canvas, {
+    this.charts.diseasePhase = new Chart(canvas, {
       type: 'bar',
       data: {
-        labels: ['Alzheimer\'s (Group A)', 'Glioblastoma (Group B)', 'Stroke (Group C)'],
+        labels: diseases,
         datasets: datasets
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, family: 'Plus Jakarta Sans' } } }
+          legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } } },
+          tooltip: { mode: 'index', intersect: false }
         },
         scales: {
-          x: { stacked: true, ticks: { font: { size: 11 } } },
-          y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } }
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }
         }
       }
     });
   }
 
-  // Chart 2: Documented Failure Reasons
-  renderFailureReasons() {
-    const canvas = document.getElementById('failureReasonsChart');
+  // Figure 2: Distribution of Clinical Outcomes (Doughnut)
+  renderOutcomeDistChart() {
+    const canvas = document.getElementById('chartOutcomeDist');
     if (!canvas) return;
 
-    const trials = this.getTrials().filter(t => t.outcomeClass !== 'Positive outcome');
-    const reasonsMap = {};
+    const trials = this.getTrials();
+    const outcomes = ['Positive', 'Negative', 'Mixed / Inconclusive', 'Not assessable'];
+    const counts = outcomes.map(out => trials.filter(t => t.overallOutcome === out).length);
+    const colors = ['#059669', '#e11d48', '#d97706', '#64748b'];
 
-    trials.forEach(t => {
-      const cat = t.failureCategory || 'Other / Not reported';
-      reasonsMap[cat] = (reasonsMap[cat] || 0) + 1;
-    });
-
-    const labels = Object.keys(reasonsMap);
-    const data = Object.values(reasonsMap);
-
-    if (this.charts.reasons) {
-      this.charts.reasons.destroy();
+    if (this.charts.outcomeDist) {
+      this.charts.outcomeDist.destroy();
     }
 
-    this.charts.reasons = new Chart(canvas, {
+    this.charts.outcomeDist = new Chart(canvas, {
       type: 'doughnut',
       data: {
-        labels: labels.length > 0 ? labels : ['No negative outcomes in dataset'],
+        labels: outcomes,
         datasets: [{
-          data: data.length > 0 ? data : [1],
-          backgroundColor: [
-            '#ef4444', // Lack of Efficacy
-            '#f97316', // Safety / AEs
-            '#8b5cf6', // Futility
-            '#06b6d4', // Accrual
-            '#64748b'  // Other
-          ]
+          data: counts.some(c => c > 0) ? counts : [0, 0, 0, 1],
+          backgroundColor: colors,
+          borderWidth: 2,
+          borderColor: '#ffffff'
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } }
+          legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const total = trials.length || 1;
+                const val = ctx.raw || 0;
+                const pct = Math.round((val / total) * 100);
+                return ` ${ctx.label}: ${val} (${pct}%)`;
+              }
+            }
+          }
+        },
+        cutout: '62%'
+      }
+    });
+  }
+
+  // Figure 3: Comparison of Therapeutic Approaches Across Diseases (Grouped Bar)
+  renderApproachDistChart() {
+    const canvas = document.getElementById('chartApproachDist');
+    if (!canvas) return;
+
+    const trials = this.getTrials();
+    const approaches = ["Small molecule", "Antibody", "Biologic", "Cell therapy", "Other"];
+    const diseases = ["Alzheimer's", "GBM", "Stroke"];
+    const disColors = {
+      "Alzheimer's": '#7c3aed',
+      "GBM": '#e11d48',
+      "Stroke": '#ea580c'
+    };
+
+    const datasets = diseases.map(dis => ({
+      label: dis,
+      data: approaches.map(app => trials.filter(t => t.disease === dis && t.therapeuticApproach === app).length),
+      backgroundColor: disColors[dis],
+      borderRadius: 3
+    }));
+
+    if (this.charts.approachDist) {
+      this.charts.approachDist.destroy();
+    }
+
+    this.charts.approachDist = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: approaches,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } } }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }
         }
       }
     });
   }
 
-  // Chart 3: BBB Delivery & Translational Factors
-  renderContributingFactors() {
-    const canvas = document.getElementById('contributingFactorsChart');
+  // Figure 4: Frequency of Documented Failure Factors (Category E Horizontal Bar)
+  renderFailureFactorsChart() {
+    const canvas = document.getElementById('chartFailureFactors');
     if (!canvas) return;
 
     const trials = this.getTrials();
-    const factorCounts = {
-      'BBB Delivery Limitation': 0,
-      'Disease Heterogeneity / Escape': 0,
-      'Target Engagement / Mechanism Toxicity': 0,
-      'Therapeutic Window / Late Timing': 0,
-      'Rodent-Human Translation Mismatch': 0
-    };
+    const factors = [
+      { key: 'factorEfficacy', label: 'Lack of Efficacy' },
+      { key: 'factorSafety', label: 'Safety / Toxicity' },
+      { key: 'factorBbb', label: 'BBB / Delivery Hurdle' },
+      { key: 'factorHeterogeneity', label: 'Disease Heterogeneity' },
+      { key: 'factorSelection', label: 'Patient Selection Issue' },
+      { key: 'factorDesign', label: 'Trial Design / Endpoints' },
+      { key: 'factorOperational', label: 'Operational / Recruitment' }
+    ];
 
-    trials.forEach(t => {
-      const text = ((t.contribFactors || '') + ' ' + (t.bbbFactor || '')).toLowerCase();
-      if (text.includes('bbb') || text.includes('blood-brain barrier') || text.includes('penetration')) {
-        factorCounts['BBB Delivery Limitation']++;
-      }
-      if (text.includes('heterogeneity') || text.includes('escape') || text.includes('clonal')) {
-        factorCounts['Disease Heterogeneity / Escape']++;
-      }
-      if (text.includes('target') || text.includes('toxicity') || text.includes('notch') || text.includes('off-target')) {
-        factorCounts['Target Engagement / Mechanism Toxicity']++;
-      }
-      if (text.includes('window') || text.includes('late') || text.includes('timing') || text.includes('early')) {
-        factorCounts['Therapeutic Window / Late Timing']++;
-      }
-      if (text.includes('rodent') || text.includes('preclinical') || text.includes('mcao') || text.includes('translation')) {
-        factorCounts['Rodent-Human Translation Mismatch']++;
-      }
+    const counts = factors.map(f => {
+      return trials.filter(t => t[f.key] === 'Yes').length;
     });
 
-    if (this.charts.factors) {
-      this.charts.factors.destroy();
+    if (this.charts.failureFactors) {
+      this.charts.failureFactors.destroy();
     }
 
-    this.charts.factors = new Chart(canvas, {
+    this.charts.failureFactors = new Chart(canvas, {
       type: 'bar',
       data: {
-        labels: Object.keys(factorCounts),
+        labels: factors.map(f => f.label),
         datasets: [{
-          label: 'Studies Citing Factor',
-          data: Object.values(factorCounts),
-          backgroundColor: '#0284c7'
+          label: 'Studies Documenting Factor (Yes)',
+          data: counts,
+          backgroundColor: '#0047ba',
+          borderRadius: 4
         }]
       },
       options: {
@@ -172,41 +205,8 @@ class AnalyticsController {
           legend: { display: false }
         },
         scales: {
-          x: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } },
-          y: { ticks: { font: { size: 10 } } }
-        }
-      }
-    });
-  }
-
-  // Chart 4: Phase Distribution
-  renderPhaseDistribution() {
-    const canvas = document.getElementById('phaseDistributionChart');
-    if (!canvas) return;
-
-    const trials = this.getTrials();
-    const phase2 = trials.filter(t => t.phase === 'Phase 2').length;
-    const phase3 = trials.filter(t => t.phase === 'Phase 3').length;
-    const phase23 = trials.filter(t => t.phase === 'Phase 2/3').length;
-
-    if (this.charts.phase) {
-      this.charts.phase.destroy();
-    }
-
-    this.charts.phase = new Chart(canvas, {
-      type: 'pie',
-      data: {
-        labels: ['Phase II', 'Phase III', 'Phase II/III'],
-        datasets: [{
-          data: [phase2, phase3, phase23],
-          backgroundColor: ['#6366f1', '#0047ba', '#38bdf8']
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+          x: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
         }
       }
     });

@@ -1,12 +1,13 @@
 /**
  * PROJ 201: Storage Management & Data Export/Import
+ * Conforms to Standard Column Schema (Categories A–G)
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 class StorageManager {
   constructor() {
-    this.STORAGE_KEY = 'proj201_research_database_v1';
-    this.USER_KEY = 'proj201_active_user_v1';
+    this.STORAGE_KEY = 'proj201_research_database_v2';
+    this.USER_KEY = 'proj201_active_user_v2';
     this.init();
   }
 
@@ -48,7 +49,9 @@ class StorageManager {
     return clone;
   }
 
-  // Trials CRUD
+  // ==========================================
+  // TRIALS CRUD (Categories A–G)
+  // ==========================================
   getTrials() {
     return this.getData().trials || [];
   }
@@ -62,8 +65,8 @@ class StorageManager {
     const data = this.getData();
     if (!data.trials) data.trials = [];
 
-    const index = data.trials.findIndex(t => t.id === trial.id || t.nctId.toUpperCase() === trial.nctId.toUpperCase());
-    trial.updatedAt = new Date().toISOString();
+    const index = data.trials.findIndex(t => t.id === trial.id || (t.nctId && t.nctId.toUpperCase() === trial.nctId.toUpperCase()));
+    trial.lastUpdated = new Date().toISOString().split('T')[0];
 
     if (index >= 0) {
       data.trials[index] = { ...data.trials[index], ...trial };
@@ -84,73 +87,20 @@ class StorageManager {
     if (window.cloudSync) window.cloudSync.deleteTrial(id);
   }
 
-  // QC Log CRUD
-  getQcLog() {
-    return this.getData().qcLog || [];
+  // ==========================================
+  // SEARCH MATRIX & SEARCH LOGS (02_SEARCH_LOG)
+  // ==========================================
+  getSearchMatrix() {
+    return this.getData().searchMatrix || (SEED_DATA.searchMatrix || []);
   }
 
-  addQcLogEntry(entry) {
+  updateSearchMatrix(matrix) {
     const data = this.getData();
-    if (!data.qcLog) data.qcLog = [];
-    if (!entry.id) entry.id = 'qc-' + Date.now();
-    if (!entry.date) {
-      const now = new Date();
-      entry.date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    }
-    data.qcLog.unshift(entry);
+    data.searchMatrix = matrix;
     this.saveData(data);
-    if (window.cloudSync) window.cloudSync.syncQcEntry(entry);
-    return entry;
+    if (window.cloudSync) window.cloudSync.syncSearchMatrix(matrix);
   }
 
-  // Weekly Progress & Tasks
-  getWeeks() {
-    return this.getData().weeks || [];
-  }
-
-  updateTaskStatus(weekNumber, taskId, completed) {
-    const data = this.getData();
-    const week = (data.weeks || []).find(w => w.weekNumber === weekNumber);
-    if (week && week.tasks) {
-      const task = week.tasks.find(t => t.id === taskId);
-      if (task) {
-        task.completed = completed;
-        this.saveData(data);
-        if (window.cloudSync) window.cloudSync.syncTasks(data.weeks, data.finalChecklist);
-      }
-    }
-  }
-
-  getFinalChecklist() {
-    return this.getData().finalChecklist || [];
-  }
-
-  updateFinalChecklist(id, checked) {
-    const data = this.getData();
-    const item = (data.finalChecklist || []).find(i => i.id === id);
-    if (item) {
-      item.checked = checked;
-      this.saveData(data);
-      if (window.cloudSync) window.cloudSync.syncTasks(data.weeks, data.finalChecklist);
-    }
-  }
-
-  getWeeklyProgressReports() {
-    return this.getData().weeklyProgress || [];
-  }
-
-  addWeeklyProgressReport(report) {
-    const data = this.getData();
-    if (!data.weeklyProgress) data.weeklyProgress = [];
-    if (!report.id) report.id = 'wp-' + Date.now();
-    if (!report.submissionDate) report.submissionDate = new Date().toISOString().split('T')[0];
-    data.weeklyProgress.unshift(report);
-    this.saveData(data);
-    if (window.cloudSync) window.cloudSync.syncWeeklyReport(report);
-    return report;
-  }
-
-  // Search Logs
   getSearchLogs() {
     return this.getData().searchLogs || [];
   }
@@ -165,7 +115,27 @@ class StorageManager {
     return log;
   }
 
-  // User Profile
+  // ==========================================
+  // WEEKLY PROGRESS (08_WEEKLY_PROGRESS)
+  // 1 row per student per week
+  // ==========================================
+  getWeeklyProgress() {
+    return this.getData().weeklyProgress || [];
+  }
+
+  addWeeklyProgressRow(row) {
+    const data = this.getData();
+    if (!data.weeklyProgress) data.weeklyProgress = [];
+    if (!row.id) row.id = 'wp-' + Date.now();
+    data.weeklyProgress.unshift(row);
+    this.saveData(data);
+    if (window.cloudSync) window.cloudSync.syncWeeklyProgress(row);
+    return row;
+  }
+
+  // ==========================================
+  // USER PROFILES
+  // ==========================================
   getActiveUser() {
     const saved = localStorage.getItem(this.USER_KEY);
     return saved || 'student_a1';
@@ -186,9 +156,8 @@ class StorageManager {
   }
 
   // ==========================================
-  // EXPORT / IMPORT UTILITIES
+  // EXPORT / IMPORT (Exact Columns A–G)
   // ==========================================
-
   exportAsJSON() {
     const data = this.getData();
     const jsonStr = JSON.stringify(data, null, 2);
@@ -198,7 +167,7 @@ class StorageManager {
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = `PROJ201_Clinical_Trials_Backup_${dateStr}.json`;
+    a.download = `PROJ201_Database_Backup_${dateStr}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -216,43 +185,57 @@ class StorageManager {
       return;
     }
 
+    // Exact Column Headings matching Dr. Nur's specification A through G
     const headers = [
+      // A. Trial identification
       'NCT ID',
-      'Disease',
       'Study Title',
-      'Phase',
-      'Randomization',
-      'Blinding',
-      'Comparator',
-      'Status',
-      'Start Date',
-      'Completion Date',
-      'Enrollment',
-      'Disease Stage / Subtype',
-      'Eligibility Criteria',
-      'Drug Name',
-      'Mechanism / Class',
-      'Molecular Target',
-      'Route',
-      'Dosing Regimen',
+      'Disease',
+      'ClinicalTrials.gov Link',
+      'Publication Link / DOI',
+      'Trial Phase',
+      'Study Status',
+      'Completion Year',
+      // B. Treatment information
+      'Drug / Treatment Name',
+      'Therapeutic Approach',
+      'Molecular Target / Mechanism',
+      'Administration Route',
+      'Treatment Objective',
+      // C. Clinical trial design
+      'Number of Participants',
+      'Patient Population',
+      'Study Design',
+      'Control Group',
       'Primary Endpoint',
-      'Secondary Endpoints',
-      'Outcome Classification',
-      'Primary Outcome Detail',
-      'Reported Efficacy',
-      'Reported Safety',
-      'Documented Reason for Failure',
-      'Failure Category',
-      'BBB Delivery Factor',
-      'Possible Contributing Factors',
-      'Registry Link',
-      'DOI',
-      'PMID',
-      'Citation',
-      'Extractor',
-      'Verifier / Checker',
-      'QC Status',
-      'QC Notes'
+      'Primary Endpoint Result',
+      // D. Clinical outcome
+      'Overall Clinical Outcome',
+      'Evidence of Clinical Benefit',
+      'Safety Concerns',
+      'Regulatory Approval',
+      'Reported Reason for Failure',
+      'Reason for Early Termination',
+      // E. Factors potentially influencing success or failure
+      'Lack of Efficacy',
+      'Safety / Toxicity',
+      'BBB / Brain Drug Delivery',
+      'Disease Heterogeneity',
+      'Patient Selection',
+      'Trial Design / Endpoint Issues',
+      'Operational / Recruitment Issues',
+      'Supporting Evidence',
+      // F. Scientific interpretation
+      'Main Finding',
+      'Why Did It Succeed or Fail?',
+      'Lessons for Future Trials',
+      'Limitations / Missing Information',
+      // G. Data quality and teamwork
+      'Data Extracted By',
+      'Data Verified By',
+      'Verification Status',
+      'Last Updated',
+      'Comments'
     ];
 
     const escapeCsv = (val) => {
@@ -262,49 +245,62 @@ class StorageManager {
     };
 
     const rows = trials.map(t => [
+      // A
       escapeCsv(t.nctId),
+      escapeCsv(t.studyTitle),
       escapeCsv(t.disease),
-      escapeCsv(t.title),
-      escapeCsv(t.phase),
-      escapeCsv(t.randomization),
-      escapeCsv(t.blinding),
-      escapeCsv(t.comparator),
-      escapeCsv(t.status),
-      escapeCsv(t.startDate),
-      escapeCsv(t.completionDate),
-      escapeCsv(t.enrollment),
-      escapeCsv(t.diseaseStage),
-      escapeCsv(t.eligibility),
-      escapeCsv(t.drugName),
-      escapeCsv(t.mechanism),
-      escapeCsv(t.molecularTarget),
-      escapeCsv(t.adminRoute),
-      escapeCsv(t.dosingRegimen),
-      escapeCsv(t.primaryEndpoint),
-      escapeCsv(t.secondaryEndpoints),
-      escapeCsv(t.outcomeClass),
-      escapeCsv(t.primaryOutcomeDetail),
-      escapeCsv(t.efficacySummary),
-      escapeCsv(t.safetySummary),
-      escapeCsv(t.docReason),
-      escapeCsv(t.failureCategory),
-      escapeCsv(t.bbbFactor),
-      escapeCsv(t.contribFactors),
       escapeCsv(t.registryUrl),
-      escapeCsv(t.doi),
-      escapeCsv(t.pmid),
-      escapeCsv(t.citation),
-      escapeCsv(t.extractor),
-      escapeCsv(t.checker),
-      escapeCsv(t.qcStatus),
-      escapeCsv(t.qcNotes)
+      escapeCsv(t.publicationUrl),
+      escapeCsv(t.phase),
+      escapeCsv(t.status),
+      escapeCsv(t.completionYear),
+      // B
+      escapeCsv(t.drugName),
+      escapeCsv(t.therapeuticApproach),
+      escapeCsv(t.mechanism),
+      escapeCsv(t.adminRoute),
+      escapeCsv(t.treatmentObjective),
+      // C
+      escapeCsv(t.numParticipants),
+      escapeCsv(t.patientPopulation),
+      escapeCsv(t.studyDesign),
+      escapeCsv(t.controlGroup),
+      escapeCsv(t.primaryEndpoint),
+      escapeCsv(t.primaryEndpointResult),
+      // D
+      escapeCsv(t.overallOutcome),
+      escapeCsv(t.clinicalBenefitEvidence),
+      escapeCsv(t.safetyConcerns),
+      escapeCsv(t.regulatoryApproval),
+      escapeCsv(t.reportedFailureReason),
+      escapeCsv(t.terminationReason),
+      // E
+      escapeCsv(t.factorEfficacy),
+      escapeCsv(t.factorSafety),
+      escapeCsv(t.factorBbb),
+      escapeCsv(t.factorHeterogeneity),
+      escapeCsv(t.factorSelection),
+      escapeCsv(t.factorDesign),
+      escapeCsv(t.factorOperational),
+      escapeCsv(t.supportingEvidence),
+      // F
+      escapeCsv(t.mainFinding),
+      escapeCsv(t.whySucceedOrFail),
+      escapeCsv(t.futureLessons),
+      escapeCsv(t.limitations),
+      // G
+      escapeCsv(t.extractedBy),
+      escapeCsv(t.verifiedBy),
+      escapeCsv(t.verificationStatus),
+      escapeCsv(t.lastUpdated),
+      escapeCsv(t.comments)
     ].join(','));
 
     const csvContent = '\uFEFF' + [headers.map(escapeCsv).join(','), ...rows].join('\r\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const dateStr = new Date().toISOString().split('T')[0];
-    const diseaseNameSafe = (diseaseFilter === 'ALL' ? 'Combined_Database' : diseaseFilter.replace(/\s+/g, '_'));
+    const diseaseNameSafe = (diseaseFilter === 'ALL' ? 'Combined_Data' : diseaseFilter.replace(/\s+/g, '_'));
 
     const a = document.createElement('a');
     a.href = url;
@@ -326,7 +322,6 @@ class StorageManager {
         this.saveData(parsed);
         return { success: true, count: parsed.trials.length, mode: 'replaced' };
       } else {
-        // Merge mode
         const currentData = this.getData();
         const existingTrials = currentData.trials || [];
         let addedCount = 0;
@@ -347,19 +342,18 @@ class StorageManager {
 
         currentData.trials = existingTrials;
 
-        // Merge search logs and QC logs if available
-        if (parsed.qcLog && Array.isArray(parsed.qcLog)) {
-          parsed.qcLog.forEach(incomingQc => {
-            if (!currentData.qcLog.some(q => q.id === incomingQc.id)) {
-              currentData.qcLog.push(incomingQc);
+        if (parsed.weeklyProgress && Array.isArray(parsed.weeklyProgress)) {
+          parsed.weeklyProgress.forEach(wp => {
+            if (!currentData.weeklyProgress.some(w => w.id === wp.id)) {
+              currentData.weeklyProgress.push(wp);
             }
           });
         }
 
         if (parsed.searchLogs && Array.isArray(parsed.searchLogs)) {
-          parsed.searchLogs.forEach(incomingSl => {
-            if (!currentData.searchLogs.some(s => s.id === incomingSl.id)) {
-              currentData.searchLogs.push(incomingSl);
+          parsed.searchLogs.forEach(sl => {
+            if (!currentData.searchLogs.some(s => s.id === sl.id)) {
+              currentData.searchLogs.push(sl);
             }
           });
         }

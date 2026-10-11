@@ -1,258 +1,215 @@
 /**
- * PROJ 201: Clinical Trial Table & Detail View Controller
+ * PROJ 201: Clinical Trial Table Controller
+ * Powers 03_ALZHEIMERS, 04_GBM, 05_STROKE, and 06_COMBINED_DATA
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 class TrialTableController {
   constructor() {
-    this.currentDiseaseFilter = 'ALL';
-    this.searchQuery = '';
-    this.outcomeFilter = 'ALL';
-    this.qcFilter = 'ALL';
-    this.phaseFilter = 'ALL';
-
-    this.tableBody = document.getElementById('trialsTableBody');
-    this.emptyState = document.getElementById('tableEmptyState');
+    this.searchFilters = {
+      ad: '',
+      gbm: '',
+      stroke: '',
+      combined: ''
+    };
+    this.outcomeFilters = {
+      ad: 'ALL',
+      gbm: 'ALL',
+      stroke: 'ALL',
+      combined: 'ALL'
+    };
+    this.combinedDiseaseFilter = 'ALL';
 
     this.initEventListeners();
   }
 
   initEventListeners() {
-    // Disease chip buttons
-    const diseaseChips = document.querySelectorAll('.disease-filter-group .filter-chip');
-    diseaseChips.forEach(chip => {
-      chip.addEventListener('click', (e) => {
-        diseaseChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        this.currentDiseaseFilter = chip.dataset.disease;
-        this.render();
-      });
-    });
+    // Search inputs
+    const bindSearch = (id, key) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', (e) => {
+          this.searchFilters[key] = e.target.value.trim().toLowerCase();
+          this.render();
+        });
+      }
+    };
+    bindSearch('searchAd', 'ad');
+    bindSearch('searchGbm', 'gbm');
+    bindSearch('searchStroke', 'stroke');
+    bindSearch('searchCombined', 'combined');
 
-    // Search bar
-    const searchInput = document.getElementById('trialSearchInput');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        this.searchQuery = e.target.value.trim().toLowerCase();
-        this.render();
-      });
-    }
+    // Outcome filter selects
+    const bindOutcome = (id, key) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('change', (e) => {
+          this.outcomeFilters[key] = e.target.value;
+          this.render();
+        });
+      }
+    };
+    bindOutcome('filterOutcomeAd', 'ad');
+    bindOutcome('filterOutcomeGbm', 'gbm');
+    bindOutcome('filterOutcomeStroke', 'stroke');
+    bindOutcome('filterOutcomeCombined', 'combined');
 
-    // Secondary select filters
-    const outcomeSelect = document.getElementById('outcomeFilterSelect');
-    if (outcomeSelect) {
-      outcomeSelect.addEventListener('change', (e) => {
-        this.outcomeFilter = e.target.value;
-        this.render();
-      });
-    }
-
-    const qcSelect = document.getElementById('qcFilterSelect');
-    if (qcSelect) {
-      qcSelect.addEventListener('change', (e) => {
-        this.qcFilter = e.target.value;
-        this.render();
-      });
-    }
-
-    const phaseSelect = document.getElementById('phaseFilterSelect');
-    if (phaseSelect) {
-      phaseSelect.addEventListener('change', (e) => {
-        this.phaseFilter = e.target.value;
+    // Combined disease filter
+    const elCombDis = document.getElementById('filterDiseaseCombined');
+    if (elCombDis) {
+      elCombDis.addEventListener('change', (e) => {
+        this.combinedDiseaseFilter = e.target.value;
         this.render();
       });
     }
 
-    // Listen to data change events
+    // Modal detail close
+    const btnClose = document.getElementById('btnCloseDetailModal');
+    const btnCloseBtn = document.getElementById('btnCloseDetailModalBtn');
+    if (btnClose) btnClose.addEventListener('click', () => this.closeDetailModal());
+    if (btnCloseBtn) btnCloseBtn.addEventListener('click', () => this.closeDetailModal());
+
     window.addEventListener('proj201:datachange', () => {
       this.render();
       this.updateCounts();
     });
   }
 
-  getFilteredTrials() {
-    let trials = window.storage.getTrials();
-
-    // Disease filter
-    if (this.currentDiseaseFilter !== 'ALL') {
-      trials = trials.filter(t => t.disease === this.currentDiseaseFilter);
-    }
-
-    // Outcome filter
-    if (this.outcomeFilter !== 'ALL') {
-      trials = trials.filter(t => t.outcomeClass === this.outcomeFilter);
-    }
-
-    // QC filter
-    if (this.qcFilter !== 'ALL') {
-      trials = trials.filter(t => t.qcStatus === this.qcFilter);
-    }
-
-    // Phase filter
-    if (this.phaseFilter !== 'ALL') {
-      trials = trials.filter(t => t.phase.includes(this.phaseFilter.replace('Phase ', '')));
-    }
-
-    // Text search query
-    if (this.searchQuery) {
-      const q = this.searchQuery;
-      trials = trials.filter(t => 
-        (t.nctId && t.nctId.toLowerCase().includes(q)) ||
-        (t.drugName && t.drugName.toLowerCase().includes(q)) ||
-        (t.title && t.title.toLowerCase().includes(q)) ||
-        (t.mechanism && t.mechanism.toLowerCase().includes(q)) ||
-        (t.molecularTarget && t.molecularTarget.toLowerCase().includes(q)) ||
-        (t.disease && t.disease.toLowerCase().includes(q)) ||
-        (t.citation && t.citation.toLowerCase().includes(q)) ||
-        (t.docReason && t.docReason.toLowerCase().includes(q))
-      );
-    }
-
-    return trials;
+  render() {
+    this.renderDiseaseTable("Alzheimer's", 'bodyAd', this.searchFilters.ad, this.outcomeFilters.ad);
+    this.renderDiseaseTable('GBM', 'bodyGbm', this.searchFilters.gbm, this.outcomeFilters.gbm);
+    this.renderDiseaseTable('Stroke', 'bodyStroke', this.searchFilters.stroke, this.outcomeFilters.stroke);
+    this.renderCombinedTable();
+    this.updateCounts();
   }
 
-  render() {
-    if (!this.tableBody) return;
-    const filtered = this.getFilteredTrials();
+  renderDiseaseTable(disease, tbodyId, searchQuery, outcomeFilter) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
 
-    if (filtered.length === 0) {
-      this.tableBody.innerHTML = '';
-      if (this.emptyState) this.emptyState.classList.remove('d-none');
+    let trials = window.storage.getTrials().filter(t => t.disease === disease);
+
+    if (outcomeFilter && outcomeFilter !== 'ALL') {
+      trials = trials.filter(t => t.overallOutcome === outcomeFilter);
+    }
+
+    if (searchQuery) {
+      trials = trials.filter(t => this.matchSearch(t, searchQuery));
+    }
+
+    if (trials.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted p-3">No ${disease} clinical trials matching criteria.</td></tr>`;
       return;
     }
 
-    if (this.emptyState) this.emptyState.classList.add('d-none');
+    tbody.innerHTML = trials.map(t => this.renderTableRow(t, false)).join('');
+  }
 
-    this.tableBody.innerHTML = filtered.map(trial => {
-      const diseaseTagClass = trial.disease === "Alzheimer's Disease" ? 'tag-ad' :
-                              trial.disease === "Glioblastoma" ? 'tag-gbm' : 'tag-stroke';
-      
-      const outcomeBadgeClass = trial.outcomeClass === 'Positive outcome' ? 'badge-success' :
-                                trial.outcomeClass === 'Negative outcome' ? 'badge-danger' :
-                                trial.outcomeClass === 'Mixed / Inconclusive' ? 'badge-warning' :
-                                trial.outcomeClass === 'Terminated / Discontinued' ? 'badge-dark' : 'badge-secondary';
+  renderCombinedTable() {
+    const tbody = document.getElementById('bodyCombined');
+    if (!tbody) return;
 
-      const qcBadgeClass = trial.qcStatus === 'Verified' ? 'badge-success' :
-                           trial.qcStatus === 'Pending Verification' ? 'badge-warning' :
-                           trial.qcStatus === 'Needs Revision' ? 'badge-danger' : 'badge-secondary';
+    let trials = window.storage.getTrials();
 
-      return `
-        <tr data-id="${trial.id}">
+    if (this.combinedDiseaseFilter && this.combinedDiseaseFilter !== 'ALL') {
+      trials = trials.filter(t => t.disease === this.combinedDiseaseFilter);
+    }
+
+    if (this.outcomeFilters.combined && this.outcomeFilters.combined !== 'ALL') {
+      trials = trials.filter(t => t.overallOutcome === this.outcomeFilters.combined);
+    }
+
+    if (this.searchFilters.combined) {
+      trials = trials.filter(t => this.matchSearch(t, this.searchFilters.combined));
+    }
+
+    if (trials.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted p-3">No clinical trials found in combined dataset.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = trials.map(t => this.renderTableRow(t, true)).join('');
+  }
+
+  matchSearch(t, query) {
+    return (
+      (t.nctId && t.nctId.toLowerCase().includes(query)) ||
+      (t.drugName && t.drugName.toLowerCase().includes(query)) ||
+      (t.studyTitle && t.studyTitle.toLowerCase().includes(query)) ||
+      (t.mechanism && t.mechanism.toLowerCase().includes(query)) ||
+      (t.primaryEndpoint && t.primaryEndpoint.toLowerCase().includes(query)) ||
+      (t.extractedBy && t.extractedBy.toLowerCase().includes(query))
+    );
+  }
+
+  renderTableRow(t, isCombined = false) {
+    const outcomeClass = t.overallOutcome === 'Positive' ? 'pill-pos' :
+                         t.overallOutcome === 'Negative' ? 'pill-neg' :
+                         t.overallOutcome === 'Mixed / Inconclusive' ? 'pill-mix' : 'pill-muted';
+
+    const disClass = t.disease === "Alzheimer's" ? 'pill-ad' :
+                     t.disease === "GBM" ? 'pill-gbm' : 'pill-stroke';
+
+    const qcClass = t.verificationStatus === 'Verified' ? 'text-primary font-bold' :
+                    t.verificationStatus === 'Needs revision' ? 'text-danger' : 'text-muted';
+
+    return `
+      <tr>
+        <td>
+          <a href="${t.registryUrl || '#'}" target="_blank" rel="noopener noreferrer" class="font-mono text-primary font-bold">
+            ${t.nctId}
+          </a>
+          <div class="text-xs text-muted">${t.completionYear || ''} · ${t.status || ''}</div>
+        </td>
+        ${isCombined ? `<td><span class="pill ${disClass}">${t.disease}</span></td>` : ''}
+        <td>
+          <strong>${t.drugName || 'Unnamed'}</strong>
+          <span class="pill pill-muted text-xs" style="margin-left: 4px;">${t.therapeuticApproach || ''}</span>
+          <div class="text-xs text-muted" style="max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${t.studyTitle}">
+            ${t.studyTitle}
+          </div>
+        </td>
+        <td><span class="font-mono text-xs">${t.phase || ''}</span></td>
+        <td><span class="pill ${outcomeClass}">${t.overallOutcome || 'Not reported'}</span></td>
+        <td>
+          <div class="text-xs" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${t.primaryEndpoint}">
+            ${t.primaryEndpoint || ''}
+          </div>
+          <span class="text-xs font-bold ${t.primaryEndpointResult === 'Met' ? 'text-primary' : 'text-muted'}">Result: ${t.primaryEndpointResult || 'N/A'}</span>
+        </td>
+        ${!isCombined ? `
           <td>
-            <a href="${trial.registryUrl || '#'}" target="_blank" rel="noopener noreferrer" class="nct-cell" title="View on ClinicalTrials.gov">
-              ${trial.nctId}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-left: 2px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
-            <div class="text-xs text-muted">${trial.status || 'Completed'}</div>
+            <span class="tag-factor ${t.factorBbb === 'Yes' ? 'yes' : ''}">BBB: ${t.factorBbb || '-'}</span>
+            <span class="tag-factor ${t.factorSafety === 'Yes' ? 'yes' : ''}">Safe: ${t.factorSafety || '-'}</span>
           </td>
-          <td>
-            <strong style="color: var(--color-text-main);">${trial.drugName || 'Unnamed'}</strong>
-            <div class="text-xs text-muted" style="max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${trial.title}">
-              ${trial.title}
-            </div>
-            <div class="text-xs" style="color: var(--color-primary);">${trial.mechanism || ''}</div>
-          </td>
-          <td>
-            <span class="disease-tag ${diseaseTagClass}">${trial.disease}</span>
-          </td>
-          <td>
-            <span class="badge badge-secondary font-mono">${trial.phase || 'N/A'}</span>
-          </td>
-          <td>
-            <span class="badge ${outcomeBadgeClass}">${trial.outcomeClass}</span>
-          </td>
-          <td>
-            <div class="text-xs" style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${trial.primaryEndpoint}">
-              ${trial.primaryEndpoint}
-            </div>
-            <div class="text-xs text-muted">${trial.enrollment ? 'N=' + trial.enrollment : ''}</div>
-          </td>
-          <td>
-            <span class="badge ${qcBadgeClass}">${trial.qcStatus}</span>
-          </td>
-          <td class="text-right" style="white-space: nowrap;">
-            <button class="table-action-btn" onclick="window.trialTable.openDetailModal('${trial.id}')" title="View Full Protocol Card">
-              View
-            </button>
-            <button class="table-action-btn" onclick="window.trialForm.openEditModal('${trial.id}')" title="Edit Clinical Trial">
-              Edit
-            </button>
-            ${trial.qcStatus !== 'Verified' ? `
-              <button class="table-action-btn btn-action-verify" onclick="window.qcWorkflow.openVerifyModal('${trial.id}')" title="Peer Verification Sign-off">
-                Verify
-              </button>
-            ` : ''}
-          </td>
-        </tr>
-      `;
-    }).join('');
+        ` : ''}
+        <td>
+          <div class="text-xs ${qcClass}">${t.verificationStatus || 'Pending'}</div>
+          <div class="text-xs text-muted">${t.verifiedBy ? 'by ' + t.verifiedBy : ''}</div>
+        </td>
+        <td class="text-right" style="white-space: nowrap;">
+          <button class="btn btn-outline btn-sm" onclick="window.trialTable.openDetailModal('${t.id}')">View</button>
+          <button class="btn btn-outline btn-sm" onclick="window.trialForm.openEditModal('${t.id}')">Edit</button>
+        </td>
+      </tr>
+    `;
   }
 
   updateCounts() {
     const trials = window.storage.getTrials();
-    const countAll = trials.length;
-    const countAd = trials.filter(t => t.disease === "Alzheimer's Disease").length;
-    const countGbm = trials.filter(t => t.disease === "Glioblastoma").length;
+    const countAd = trials.filter(t => t.disease === "Alzheimer's").length;
+    const countGbm = trials.filter(t => t.disease === "GBM").length;
     const countStroke = trials.filter(t => t.disease === "Stroke").length;
-    const countPending = trials.filter(t => t.qcStatus === "Pending Verification").length;
-    const countVerified = trials.filter(t => t.qcStatus === "Verified").length;
+    const countCombined = trials.length;
 
-    // Filter chip counts
-    const elAll = document.getElementById('countFilterAll');
-    if (elAll) elAll.textContent = countAll;
-    const elAd = document.getElementById('countFilterAd');
+    const elAd = document.getElementById('countTabAd');
     if (elAd) elAd.textContent = countAd;
-    const elGbm = document.getElementById('countFilterGbm');
+    const elGbm = document.getElementById('countTabGbm');
     if (elGbm) elGbm.textContent = countGbm;
-    const elStroke = document.getElementById('countFilterStroke');
+    const elStroke = document.getElementById('countTabStroke');
     if (elStroke) elStroke.textContent = countStroke;
-
-    // Badges in header navigation
-    const totalBadge = document.getElementById('totalTrialsBadge');
-    if (totalBadge) totalBadge.textContent = countAll;
-    const pendingBadge = document.getElementById('pendingQcBadge');
-    if (pendingBadge) pendingBadge.textContent = countPending;
-
-    // Dashboard metrics
-    const statTotal = document.getElementById('statTotalTrials');
-    if (statTotal) statTotal.textContent = countAll;
-    const statProgress = document.getElementById('statTotalProgress');
-    if (statProgress) {
-      const pct = Math.min(100, Math.round((countAll / 45) * 100));
-      statProgress.style.width = `${pct}%`;
-    }
-
-    const statAd = document.getElementById('statAdTrials');
-    if (statAd) statAd.textContent = countAd;
-    const statAdVer = document.getElementById('statAdVerified');
-    if (statAdVer) {
-      const adVerCount = trials.filter(t => t.disease === "Alzheimer's Disease" && t.qcStatus === "Verified").length;
-      statAdVer.textContent = `${adVerCount} verified`;
-    }
-
-    const statGbm = document.getElementById('statGbmTrials');
-    if (statGbm) statGbm.textContent = countGbm;
-    const statGbmVer = document.getElementById('statGbmVerified');
-    if (statGbmVer) {
-      const gbmVerCount = trials.filter(t => t.disease === "Glioblastoma" && t.qcStatus === "Verified").length;
-      statGbmVer.textContent = `${gbmVerCount} verified`;
-    }
-
-    const statStroke = document.getElementById('statStrokeTrials');
-    if (statStroke) statStroke.textContent = countStroke;
-    const statStrokeVer = document.getElementById('statStrokeVerified');
-    if (statStrokeVer) {
-      const strokeVerCount = trials.filter(t => t.disease === "Stroke" && t.qcStatus === "Verified").length;
-      statStrokeVer.textContent = `${strokeVerCount} verified`;
-    }
-
-    const statQcVer = document.getElementById('statQcVerified');
-    if (statQcVer) statQcVer.textContent = countVerified;
-    const statQcPen = document.getElementById('statQcPending');
-    if (statQcPen) statQcPen.textContent = `${countPending} pending review`;
-
-    const quickPen = document.getElementById('quickPendingCount');
-    if (quickPen) quickPen.textContent = countPending;
+    const elComb = document.getElementById('countTabCombined');
+    if (elComb) elComb.textContent = countCombined;
   }
 
   openDetailModal(id) {
@@ -262,27 +219,24 @@ class TrialTableController {
     const modalBackdrop = document.getElementById('viewDetailModalBackdrop');
     const modalTitle = document.getElementById('viewDetailModalTitle');
     const modalBody = document.getElementById('viewDetailModalBody');
-    const diseaseBadge = document.getElementById('detailDiseaseBadge');
-    const outcomeBadge = document.getElementById('detailOutcomeBadge');
-    const qcBadge = document.getElementById('detailQcBadge');
-    const btnVerify = document.getElementById('btnDetailVerify');
+    const diseasePill = document.getElementById('detailDiseasePill');
+    const outcomePill = document.getElementById('detailOutcomePill');
+    const qcPill = document.getElementById('detailQcPill');
     const btnEdit = document.getElementById('btnDetailEdit');
 
     if (!modalBackdrop || !modalBody) return;
 
-    modalTitle.textContent = `${trial.nctId}: ${trial.drugName}`;
+    modalTitle.textContent = `${trial.nctId} · ${trial.drugName}`;
 
-    // Badges
-    diseaseBadge.className = `badge ${trial.disease === "Alzheimer's Disease" ? 'tag-ad' : trial.disease === "Glioblastoma" ? 'tag-gbm' : 'tag-stroke'}`;
-    diseaseBadge.textContent = trial.disease;
+    diseasePill.className = `pill ${trial.disease === "Alzheimer's" ? 'pill-ad' : trial.disease === "GBM" ? 'pill-gbm' : 'pill-stroke'}`;
+    diseasePill.textContent = trial.disease;
 
-    outcomeBadge.className = `badge ${trial.outcomeClass === 'Positive outcome' ? 'badge-success' : trial.outcomeClass === 'Negative outcome' ? 'badge-danger' : 'badge-warning'}`;
-    outcomeBadge.textContent = trial.outcomeClass;
+    outcomePill.className = `pill ${trial.overallOutcome === 'Positive' ? 'pill-pos' : trial.overallOutcome === 'Negative' ? 'pill-neg' : 'pill-mix'}`;
+    outcomePill.textContent = trial.overallOutcome;
 
-    qcBadge.className = `badge ${trial.qcStatus === 'Verified' ? 'badge-success' : 'badge-warning'}`;
-    qcBadge.textContent = `QC: ${trial.qcStatus}`;
+    qcPill.className = `pill ${trial.verificationStatus === 'Verified' ? 'pill-pos' : 'pill-muted'}`;
+    qcPill.textContent = `QC: ${trial.verificationStatus}`;
 
-    // Action handlers in detail modal
     if (btnEdit) {
       btnEdit.onclick = () => {
         this.closeDetailModal();
@@ -290,138 +244,87 @@ class TrialTableController {
       };
     }
 
-    if (btnVerify) {
-      btnVerify.onclick = () => {
-        this.closeDetailModal();
-        window.qcWorkflow.openVerifyModal(trial.id);
-      };
-    }
-
-    // Build rich detail card body
     modalBody.innerHTML = `
       <div class="mb-3">
-        <h4 style="font-size: 1.1rem; color: var(--color-text-main); margin-bottom: 0.35rem;">${trial.title}</h4>
-        <div class="text-sm">
-          <a href="${trial.registryUrl}" target="_blank" rel="noopener noreferrer" class="font-mono text-primary font-bold">
+        <h4 style="font-size: 1.05rem;">${trial.studyTitle}</h4>
+        <div class="text-sm mt-1">
+          <a href="${trial.registryUrl}" target="_blank" rel="noopener noreferrer" class="font-mono text-primary">
             ${trial.nctId} on ClinicalTrials.gov &nearr;
           </a>
+          ${trial.publicationUrl ? `· <a href="${trial.publicationUrl}" target="_blank" rel="noopener noreferrer" class="text-muted font-mono">DOI/Paper &nearr;</a>` : ''}
         </div>
       </div>
 
-      <!-- Section 1: Study Design & Population -->
-      <h5 class="text-sm font-bold text-muted text-uppercase mb-2">1. Trial Design & Patient Population</h5>
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span class="detail-label">Phase &amp; Status</span>
-          <span class="detail-value">${trial.phase} · ${trial.status} (${trial.startDate || 'N/A'} &rarr; ${trial.completionDate || 'N/A'})</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Design &amp; Control</span>
-          <span class="detail-value">${trial.randomization || 'Randomized'}, ${trial.blinding || 'Double-blind'} vs ${trial.comparator || 'Placebo'}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Enrollment (N)</span>
-          <span class="detail-value">${trial.enrollment ? trial.enrollment.toLocaleString() + ' patients' : 'Not reported'}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Disease Stage / Clinical Subtype</span>
-          <span class="detail-value">${trial.diseaseStage || 'Not specified'}</span>
-        </div>
-      </div>
-      ${trial.eligibility ? `
-        <div class="detail-item mb-3">
-          <span class="detail-label">Key Eligibility Criteria</span>
-          <div class="text-xs text-muted mt-1">${trial.eligibility}</div>
-        </div>
-      ` : ''}
-
-      <!-- Section 2: Intervention & Mechanism -->
-      <h5 class="text-sm font-bold text-muted text-uppercase mb-2 mt-3">2. Investigational Drug & Mechanism</h5>
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span class="detail-label">Drug Name &amp; Molecular Target</span>
-          <span class="detail-value">${trial.drugName} (Target: ${trial.molecularTarget || 'N/A'})</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Therapeutic Mechanism / Class</span>
-          <span class="detail-value">${trial.mechanism}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Route &amp; Regimen</span>
-          <span class="detail-value">${trial.adminRoute || 'IV'} · ${trial.dosingRegimen || 'Standard'}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">BBB Delivery Assessment</span>
-          <span class="detail-value">${trial.bbbFactor || 'Not reported'}</span>
-        </div>
-      </div>
-
-      <!-- Section 3: Endpoints, Efficacy & Safety -->
-      <h5 class="text-sm font-bold text-muted text-uppercase mb-2 mt-3">3. Endpoints & Clinical Outcomes</h5>
-      <div class="detail-item mb-2">
-        <span class="detail-label">Primary Endpoint(s)</span>
-        <span class="detail-value">${trial.primaryEndpoint}</span>
-        ${trial.primaryOutcomeDetail ? `<div class="text-xs mt-1 text-primary"><strong>Outcome Detail:</strong> ${trial.primaryOutcomeDetail}</div>` : ''}
-      </div>
-      ${trial.secondaryEndpoints ? `
-        <div class="detail-item mb-2">
-          <span class="detail-label">Secondary Endpoints</span>
-          <div class="text-xs text-muted mt-1">${trial.secondaryEndpoints}</div>
-        </div>
-      ` : ''}
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span class="detail-label">Reported Efficacy</span>
-          <div class="text-xs mt-1">${trial.efficacySummary || 'Not reported'}</div>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Safety &amp; Adverse Events</span>
-          <div class="text-xs mt-1 text-danger">${trial.safetySummary || 'Not reported'}</div>
-        </div>
-      </div>
-
-      <!-- Section 4: Documented Reasons vs Possible Contributing Factors -->
-      <h5 class="text-sm font-bold text-muted text-uppercase mb-2 mt-3">4. Documented Reasons vs Translational Contributing Factors</h5>
-      <div class="detail-item mb-2" style="border-left: 4px solid var(--color-danger);">
-        <span class="detail-label text-danger">Explicitly Documented Reason for Failure / Termination</span>
-        <div class="text-sm mt-1"><strong>${trial.docReason || 'None documented'}</strong></div>
-        <div class="text-xs text-muted mt-1">Category: <strong>${trial.failureCategory || 'N/A'}</strong></div>
-      </div>
-      <div class="detail-item mb-3" style="border-left: 4px solid var(--color-primary);">
-        <span class="detail-label text-primary">Possible Contributing Factors (Literature-Supported Hypotheses)</span>
-        <div class="text-xs mt-1">${trial.contribFactors || 'No literature hypotheses recorded yet.'}</div>
-      </div>
-
-      <!-- Section 5: References & QC Audit Trail -->
-      <h5 class="text-sm font-bold text-muted text-uppercase mb-2 mt-3">5. Evidence & Quality Control</h5>
-      <div class="detail-grid mb-2">
-        <div class="detail-item">
-          <span class="detail-label">Publication References</span>
-          <div class="text-xs mt-1">
-            ${trial.doi ? `<div>DOI: <a href="https://doi.org/${trial.doi}" target="_blank" rel="noopener noreferrer">${trial.doi}</a></div>` : ''}
-            ${trial.pmid ? `<div>PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/${trial.pmid}" target="_blank" rel="noopener noreferrer">${trial.pmid}</a></div>` : ''}
+      <!-- Categories A, B, C, D -->
+      <div class="grid-2 mb-3">
+        <div class="card p-0">
+          <div class="card-header"><strong class="text-sm">A &amp; B. Identification &amp; Treatment</strong></div>
+          <div class="card-body text-sm">
+            <div><strong>Phase:</strong> ${trial.phase} (${trial.status}, ${trial.completionYear || 'N/A'})</div>
+            <div><strong>Drug:</strong> ${trial.drugName} (${trial.therapeuticApproach})</div>
+            <div><strong>Mechanism:</strong> ${trial.mechanism}</div>
+            <div><strong>Route &amp; Goal:</strong> ${trial.adminRoute} · ${trial.treatmentObjective}</div>
           </div>
         </div>
-        <div class="detail-item">
-          <span class="detail-label">QC Team Assignment</span>
-          <div class="text-xs mt-1">
-            <div>Extractor: <strong>${trial.extractor || 'Unknown'}</strong></div>
-            <div>Verifier: <strong>${trial.checker || 'Unassigned'}</strong></div>
-            <div>Status: <span class="badge ${trial.qcStatus === 'Verified' ? 'badge-success' : 'badge-warning'}">${trial.qcStatus}</span></div>
+
+        <div class="card p-0">
+          <div class="card-header"><strong class="text-sm">C &amp; D. Trial Design &amp; Outcome</strong></div>
+          <div class="card-body text-sm">
+            <div><strong>Design:</strong> ${trial.studyDesign} vs ${trial.controlGroup} (N=${trial.numParticipants || 'N/A'})</div>
+            <div><strong>Population:</strong> ${trial.patientPopulation}</div>
+            <div><strong>Primary Endpoint:</strong> ${trial.primaryEndpoint} (<strong>${trial.primaryEndpointResult}</strong>)</div>
+            <div><strong>FDA Approval:</strong> ${trial.regulatoryApproval}</div>
           </div>
         </div>
       </div>
-      ${trial.citation ? `
-        <div class="detail-item mb-2">
-          <span class="detail-label">Citation</span>
-          <div class="text-xs text-muted mt-1 font-mono">${trial.citation}</div>
+
+      <!-- Reported Clinical Findings -->
+      <div class="card p-0 mb-3">
+        <div class="card-header"><strong class="text-sm">Reported Clinical Findings &amp; Safety</strong></div>
+        <div class="card-body text-sm">
+          <div><strong>Clinical Benefit Evidence:</strong> ${trial.clinicalBenefitEvidence || 'None reported'}</div>
+          <div class="mt-1 text-danger"><strong>Safety Concerns:</strong> ${trial.safetyConcerns || 'None reported'}</div>
+          ${trial.reportedFailureReason ? `<div class="mt-1"><strong>Documented Reason for Failure:</strong> ${trial.reportedFailureReason}</div>` : ''}
+          ${trial.terminationReason && trial.terminationReason !== 'Not applicable' ? `<div class="mt-1 text-danger"><strong>Termination Reason:</strong> ${trial.terminationReason}</div>` : ''}
         </div>
-      ` : ''}
-      ${trial.qcNotes ? `
-        <div class="alert alert-important text-xs">
-          <strong>Quality Control Audit Notes:</strong> ${trial.qcNotes}
+      </div>
+
+      <!-- Category E Factors -->
+      <div class="card p-0 mb-3">
+        <div class="card-header"><strong class="text-sm">E. Factors Influencing Success or Failure (Yes / No / Unclear)</strong></div>
+        <div class="card-body text-sm">
+          <div class="factor-grid-minimal mb-2">
+            <div class="factor-item">Efficacy Issue: <strong>${trial.factorEfficacy}</strong></div>
+            <div class="factor-item">Safety/Toxicity: <strong>${trial.factorSafety}</strong></div>
+            <div class="factor-item">BBB Delivery: <strong>${trial.factorBbb}</strong></div>
+            <div class="factor-item">Heterogeneity: <strong>${trial.factorHeterogeneity}</strong></div>
+            <div class="factor-item">Patient Selection: <strong>${trial.factorSelection}</strong></div>
+            <div class="factor-item">Trial Design: <strong>${trial.factorDesign}</strong></div>
+            <div class="factor-item">Operational: <strong>${trial.factorOperational}</strong></div>
+          </div>
+          ${trial.supportingEvidence ? `<div class="text-xs text-muted"><strong>Supporting Evidence:</strong> ${trial.supportingEvidence}</div>` : ''}
         </div>
-      ` : ''}
+      </div>
+
+      <!-- Category F Scientific Interpretation -->
+      <div class="card p-0 mb-3">
+        <div class="card-header"><strong class="text-sm">F. Scientific Interpretation &amp; Lessons</strong></div>
+        <div class="card-body text-sm">
+          <div><strong>Main Finding:</strong> ${trial.mainFinding || 'N/A'}</div>
+          <div class="mt-1"><strong>Why Did It Succeed or Fail?:</strong> ${trial.whySucceedOrFail || 'N/A'}</div>
+          <div class="mt-1 text-primary"><strong>Lessons for Future Trials:</strong> ${trial.futureLessons || 'N/A'}</div>
+          ${trial.limitations ? `<div class="mt-1 text-muted"><strong>Limitations:</strong> ${trial.limitations}</div>` : ''}
+        </div>
+      </div>
+
+      <!-- Category G Teamwork -->
+      <div class="card p-0">
+        <div class="card-header"><strong class="text-sm">G. Data Quality &amp; Teamwork</strong></div>
+        <div class="card-body text-sm">
+          <div>Extracted by: <strong>${trial.extractedBy}</strong> · Verified by: <strong>${trial.verifiedBy}</strong> (Status: <strong>${trial.verificationStatus}</strong>)</div>
+          ${trial.comments ? `<div class="mt-1 text-xs text-muted">Notes: ${trial.comments}</div>` : ''}
+        </div>
+      </div>
     `;
 
     modalBackdrop.classList.remove('d-none');
@@ -433,13 +336,5 @@ class TrialTableController {
   }
 }
 
-// Global instance
+// Global singleton
 window.trialTable = new TrialTableController();
-
-// Modal close button handlers
-document.addEventListener('DOMContentLoaded', () => {
-  const btnClose = document.getElementById('btnCloseDetailModal');
-  const btnCloseBtn = document.getElementById('btnCloseDetailModalBtn');
-  if (btnClose) btnClose.addEventListener('click', () => window.trialTable.closeDetailModal());
-  if (btnCloseBtn) btnCloseBtn.addEventListener('click', () => window.trialTable.closeDetailModal());
-});

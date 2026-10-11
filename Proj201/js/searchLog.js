@@ -1,29 +1,33 @@
 /**
- * PROJ 201: Clinical Trial Landscape & Search Log Controller
+ * PROJ 201: Search Log Controller (02_SEARCH_LOG)
+ * Manages the 7-Step Cumulative Filter Matrix & Search Query Log
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 class SearchLogController {
   constructor() {
-    this.tableBody = document.getElementById('searchLogTableBody');
+    this.matrixBody = document.getElementById('searchMatrixBody');
+    this.listBody = document.getElementById('searchLogListBody');
     this.modalBackdrop = document.getElementById('searchLogModalBackdrop');
-    this.form = document.getElementById('searchLogForm');
-    this.chartInstance = null;
+    this.form = document.getElementById('searchEntryForm');
 
     this.initEventListeners();
   }
 
   initEventListeners() {
-    const btnOpen = document.getElementById('btnAddSearchLog');
+    // Open Modal button
+    const btnOpen = document.getElementById('btnOpenSearchLogModal');
     if (btnOpen) {
       btnOpen.addEventListener('click', () => this.openModal());
     }
 
-    const btnClose = document.getElementById('btnCloseSearchLogModal');
-    const btnCancel = document.getElementById('btnCancelSearchLogModal');
+    // Modal close buttons
+    const btnClose = document.getElementById('btnCloseSearchModal');
+    const btnCancel = document.getElementById('btnCancelSearchModal');
     if (btnClose) btnClose.addEventListener('click', () => this.closeModal());
     if (btnCancel) btnCancel.addEventListener('click', () => this.closeModal());
 
+    // Form submit
     if (this.form) {
       this.form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -31,136 +35,128 @@ class SearchLogController {
       });
     }
 
+    // React to data changes
     window.addEventListener('proj201:datachange', () => {
       this.render();
     });
   }
 
   render() {
-    this.renderTable();
-    this.renderFunnelChart();
+    this.renderMatrix();
+    this.renderLogs();
   }
 
-  renderTable() {
-    if (!this.tableBody) return;
-    const logs = window.storage.getSearchLogs();
+  renderMatrix() {
+    if (!this.matrixBody) return;
+    const matrix = window.storage.getSearchMatrix();
 
-    if (logs.length === 0) {
-      this.tableBody.innerHTML = `
-        <tr><td colspan="8" class="text-center text-muted p-3">No search logs recorded yet.</td></tr>
-      `;
+    if (!matrix || matrix.length === 0) {
+      this.matrixBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted p-3">No search matrix data found.</td></tr>`;
       return;
     }
 
-    this.tableBody.innerHTML = logs.map(l => {
-      const diseaseTagClass = l.disease === "Alzheimer's Disease" ? 'tag-ad' :
-                              l.disease === "Glioblastoma" ? 'tag-gbm' : 'tag-stroke';
+    this.matrixBody.innerHTML = matrix.map((step, idx) => {
+      const isFinal = (step.stepNumber === 7);
+      const highlightClass = isFinal ? 'font-bold text-primary' : '';
 
       return `
-        <tr>
-          <td class="font-mono text-xs text-muted" style="white-space: nowrap;">${l.date}</td>
-          <td><span class="disease-tag ${diseaseTagClass}">${l.disease}</span></td>
+        <tr class="${isFinal ? 'bg-subtle font-bold' : ''}">
+          <td class="font-mono text-xs text-center"><span class="badge badge-secondary">${step.stepNumber}</span></td>
           <td>
-            <div class="text-xs" style="max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${l.query}">
-              ${l.query}
-            </div>
-            <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-primary font-mono">
-              View Search &nearr;
-            </a>
+            <strong>${step.stepName}</strong>
+            ${isFinal ? '<div class="text-xs text-muted">Final pool with published results or documented outcome reasons</div>' : ''}
           </td>
-          <td><span class="font-mono font-bold">${l.step1Count ? l.step1Count.toLocaleString() : 'N/A'}</span></td>
-          <td><span class="font-mono">${l.step3Count ? l.step3Count.toLocaleString() : 'N/A'}</span></td>
-          <td><span class="font-mono">${l.step5Count ? l.step5Count.toLocaleString() : 'N/A'}</span></td>
-          <td><span class="font-mono font-bold text-success">${l.step7Count ? l.step7Count.toLocaleString() : 'N/A'}</span></td>
-          <td><span class="text-xs text-muted">${l.loggedBy || 'Student'}</span></td>
+          <td class="text-right font-mono ${highlightClass}">
+            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'adCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
+              ${(step.adCount || 0).toLocaleString()}
+            </span>
+          </td>
+          <td class="text-right font-mono ${highlightClass}">
+            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'gbmCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
+              ${(step.gbmCount || 0).toLocaleString()}
+            </span>
+          </td>
+          <td class="text-right font-mono ${highlightClass}">
+            <span class="count-val" onclick="window.searchLog.editStepCount(${idx}, 'strokeCount')" title="Click to edit count" style="cursor: pointer; text-decoration: underline dotted;">
+              ${(step.strokeCount || 0).toLocaleString()}
+            </span>
+          </td>
         </tr>
       `;
     }).join('');
   }
 
-  renderFunnelChart() {
-    const canvas = document.getElementById('funnelChart');
-    if (!canvas || typeof Chart === 'undefined') return;
+  editStepCount(stepIndex, diseaseField) {
+    const matrix = window.storage.getSearchMatrix();
+    const step = matrix[stepIndex];
+    if (!step) return;
 
-    const logs = window.storage.getSearchLogs();
-    const adLog = logs.find(l => l.disease === "Alzheimer's Disease") || {};
-    const gbmLog = logs.find(l => l.disease === "Glioblastoma") || {};
-    const strokeLog = logs.find(l => l.disease === "Stroke") || {};
+    const disName = diseaseField === 'adCount' ? "Alzheimer's" : diseaseField === 'gbmCount' ? "GBM" : "Stroke";
+    const current = step[diseaseField] || 0;
+    const val = prompt(`Update Step ${step.stepNumber} count for ${disName} (${step.stepName}):`, current);
 
-    const steps = ['Step 1: All', 'Step 3: Ph II/III', 'Step 5: Drug/Bio', 'Step 7: Eligible'];
-
-    const data = {
-      labels: steps,
-      datasets: [
-        {
-          label: "Alzheimer's Disease",
-          data: [adLog.step1Count || 0, adLog.step3Count || 0, adLog.step5Count || 0, adLog.step7Count || 0],
-          backgroundColor: 'rgba(124, 58, 237, 0.7)',
-          borderColor: '#7c3aed',
-          borderWidth: 2,
-          fill: false,
-          tension: 0.2
-        },
-        {
-          label: 'Glioblastoma',
-          data: [gbmLog.step1Count || 0, gbmLog.step3Count || 0, gbmLog.step5Count || 0, gbmLog.step7Count || 0],
-          backgroundColor: 'rgba(225, 29, 72, 0.7)',
-          borderColor: '#e11d48',
-          borderWidth: 2,
-          fill: false,
-          tension: 0.2
-        },
-        {
-          label: 'Stroke',
-          data: [strokeLog.step1Count || 0, strokeLog.step3Count || 0, strokeLog.step5Count || 0, strokeLog.step7Count || 0],
-          backgroundColor: 'rgba(234, 88, 12, 0.7)',
-          borderColor: '#ea580c',
-          borderWidth: 2,
-          fill: false,
-          tension: 0.2
-        }
-      ]
-    };
-
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
-
-    this.chartInstance = new Chart(canvas, {
-      type: 'bar',
-      data: data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } } },
-          tooltip: { mode: 'index', intersect: false }
-        },
-        scales: {
-          y: {
-            type: 'logarithmic',
-            title: { display: true, text: 'Clinical Trials Count (Log Scale)', font: { size: 11 } },
-            ticks: { font: { size: 10 } }
-          },
-          x: {
-            ticks: { font: { size: 10 } }
-          }
+    if (val !== null) {
+      const parsed = parseInt(val.replace(/,/g, ''), 10);
+      if (!isNaN(parsed) && parsed >= 0) {
+        step[diseaseField] = parsed;
+        window.storage.updateSearchMatrix(matrix);
+        if (window.app && window.app.showToast) {
+          window.app.showToast(`Updated Step ${step.stepNumber} ${disName} count to ${parsed.toLocaleString()}`, 'success');
         }
       }
-    });
+    }
+  }
+
+  renderLogs() {
+    if (!this.listBody) return;
+    const logs = window.storage.getSearchLogs();
+
+    if (logs.length === 0) {
+      this.listBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-3">No search queries logged yet. Click "Record Search Query" to add one.</td></tr>`;
+      return;
+    }
+
+    this.listBody.innerHTML = logs.map(l => {
+      const disClass = l.disease === "Alzheimer's" ? 'pill-ad' :
+                       l.disease === "GBM" ? 'pill-gbm' : 'pill-stroke';
+
+      return `
+        <tr>
+          <td class="font-mono text-xs text-muted" style="white-space: nowrap;">${l.date || ''}</td>
+          <td><span class="pill ${disClass}">${l.disease || 'All'}</span></td>
+          <td>
+            <div class="text-sm font-bold font-mono text-main">${this.escapeHtml(l.searchTerms || '')}</div>
+            <div class="text-xs text-muted mt-1">Filters: ${this.escapeHtml(l.filtersApplied || 'Standard filters')}</div>
+            ${l.notes ? `<div class="text-xs text-muted mt-1" style="font-style: italic;">Note: ${this.escapeHtml(l.notes)}</div>` : ''}
+          </td>
+          <td class="text-right font-mono font-bold">${(l.resultsCount || 0).toLocaleString()}</td>
+          <td><span class="text-xs text-muted">${l.student || l.loggedBy || 'Student'}</span></td>
+          <td class="text-right">
+            ${l.sourceUrl ? `
+              <a href="${l.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm font-mono text-xs" title="Open ClinicalTrials.gov query">
+                View &nearr;
+              </a>
+            ` : '—'}
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
   openModal() {
+    if (!this.modalBackdrop) return;
     if (this.form) this.form.reset();
-    document.getElementById('searchLogDate').value = new Date().toISOString().split('T')[0];
+
+    const dateInput = document.getElementById('slDate');
+    if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
     const activeProfile = window.storage.getActiveUserProfile();
-    const diseaseSelect = document.getElementById('searchLogDisease');
+    const diseaseSelect = document.getElementById('slDisease');
     if (diseaseSelect && activeProfile.diseaseScope && activeProfile.diseaseScope !== 'ALL') {
       diseaseSelect.value = activeProfile.diseaseScope;
     }
 
-    if (this.modalBackdrop) this.modalBackdrop.classList.remove('d-none');
+    this.modalBackdrop.classList.remove('d-none');
   }
 
   closeModal() {
@@ -169,22 +165,33 @@ class SearchLogController {
 
   saveEntry() {
     const activeProfile = window.storage.getActiveUserProfile();
+
     const entry = {
-      date: document.getElementById('searchLogDate').value,
-      disease: document.getElementById('searchLogDisease').value,
-      query: document.getElementById('searchLogQuery').value.trim(),
-      url: document.getElementById('searchLogUrl').value.trim(),
-      step1Count: parseInt(document.getElementById('searchLogStep1').value, 10) || null,
-      step3Count: parseInt(document.getElementById('searchLogStep3').value, 10) || null,
-      step5Count: parseInt(document.getElementById('searchLogStep5').value, 10) || null,
-      step7Count: parseInt(document.getElementById('searchLogStep7').value, 10) || null,
-      notes: document.getElementById('searchLogNotes').value.trim(),
-      loggedBy: activeProfile.name
+      date: document.getElementById('slDate').value,
+      disease: document.getElementById('slDisease').value,
+      searchTerms: document.getElementById('slTerms').value.trim(),
+      filtersApplied: document.getElementById('slFilters').value.trim(),
+      resultsCount: parseInt(document.getElementById('slCount').value, 10) || 0,
+      sourceUrl: document.getElementById('slUrl').value.trim(),
+      notes: document.getElementById('slNotes').value.trim(),
+      student: activeProfile.name
     };
 
     window.storage.addSearchLog(entry);
     this.closeModal();
-    window.app.showToast(`Search log entry recorded for ${entry.disease}!`, 'success');
+
+    if (window.app && window.app.showToast) {
+      window.app.showToast(`Search query logged for ${entry.disease} (${entry.resultsCount} trials)!`, 'success');
+    }
+  }
+
+  escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 }
 

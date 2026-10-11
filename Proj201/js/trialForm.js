@@ -1,5 +1,6 @@
 /**
  * PROJ 201: Clinical Trial Form Controller (Add & Edit)
+ * Conforms to Standard Categories A–G Schema and Two-Stage Entry Workflow
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
@@ -8,44 +9,29 @@ class TrialFormController {
     this.modalBackdrop = document.getElementById('trialModalBackdrop');
     this.modalTitle = document.getElementById('trialModalTitle');
     this.form = document.getElementById('trialForm');
-    this.currentSectionIndex = 0;
-    this.sectionIds = [
-      'form-sec-ident',
-      'form-sec-patient',
-      'form-sec-outcomes',
-      'form-sec-reasons',
-      'form-sec-evidence'
-    ];
+    this.currentStage = 'stage-essential';
+    this.stages = ['stage-essential', 'stage-advanced', 'stage-team'];
 
     this.initEventListeners();
   }
 
   initEventListeners() {
-    // Form navigation tabs
-    const sectionTabs = document.querySelectorAll('.form-section-tab');
-    sectionTabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => {
-        this.goToSection(index);
-      });
-    });
+    // Stage navigation tabs
+    const btnStageEssential = document.getElementById('tabBtnStageEssential');
+    const btnStageAdvanced = document.getElementById('tabBtnStageAdvanced');
+    const btnStageTeam = document.getElementById('tabBtnStageTeam');
 
-    // Prev / Next buttons
-    const btnPrev = document.getElementById('btnFormPrev');
-    const btnNext = document.getElementById('btnFormNext');
+    if (btnStageEssential) btnStageEssential.addEventListener('click', () => this.setStage('stage-essential'));
+    if (btnStageAdvanced) btnStageAdvanced.addEventListener('click', () => this.setStage('stage-advanced'));
+    if (btnStageTeam) btnStageTeam.addEventListener('click', () => this.setStage('stage-team'));
 
-    if (btnPrev) {
-      btnPrev.addEventListener('click', () => {
-        if (this.currentSectionIndex > 0) {
-          this.goToSection(this.currentSectionIndex - 1);
-        }
-      });
-    }
-
-    if (btnNext) {
-      btnNext.addEventListener('click', () => {
-        if (this.currentSectionIndex < this.sectionIds.length - 1) {
-          this.goToSection(this.currentSectionIndex + 1);
-        }
+    // Toggle button in modal footer
+    const btnToggleStage = document.getElementById('btnToggleStage');
+    if (btnToggleStage) {
+      btnToggleStage.addEventListener('click', () => {
+        const currIndex = this.stages.indexOf(this.currentStage);
+        const nextIndex = (currIndex + 1) % this.stages.length;
+        this.setStage(this.stages[nextIndex]);
       });
     }
 
@@ -55,7 +41,7 @@ class TrialFormController {
     if (btnClose) btnClose.addEventListener('click', () => this.closeModal());
     if (btnCancel) btnCancel.addEventListener('click', () => this.closeModal());
 
-    // NCT ID input helper: uppercase formatting + auto-fill Registry URL
+    // NCT ID formatting and registry link helper
     const nctInput = document.getElementById('formNctId');
     const regUrlInput = document.getElementById('formRegistryUrl');
     if (nctInput) {
@@ -79,62 +65,103 @@ class TrialFormController {
     }
   }
 
-  goToSection(index) {
-    this.currentSectionIndex = index;
-    const tabs = document.querySelectorAll('.form-section-tab');
-    const sections = document.querySelectorAll('.form-section');
+  setStage(stageId) {
+    this.currentStage = stageId;
 
-    tabs.forEach((tab, i) => {
-      if (i === index) {
-        tab.classList.add('active');
-      } else {
-        tab.classList.remove('active');
-      }
-    });
+    // Update Stage Tab active classes
+    const tabs = [
+      { id: 'tabBtnStageEssential', stage: 'stage-essential' },
+      { id: 'tabBtnStageAdvanced', stage: 'stage-advanced' },
+      { id: 'tabBtnStageTeam', stage: 'stage-team' }
+    ];
 
-    sections.forEach((sec, i) => {
-      if (i === index) {
-        sec.classList.remove('d-none');
-        sec.classList.add('active');
-      } else {
-        sec.classList.add('d-none');
-        sec.classList.remove('active');
-      }
-    });
-
-    // Update buttons
-    const btnPrev = document.getElementById('btnFormPrev');
-    const btnNext = document.getElementById('btnFormNext');
-    if (btnPrev) btnPrev.disabled = (index === 0);
-    if (btnNext) btnNext.disabled = (index === this.sectionIds.length - 1);
-  }
-
-  openNewModal() {
-    this.form.reset();
-    document.getElementById('formTrialId').value = '';
-    this.modalTitle.textContent = 'Add New Clinical Trial Record';
-
-    // Auto-set extractor to active user profile
-    const activeProfile = window.storage.getActiveUserProfile();
-    const extractorSelect = document.getElementById('formExtractor');
-    if (extractorSelect) {
-      for (let i = 0; i < extractorSelect.options.length; i++) {
-        if (extractorSelect.options[i].text.includes(activeProfile.name)) {
-          extractorSelect.selectedIndex = i;
-          break;
+    tabs.forEach(t => {
+      const el = document.getElementById(t.id);
+      if (el) {
+        if (t.stage === stageId) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
         }
       }
-    }
+    });
 
-    // Auto-select disease based on active group
+    // Show/hide content panels
+    this.stages.forEach(st => {
+      const panel = document.getElementById(st);
+      if (panel) {
+        if (st === stageId) {
+          panel.classList.remove('d-none');
+          panel.classList.add('active');
+        } else {
+          panel.classList.add('d-none');
+          panel.classList.remove('active');
+        }
+      }
+    });
+
+    // Update toggle button text
+    const btnToggle = document.getElementById('btnToggleStage');
+    if (btnToggle) {
+      if (stageId === 'stage-essential') {
+        btnToggle.innerHTML = 'Next: Factors &amp; Interpretation &rarr;';
+      } else if (stageId === 'stage-advanced') {
+        btnToggle.innerHTML = 'Next: Teamwork &amp; QC &rarr;';
+      } else {
+        btnToggle.innerHTML = '&larr; Back to Essential Data';
+      }
+    }
+  }
+
+  openNewModal(disease = null) {
+    if (!this.form) return;
+    this.form.reset();
+    document.getElementById('formTrialId').value = '';
+    this.modalTitle.textContent = 'Add Clinical Trial Record';
+
+    const activeProfile = window.storage.getActiveUserProfile();
+
+    // Auto-select disease
     const diseaseSelect = document.getElementById('formDisease');
-    if (diseaseSelect && activeProfile.diseaseScope && activeProfile.diseaseScope !== 'ALL') {
-      diseaseSelect.value = activeProfile.diseaseScope;
+    if (diseaseSelect) {
+      if (disease) {
+        diseaseSelect.value = disease;
+      } else if (activeProfile.diseaseScope && activeProfile.diseaseScope !== 'ALL') {
+        diseaseSelect.value = activeProfile.diseaseScope;
+      }
     }
 
-    document.getElementById('formQcStatus').value = 'Pending Verification';
+    // Determine default extractor and partner reviewer
+    const extractedInput = document.getElementById('formExtractedBy');
+    const verifiedInput = document.getElementById('formVerifiedBy');
+    if (extractedInput) extractedInput.value = activeProfile.name || 'Student';
 
-    this.goToSection(0);
+    if (verifiedInput) {
+      const partnerMap = {
+        'Student A1': 'Student A2',
+        'Student A2': 'Student A1',
+        'Student B1': 'Student B2',
+        'Student B2': 'Student B1',
+        'Student C1': 'Student C2',
+        'Student C2': 'Student C1'
+      };
+      verifiedInput.value = partnerMap[activeProfile.name] || 'Teammate';
+    }
+
+    const qcStatusSelect = document.getElementById('formVerificationStatus');
+    if (qcStatusSelect) qcStatusSelect.value = 'Pending';
+
+    // Defaults for Factor dropdowns
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    setVal('factorEfficacy', 'Yes');
+    setVal('factorSafety', 'No');
+    setVal('factorBbb', 'Unclear');
+    setVal('factorHeterogeneity', 'No');
+    setVal('factorSelection', 'No');
+    setVal('factorDesign', 'No');
+    setVal('factorOperational', 'No');
+
+    this.setStage('stage-essential');
     this.modalBackdrop.classList.remove('d-none');
   }
 
@@ -146,53 +173,67 @@ class TrialFormController {
     document.getElementById('formTrialId').value = trial.id;
     this.modalTitle.textContent = `Edit Clinical Trial: ${trial.nctId}`;
 
-    // Populate Section 1
-    document.getElementById('formNctId').value = trial.nctId || '';
-    document.getElementById('formDisease').value = trial.disease || '';
-    document.getElementById('formPhase').value = trial.phase || '';
-    document.getElementById('formTitle').value = trial.title || '';
-    document.getElementById('formRandomization').value = trial.randomization || 'Randomized';
-    document.getElementById('formBlinding').value = trial.blinding || 'Double-blind';
-    document.getElementById('formComparator').value = trial.comparator || '';
-    document.getElementById('formStatus').value = trial.status || 'Completed';
-    document.getElementById('formStartDate').value = trial.startDate || '';
-    document.getElementById('formCompletionDate').value = trial.completionDate || '';
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== undefined && val !== null) ? val : '';
+    };
 
-    // Populate Section 2
-    document.getElementById('formEnrollment').value = trial.enrollment || '';
-    document.getElementById('formDiseaseStage').value = trial.diseaseStage || '';
-    document.getElementById('formEligibility').value = trial.eligibility || '';
-    document.getElementById('formDrugName').value = trial.drugName || '';
-    document.getElementById('formMechanism').value = trial.mechanism || '';
-    document.getElementById('formTarget').value = trial.molecularTarget || '';
-    document.getElementById('formAdminRoute').value = trial.adminRoute || 'Intravenous (IV) infusion';
-    document.getElementById('formDosingRegimen').value = trial.dosingRegimen || '';
+    // Category A. Trial identification
+    setVal('formNctId', trial.nctId);
+    setVal('formDisease', trial.disease || "Alzheimer's");
+    setVal('formPhase', trial.phase || 'Phase III');
+    setVal('formStudyTitle', trial.studyTitle);
+    setVal('formRegistryUrl', trial.registryUrl);
+    setVal('formPublicationUrl', trial.publicationUrl);
+    setVal('formStatus', trial.status || 'Completed');
+    setVal('formCompletionYear', trial.completionYear);
 
-    // Populate Section 3
-    document.getElementById('formPrimaryEndpoint').value = trial.primaryEndpoint || '';
-    document.getElementById('formSecondaryEndpoints').value = trial.secondaryEndpoints || '';
-    document.getElementById('formOutcomeClass').value = trial.outcomeClass || '';
-    document.getElementById('formPrimaryOutcomeDetail').value = trial.primaryOutcomeDetail || '';
-    document.getElementById('formEfficacySummary').value = trial.efficacySummary || '';
-    document.getElementById('formSafetySummary').value = trial.safetySummary || '';
+    // Category B. Treatment information
+    setVal('formDrugName', trial.drugName);
+    setVal('formApproach', trial.therapeuticApproach || 'Small molecule');
+    setVal('formAdminRoute', trial.adminRoute || 'Oral');
+    setVal('formMechanism', trial.mechanism);
+    setVal('formTreatmentObjective', trial.treatmentObjective || 'Disease-modifying');
 
-    // Populate Section 4
-    document.getElementById('formDocReason').value = trial.docReason || '';
-    document.getElementById('formFailureCategory').value = trial.failureCategory || 'Not applicable (Positive)';
-    document.getElementById('formBbbFactor').value = trial.bbbFactor || 'Not reported / Unknown';
-    document.getElementById('formContribFactors').value = trial.contribFactors || '';
+    // Category C. Clinical trial design
+    setVal('formNumParticipants', trial.numParticipants);
+    setVal('formStudyDesign', trial.studyDesign || 'Randomized');
+    setVal('formControlGroup', trial.controlGroup || 'Placebo');
+    setVal('formPatientPopulation', trial.patientPopulation);
+    setVal('formPrimaryEndpoint', trial.primaryEndpoint);
+    setVal('formPrimaryEndpointResult', trial.primaryEndpointResult || 'Met');
 
-    // Populate Section 5
-    document.getElementById('formRegistryUrl').value = trial.registryUrl || '';
-    document.getElementById('formDoi').value = trial.doi || '';
-    document.getElementById('formPmid').value = trial.pmid || '';
-    document.getElementById('formCitation').value = trial.citation || '';
-    document.getElementById('formExtractor').value = trial.extractor || 'Student A1';
-    document.getElementById('formChecker').value = trial.checker || 'Student A2';
-    document.getElementById('formQcStatus').value = trial.qcStatus || 'Pending Verification';
-    document.getElementById('formQcNotes').value = trial.qcNotes || '';
+    // Category D. Clinical outcome
+    setVal('formOverallOutcome', trial.overallOutcome || 'Negative');
+    setVal('formRegulatoryApproval', trial.regulatoryApproval || 'No');
+    setVal('formClinicalBenefitEvidence', trial.clinicalBenefitEvidence);
+    setVal('formSafetyConcerns', trial.safetyConcerns);
+    setVal('formReportedFailureReason', trial.reportedFailureReason);
+    setVal('formTerminationReason', trial.terminationReason);
 
-    this.goToSection(0);
+    // Category E. Factors potentially influencing success or failure
+    setVal('factorEfficacy', trial.factorEfficacy || 'No');
+    setVal('factorSafety', trial.factorSafety || 'No');
+    setVal('factorBbb', trial.factorBbb || 'No');
+    setVal('factorHeterogeneity', trial.factorHeterogeneity || 'No');
+    setVal('factorSelection', trial.factorSelection || 'No');
+    setVal('factorDesign', trial.factorDesign || 'No');
+    setVal('factorOperational', trial.factorOperational || 'No');
+    setVal('formSupportingEvidence', trial.supportingEvidence);
+
+    // Category F. Scientific interpretation
+    setVal('formMainFinding', trial.mainFinding);
+    setVal('formWhySucceedOrFail', trial.whySucceedOrFail);
+    setVal('formFutureLessons', trial.futureLessons);
+    setVal('formLimitations', trial.limitations);
+
+    // Category G. Data quality and teamwork
+    setVal('formExtractedBy', trial.extractedBy);
+    setVal('formVerifiedBy', trial.verifiedBy);
+    setVal('formVerificationStatus', trial.verificationStatus || 'Pending');
+    setVal('formComments', trial.comments);
+
+    this.setStage('stage-essential');
     this.modalBackdrop.classList.remove('d-none');
   }
 
@@ -205,55 +246,82 @@ class TrialFormController {
     const nctId = document.getElementById('formNctId').value.trim();
 
     if (!nctId.match(/^NCT[0-9]{8}$/i)) {
-      alert('Please provide a valid ClinicalTrials.gov NCT identifier (e.g. NCT01234567).');
-      this.goToSection(0);
+      alert('Please provide a valid ClinicalTrials.gov identifier (e.g. NCT01234567).');
+      this.setStage('stage-essential');
+      document.getElementById('formNctId').focus();
       return;
     }
 
+    const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+
     const trialData = {
       id: trialId || ('trial-' + Date.now()),
+      // A. Trial identification
       nctId: nctId.toUpperCase(),
-      disease: document.getElementById('formDisease').value,
-      phase: document.getElementById('formPhase').value,
-      title: document.getElementById('formTitle').value.trim(),
-      randomization: document.getElementById('formRandomization').value,
-      blinding: document.getElementById('formBlinding').value,
-      comparator: document.getElementById('formComparator').value.trim(),
-      status: document.getElementById('formStatus').value,
-      startDate: document.getElementById('formStartDate').value.trim(),
-      completionDate: document.getElementById('formCompletionDate').value.trim(),
-      enrollment: parseInt(document.getElementById('formEnrollment').value, 10) || null,
-      diseaseStage: document.getElementById('formDiseaseStage').value.trim(),
-      eligibility: document.getElementById('formEligibility').value.trim(),
-      drugName: document.getElementById('formDrugName').value.trim(),
-      mechanism: document.getElementById('formMechanism').value.trim(),
-      molecularTarget: document.getElementById('formTarget').value.trim(),
-      adminRoute: document.getElementById('formAdminRoute').value,
-      dosingRegimen: document.getElementById('formDosingRegimen').value.trim(),
-      primaryEndpoint: document.getElementById('formPrimaryEndpoint').value.trim(),
-      secondaryEndpoints: document.getElementById('formSecondaryEndpoints').value.trim(),
-      outcomeClass: document.getElementById('formOutcomeClass').value,
-      primaryOutcomeDetail: document.getElementById('formPrimaryOutcomeDetail').value.trim(),
-      efficacySummary: document.getElementById('formEfficacySummary').value.trim(),
-      safetySummary: document.getElementById('formSafetySummary').value.trim(),
-      docReason: document.getElementById('formDocReason').value.trim(),
-      failureCategory: document.getElementById('formFailureCategory').value,
-      bbbFactor: document.getElementById('formBbbFactor').value,
-      contribFactors: document.getElementById('formContribFactors').value.trim(),
-      registryUrl: document.getElementById('formRegistryUrl').value.trim(),
-      doi: document.getElementById('formDoi').value.trim(),
-      pmid: document.getElementById('formPmid').value.trim(),
-      citation: document.getElementById('formCitation').value.trim(),
-      extractor: document.getElementById('formExtractor').value,
-      checker: document.getElementById('formChecker').value,
-      qcStatus: document.getElementById('formQcStatus').value,
-      qcNotes: document.getElementById('formQcNotes').value.trim()
+      disease: getVal('formDisease'),
+      phase: getVal('formPhase'),
+      studyTitle: getVal('formStudyTitle'),
+      registryUrl: getVal('formRegistryUrl') || `https://clinicaltrials.gov/study/${nctId.toUpperCase()}`,
+      publicationUrl: getVal('formPublicationUrl'),
+      status: getVal('formStatus'),
+      completionYear: getVal('formCompletionYear'),
+
+      // B. Treatment information
+      drugName: getVal('formDrugName'),
+      therapeuticApproach: getVal('formApproach'),
+      adminRoute: getVal('formAdminRoute'),
+      mechanism: getVal('formMechanism'),
+      treatmentObjective: getVal('formTreatmentObjective'),
+
+      // C. Clinical trial design
+      numParticipants: parseInt(getVal('formNumParticipants'), 10) || null,
+      studyDesign: getVal('formStudyDesign'),
+      controlGroup: getVal('formControlGroup'),
+      patientPopulation: getVal('formPatientPopulation'),
+      primaryEndpoint: getVal('formPrimaryEndpoint'),
+      primaryEndpointResult: getVal('formPrimaryEndpointResult'),
+
+      // D. Clinical outcome
+      overallOutcome: getVal('formOverallOutcome'),
+      regulatoryApproval: getVal('formRegulatoryApproval'),
+      clinicalBenefitEvidence: getVal('formClinicalBenefitEvidence'),
+      safetyConcerns: getVal('formSafetyConcerns'),
+      reportedFailureReason: getVal('formReportedFailureReason'),
+      terminationReason: getVal('formTerminationReason'),
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: getVal('factorEfficacy') || 'No',
+      factorSafety: getVal('factorSafety') || 'No',
+      factorBbb: getVal('factorBbb') || 'No',
+      factorHeterogeneity: getVal('factorHeterogeneity') || 'No',
+      factorSelection: getVal('factorSelection') || 'No',
+      factorDesign: getVal('factorDesign') || 'No',
+      factorOperational: getVal('factorOperational') || 'No',
+      supportingEvidence: getVal('formSupportingEvidence'),
+
+      // F. Scientific interpretation
+      mainFinding: getVal('formMainFinding'),
+      whySucceedOrFail: getVal('formWhySucceedOrFail'),
+      futureLessons: getVal('formFutureLessons'),
+      limitations: getVal('formLimitations'),
+
+      // G. Data quality and teamwork
+      extractedBy: getVal('formExtractedBy'),
+      verifiedBy: getVal('formVerifiedBy'),
+      verificationStatus: getVal('formVerificationStatus') || 'Pending',
+      comments: getVal('formComments'),
+      lastUpdated: new Date().toISOString().split('T')[0]
     };
 
     window.storage.saveTrial(trialData);
     this.closeModal();
 
-    window.app.showToast(`Trial ${trialData.nctId} saved successfully!`, 'success');
+    if (window.app && window.app.showToast) {
+      window.app.showToast(`Trial ${trialData.nctId} (${trialData.drugName}) saved!`, 'success');
+    }
   }
 }
 

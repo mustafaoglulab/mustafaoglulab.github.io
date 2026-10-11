@@ -1,11 +1,11 @@
 /**
- * PROJ 201: Main Application Core & Navigation Router
+ * PROJ 201: Main Application Core, Navigation Router & Modal Handlers
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 class AppController {
   constructor() {
-    this.activeTab = 'tab-dashboard';
+    this.activeTab = 'tab-instructions';
     this.init();
   }
 
@@ -16,18 +16,23 @@ class AppController {
       this.initDataToolsDropdown();
       this.initImportModal();
       this.initCloudModal();
-      this.initGlobalEvents();
 
       // Trigger initial renders
       window.storage.notifyUpdate();
-      this.updateUserGreeting();
+      if (window.trialTable) window.trialTable.render();
+      if (window.searchLog) window.searchLog.render();
+      if (window.weeklyTracker) window.weeklyTracker.render();
+      if (window.analytics) window.analytics.render();
     });
   }
 
+  // ==========================================
+  // NAVIGATION ROUTER (9 Course Workspace Tabs)
+  // ==========================================
   initNavigation() {
-    const tabButtons = document.querySelectorAll('.app-nav .tab-link');
+    const tabButtons = document.querySelectorAll('.app-tabs-nav .tab-btn');
     tabButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', () => {
         const targetTab = btn.dataset.tab;
         this.navigateToTab(targetTab);
       });
@@ -35,10 +40,11 @@ class AppController {
   }
 
   navigateToTab(tabId) {
+    if (!tabId) return;
     this.activeTab = tabId;
 
-    // Update nav links
-    const tabButtons = document.querySelectorAll('.app-nav .tab-link');
+    // Update navigation buttons
+    const tabButtons = document.querySelectorAll('.app-tabs-nav .tab-btn');
     tabButtons.forEach(btn => {
       if (btn.dataset.tab === tabId) {
         btn.classList.add('active');
@@ -49,68 +55,71 @@ class AppController {
       }
     });
 
-    // Update panes
-    const panes = document.querySelectorAll('.tab-pane');
-    panes.forEach(pane => {
-      if (pane.id === tabId) {
-        pane.classList.add('active');
+    // Update tab panels
+    const panels = document.querySelectorAll('.tab-panel');
+    panels.forEach(p => {
+      if (p.id === tabId) {
+        p.classList.add('active');
       } else {
-        pane.classList.remove('active');
+        p.classList.remove('active');
       }
     });
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Re-render charts if analytics or searchlog tab
-    if (tabId === 'tab-analytics' && window.analytics) {
+    // Component refresh on tab switch
+    if (tabId === 'tab-analysis' && window.analytics) {
       setTimeout(() => window.analytics.render(), 100);
-    }
-    if (tabId === 'tab-searchlog' && window.searchLog) {
-      setTimeout(() => window.searchLog.renderFunnelChart(), 100);
+    } else if (tabId === 'tab-searchlog' && window.searchLog) {
+      setTimeout(() => window.searchLog.render(), 50);
+    } else if (tabId === 'tab-weekly' && window.weeklyTracker) {
+      setTimeout(() => window.weeklyTracker.render(), 50);
+    } else if (
+      (tabId === 'tab-alzheimers' || tabId === 'tab-gbm' || tabId === 'tab-stroke' || tabId === 'tab-combined') &&
+      window.trialTable
+    ) {
+      setTimeout(() => window.trialTable.render(), 50);
     }
   }
 
+  // ==========================================
+  // ACTIVE USER PROFILE
+  // ==========================================
   initUserProfile() {
     const select = document.getElementById('activeUserSelect');
     if (!select) return;
 
-    // Load saved user
     const currentUserId = window.storage.getActiveUser();
     select.value = currentUserId;
 
     select.addEventListener('change', (e) => {
       const newUserId = e.target.value;
       window.storage.setActiveUser(newUserId);
-      this.updateUserGreeting();
 
       const profile = window.storage.getActiveUserProfile();
       this.showToast(`Switched active profile to ${profile.name} (${profile.group})`, 'info');
 
-      // Dispatch change so forms and lists update
+      // Notify other components
       window.storage.notifyUpdate();
     });
   }
 
-  updateUserGreeting() {
-    const profile = window.storage.getActiveUserProfile();
-    const greetingName = document.getElementById('greetingUserName');
-    if (greetingName) {
-      greetingName.textContent = `${profile.name} (${profile.group})`;
-    }
-  }
-
+  // ==========================================
+  // DATA TOOLS & DROPDOWN
+  // ==========================================
   initDataToolsDropdown() {
     const btnToggle = document.getElementById('btnDataActions');
     const dropdown = document.getElementById('dataActionsDropdown');
-    const btnExportJson = document.getElementById('btnExportJSON');
     const btnExportCsv = document.getElementById('btnExportCSV');
+    const btnExportJson = document.getElementById('btnExportJSON');
+    const btnOpenCloud = document.getElementById('btnOpenCloudConfig');
     const btnOpenImport = document.getElementById('btnOpenImportModal');
     const btnReset = document.getElementById('btnResetToDefaults');
-    const btnNewTrialHeader = document.getElementById('btnNewTrial');
+    const btnNewTrial = document.getElementById('btnNewTrial');
 
-    if (btnNewTrialHeader) {
-      btnNewTrialHeader.addEventListener('click', () => {
+    if (btnNewTrial) {
+      btnNewTrial.addEventListener('click', () => {
         window.trialForm.openNewModal();
       });
     }
@@ -126,18 +135,29 @@ class AppController {
       });
     }
 
-    if (btnExportJson) {
-      btnExportJson.addEventListener('click', () => {
-        window.storage.exportAsJSON();
-        this.showToast('Full dataset exported as JSON file.', 'success');
+    if (btnExportCsv) {
+      btnExportCsv.addEventListener('click', () => {
+        // Export matching active tab context
+        let dis = 'ALL';
+        if (this.activeTab === 'tab-alzheimers') dis = "Alzheimer's";
+        else if (this.activeTab === 'tab-gbm') dis = "GBM";
+        else if (this.activeTab === 'tab-stroke') dis = "Stroke";
+
+        window.storage.exportAsCSV(dis);
+        this.showToast(`Exported ${dis === 'ALL' ? 'Combined Database' : dis} as CSV.`, 'success');
       });
     }
 
-    if (btnExportCsv) {
-      btnExportCsv.addEventListener('click', () => {
-        const activeDisease = window.trialTable ? window.trialTable.currentDiseaseFilter : 'ALL';
-        window.storage.exportAsCSV(activeDisease);
-        this.showToast(`Exported ${activeDisease === 'ALL' ? 'Combined Database' : activeDisease} as CSV.`, 'success');
+    if (btnExportJson) {
+      btnExportJson.addEventListener('click', () => {
+        window.storage.exportAsJSON();
+        this.showToast('Full dataset backup exported as JSON file.', 'success');
+      });
+    }
+
+    if (btnOpenCloud) {
+      btnOpenCloud.addEventListener('click', () => {
+        this.openCloudModal();
       });
     }
 
@@ -149,35 +169,35 @@ class AppController {
 
     if (btnReset) {
       btnReset.addEventListener('click', () => {
-        const confirmed = confirm('Are you sure you want to reload the default benchmark seed dataset? Any unexported local changes will be replaced with initial course examples.');
-        if (confirmed) {
+        if (confirm('Are you sure you want to reload the initial benchmark seed dataset? Any unsaved local edits will be reset.')) {
           window.storage.resetToSeedData();
-          this.showToast('Benchmark seed dataset reloaded successfully!', 'info');
+          this.showToast('Database reset to official benchmark dataset.', 'info');
         }
       });
     }
   }
 
+  // ==========================================
+  // DATA IMPORT BACKUP MODAL
+  // ==========================================
   initImportModal() {
-    const modalBackdrop = document.getElementById('importModalBackdrop');
+    const modal = document.getElementById('importModalBackdrop');
     const btnClose = document.getElementById('btnCloseImportModal');
     const btnCancel = document.getElementById('btnCancelImportModal');
     const btnExecute = document.getElementById('btnExecuteImport');
     const fileInput = document.getElementById('importFileInput');
-    const textarea = document.getElementById('importJsonTextarea');
+    const textArea = document.getElementById('importJsonTextarea');
 
     if (btnClose) btnClose.addEventListener('click', () => this.closeImportModal());
     if (btnCancel) btnCancel.addEventListener('click', () => this.closeImportModal());
 
-    // File input change
     if (fileInput) {
       fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = (event) => {
-          if (textarea) textarea.value = event.target.result;
+          if (textArea) textArea.value = event.target.result;
         };
         reader.readAsText(file);
       });
@@ -185,117 +205,125 @@ class AppController {
 
     if (btnExecute) {
       btnExecute.addEventListener('click', () => {
-        const jsonContent = textarea ? textarea.value.trim() : '';
-        if (!jsonContent) {
-          alert('Please upload a JSON file or paste JSON content.');
+        const content = textArea.value.trim();
+        if (!content) {
+          alert('Please select a file or paste JSON content.');
           return;
         }
 
-        const modeRadio = document.querySelector('input[name="importMode"]:checked');
-        const mode = modeRadio ? modeRadio.value : 'merge';
+        try {
+          const parsed = JSON.parse(content);
+          const modeEl = document.querySelector('input[name="importMode"]:checked');
+          const mode = modeEl ? modeEl.value : 'merge';
 
-        const result = window.storage.importFromJSON(jsonContent, mode);
-        if (result.success) {
-          this.closeImportModal();
-          if (result.mode === 'replaced') {
-            this.showToast(`Database replaced with ${result.count} trials.`, 'success');
+          if (mode === 'replace') {
+            window.storage.saveData(parsed);
           } else {
-            this.showToast(`Import completed: ${result.added} added, ${result.updated} updated.`, 'success');
+            const current = window.storage.getData();
+            if (Array.isArray(parsed.trials)) {
+              parsed.trials.forEach(trial => {
+                const idx = current.trials.findIndex(t => t.id === trial.id || (t.nctId && t.nctId.toUpperCase() === trial.nctId.toUpperCase()));
+                if (idx >= 0) current.trials[idx] = { ...current.trials[idx], ...trial };
+                else current.trials.push(trial);
+              });
+            }
+            if (Array.isArray(parsed.weeklyProgress)) {
+              current.weeklyProgress = [...parsed.weeklyProgress, ...(current.weeklyProgress || [])];
+            }
+            if (Array.isArray(parsed.searchLogs)) {
+              current.searchLogs = [...parsed.searchLogs, ...(current.searchLogs || [])];
+            }
+            window.storage.saveData(current);
           }
-        } else {
-          alert('Import error: ' + result.error);
+
+          this.closeImportModal();
+          this.showToast('Data backup imported successfully!', 'success');
+        } catch (err) {
+          alert('Error parsing JSON backup file: ' + err.message);
         }
       });
     }
   }
 
   openImportModal() {
-    const modalBackdrop = document.getElementById('importModalBackdrop');
-    const textarea = document.getElementById('importJsonTextarea');
-    const fileInput = document.getElementById('importFileInput');
-    if (textarea) textarea.value = '';
-    if (fileInput) fileInput.value = '';
-    if (modalBackdrop) modalBackdrop.classList.remove('d-none');
+    const modal = document.getElementById('importModalBackdrop');
+    if (modal) modal.classList.remove('d-none');
   }
 
   closeImportModal() {
-    const modalBackdrop = document.getElementById('importModalBackdrop');
-    if (modalBackdrop) modalBackdrop.classList.add('d-none');
+    const modal = document.getElementById('importModalBackdrop');
+    if (modal) modal.classList.add('d-none');
   }
 
+  // ==========================================
+  // FIREBASE CLOUD DATABASE MODAL
+  // ==========================================
   initCloudModal() {
     const btnStatus = document.getElementById('btnCloudStatus');
-    const btnOpenConfig = document.getElementById('btnOpenCloudConfig');
+    const modal = document.getElementById('cloudSettingsModalBackdrop');
     const btnClose = document.getElementById('btnCloseCloudModal');
     const btnCancel = document.getElementById('btnCancelCloudModal');
     const btnSave = document.getElementById('btnSaveCloudConfig');
     const btnDisconnect = document.getElementById('btnDisconnectCloud');
     const btnPush = document.getElementById('btnPushLocalToCloud');
 
-    if (btnStatus) btnStatus.addEventListener('click', () => this.openCloudModal());
-    if (btnOpenConfig) btnOpenConfig.addEventListener('click', () => this.openCloudModal());
+    if (btnStatus) {
+      btnStatus.addEventListener('click', () => this.openCloudModal());
+    }
+
     if (btnClose) btnClose.addEventListener('click', () => this.closeCloudModal());
     if (btnCancel) btnCancel.addEventListener('click', () => this.closeCloudModal());
 
     if (btnSave) {
       btnSave.addEventListener('click', async () => {
-        const rawInput = document.getElementById('firebaseConfigInput').value.trim();
-        if (!rawInput) {
-          alert('Please paste your Firebase configuration object.');
+        const raw = document.getElementById('firebaseConfigInput').value.trim();
+        if (!raw) {
+          alert('Please paste your Firebase configuration.');
           return;
         }
 
-        let parsedConfig = null;
         try {
-          // Attempt standard JSON parse
-          parsedConfig = JSON.parse(rawInput);
-        } catch (e) {
-          // Attempt regex extraction of key properties from JavaScript snippet
-          try {
-            const extract = (key) => {
-              const match = rawInput.match(new RegExp(`${key}\\s*:\\s*["']([^"']+)["']`));
-              return match ? match[1] : '';
-            };
-            parsedConfig = {
-              apiKey: extract('apiKey'),
-              authDomain: extract('authDomain'),
-              projectId: extract('projectId'),
-              storageBucket: extract('storageBucket'),
-              messagingSenderId: extract('messagingSenderId'),
-              appId: extract('appId')
-            };
-            if (!parsedConfig.apiKey || !parsedConfig.projectId) {
-              throw new Error('Missing apiKey or projectId in config.');
+          let config = null;
+          if (raw.startsWith('{')) {
+            config = JSON.parse(raw);
+          } else {
+            const match = raw.match(/\{[\s\S]*\}/);
+            if (match) {
+              const cleaned = match[0].replace(/([a-zA-Z0-9_]+):/g, '"$1":').replace(/'/g, '"');
+              config = JSON.parse(cleaned);
             }
-          } catch (err) {
-            alert('Failed to parse Firebase configuration. Please ensure you paste valid JSON or the standard firebaseConfig snippet from Firebase console.');
-            return;
           }
-        }
 
-        btnSave.disabled = true;
-        btnSave.textContent = 'Testing & Connecting...';
+          if (!config || !config.apiKey || !config.projectId) {
+            throw new Error('Config missing apiKey or projectId');
+          }
 
-        const result = await window.cloudSync.saveConfig(parsedConfig);
-        btnSave.disabled = false;
-        btnSave.textContent = 'Test & Connect to Firebase';
+          btnSave.disabled = true;
+          btnSave.textContent = 'Connecting...';
 
-        if (result.success) {
-          this.updateCloudModalView();
-          this.showToast('Successfully connected to Google Firebase Firestore! Real-time sync enabled.', 'success');
-        } else {
-          alert('Connection failed: ' + result.error);
+          const res = await window.cloudSync.saveConfig(config);
+          btnSave.disabled = false;
+          btnSave.textContent = 'Test & Connect';
+
+          if (res.success) {
+            this.showToast('Connected to Firebase Firestore Cloud Database!', 'success');
+            this.closeCloudModal();
+          } else {
+            alert('Firebase Connection failed: ' + res.error);
+          }
+        } catch (err) {
+          btnSave.disabled = false;
+          btnSave.textContent = 'Test & Connect';
+          alert('Could not parse Firebase config: ' + err.message);
         }
       });
     }
 
     if (btnDisconnect) {
       btnDisconnect.addEventListener('click', () => {
-        const confirmed = confirm('Disconnect from Firebase cloud database? The app will operate in local browser mode.');
-        if (confirmed) {
+        if (confirm('Disconnect from Firebase cloud database and revert to local storage?')) {
           window.cloudSync.clearConfig();
-          this.updateCloudModalView();
-          this.showToast('Disconnected from cloud. Switched to local mode.', 'info');
+          this.showToast('Disconnected from cloud sync.', 'info');
         }
       });
     }
@@ -303,24 +331,48 @@ class AppController {
     if (btnPush) {
       btnPush.addEventListener('click', async () => {
         btnPush.disabled = true;
-        btnPush.textContent = 'Uploading...';
+        btnPush.textContent = 'Pushing Data...';
         const res = await window.cloudSync.pushAllLocalDataToCloud();
         btnPush.disabled = false;
         btnPush.textContent = 'Upload Current Local Trials to Cloud';
 
         if (res.success) {
-          this.showToast(`Uploaded ${res.count} trials to Firebase cloud successfully!`, 'success');
+          this.showToast(`Pushed ${res.count} clinical trials to cloud database!`, 'success');
         } else {
-          alert('Upload error: ' + res.error);
+          alert('Upload failed: ' + res.error);
         }
       });
     }
   }
 
   openCloudModal() {
-    this.updateCloudModalView();
     const modal = document.getElementById('cloudSettingsModalBackdrop');
-    if (modal) modal.classList.remove('d-none');
+    if (!modal) return;
+
+    const modalDot = document.getElementById('modalCloudDot');
+    const modalStatusText = document.getElementById('modalCloudStatusText');
+    const modalSubText = document.getElementById('modalCloudSubText');
+    const btnDisconnect = document.getElementById('btnDisconnectCloud');
+    const configInput = document.getElementById('firebaseConfigInput');
+
+    if (window.cloudSync && window.cloudSync.isConnected) {
+      modalDot.className = 'status-dot-lg connected';
+      modalStatusText.textContent = 'Connected & Synced';
+      modalSubText.textContent = 'Real-time multi-user live synchronization is active.';
+      if (btnDisconnect) btnDisconnect.classList.remove('d-none');
+    } else {
+      modalDot.className = 'status-dot-lg';
+      modalStatusText.textContent = 'Operating in Offline / Local Mode';
+      modalSubText.textContent = 'Data is safely preserved in browser localStorage.';
+      if (btnDisconnect) btnDisconnect.classList.add('d-none');
+    }
+
+    const currentConfig = window.cloudSync ? window.cloudSync.getConfig() : null;
+    if (currentConfig && configInput && !configInput.value) {
+      configInput.value = JSON.stringify(currentConfig, null, 2);
+    }
+
+    modal.classList.remove('d-none');
   }
 
   closeCloudModal() {
@@ -328,73 +380,31 @@ class AppController {
     if (modal) modal.classList.add('d-none');
   }
 
-  updateCloudModalView() {
-    const isConn = window.cloudSync && window.cloudSync.isConnected;
-    const dot = document.getElementById('modalCloudDot');
-    const statusText = document.getElementById('modalCloudStatusText');
-    const subText = document.getElementById('modalCloudSubText');
-    const btnDisconnect = document.getElementById('btnDisconnectCloud');
-    const textarea = document.getElementById('firebaseConfigInput');
-
-    if (dot) dot.className = `cloud-status-dot-large ${isConn ? 'bg-success' : 'bg-warning'}`;
-    if (statusText) statusText.textContent = isConn ? 'Connected to Firebase Firestore' : 'Not Connected to Firebase';
-    if (subText) subText.textContent = isConn ? 'Live real-time sync active across all student browsers.' : 'Operating in local browser storage mode.';
-    if (btnDisconnect) {
-      if (isConn) btnDisconnect.classList.remove('d-none');
-      else btnDisconnect.classList.add('d-none');
-    }
-
-    const cfg = window.cloudSync ? window.cloudSync.getConfig() : null;
-    if (textarea && cfg) {
-      textarea.value = JSON.stringify(cfg, null, 2);
-    }
-  }
-
-  initGlobalEvents() {
-    // ESC key closes modals
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const openModals = document.querySelectorAll('.modal-backdrop:not(.d-none)');
-        openModals.forEach(m => m.classList.add('d-none'));
-      }
-    });
-  }
-
-  // Toast notification helper
+  // ==========================================
+  // TOAST NOTIFICATIONS
+  // ==========================================
   showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-
-    let iconSvg = '';
-    if (type === 'success') {
-      iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
-    } else if (type === 'error') {
-      iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
-    } else if (type === 'warning') {
-      iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
-    } else {
-      iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
-    }
-
     toast.innerHTML = `
-      ${iconSvg}
-      <div style="flex: 1;">${message}</div>
+      <div class="toast-body">
+        <span>${message}</span>
+      </div>
     `;
 
     container.appendChild(toast);
 
     setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px)';
+      toast.classList.add('fade-out');
       setTimeout(() => {
         if (toast.parentNode) toast.parentNode.removeChild(toast);
       }, 300);
-    }, 3800);
+    }, 3500);
   }
 }
 
-// Global application singleton
+// Global instance
 window.app = new AppController();

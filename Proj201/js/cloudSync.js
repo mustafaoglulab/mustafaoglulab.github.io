@@ -266,12 +266,24 @@ class CloudSyncAdapter {
     }
   }
 
-  async syncWeeklyReport(report) {
+  async syncWeeklyProgress(row) {
     if (!this.isConnected || !this.db) return;
     try {
-      await this.db.collection(this.COL_WEEKLY).doc(report.id).set(report, { merge: true });
+      await this.db.collection(this.COL_WEEKLY).doc(row.id).set(row, { merge: true });
     } catch (e) {
-      console.error('Error syncing weekly report to cloud:', e);
+      console.error('Error syncing weekly progress to cloud:', e);
+    }
+  }
+
+  async syncSearchMatrix(matrix) {
+    if (!this.isConnected || !this.db) return;
+    try {
+      await this.db.collection(this.COL_META).doc('searchMatrix').set({
+        matrix: matrix,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (e) {
+      console.error('Error syncing search matrix to cloud:', e);
     }
   }
 

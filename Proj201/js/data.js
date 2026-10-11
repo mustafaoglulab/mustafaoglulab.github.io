@@ -1,743 +1,678 @@
 /**
  * PROJ 201: Why Do Brain Drugs Fail?
- * Data Models & Benchmark Seed Dataset
+ * Standardized Data Schema (Categories A–G) & Initial Benchmark Datasets
  * Mustafaoglu Lab · Sabancı University · Fall 2026
  */
 
 const SEED_DATA = {
-  // Benchmark Clinical Trials (High-profile Phase II/III trials across AD, GBM, Stroke)
+  // Clinical Trials Database — All tabs share this identical schema (Categories A–G)
   trials: [
-    // --- ALZHEIMER'S DISEASE (Group A) ---
+    // --- 03_ALZHEIMERS (Group A) ---
     {
       id: "trial-ad-1",
+      // A. Trial identification
       nctId: "NCT02484534",
-      title: "A Study to Confirm Safety and Efficacy of BAN2401 (Lecanemab) in Participants With Early Alzheimer's Disease (Clarity AD)",
-      disease: "Alzheimer's Disease",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo",
-      status: "Completed",
-      startDate: "2019-03",
-      completionDate: "2022-11",
-      enrollment: 1795,
-      diseaseStage: "Early Alzheimer's Disease (MCI and mild AD with confirmed amyloid)",
-      eligibility: "Aged 50-90, CDR-global 0.5 or 1.0, positive amyloid-PET or CSF Abeta42/40 ratio.",
-      drugName: "Lecanemab (Leqembi / BAN2401)",
-      mechanism: "Anti-amyloid-beta protofibril monoclonal antibody (IgG1)",
-      molecularTarget: "Soluble amyloid-beta protofibrils and oligomers",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "10 mg/kg bi-weekly",
-      primaryEndpoint: "Change in Clinical Dementia Rating-Sum of Boxes (CDR-SB) at 18 months",
-      secondaryEndpoints: "ADAS-Cog14, ADCS-MCI-ADL, Amyloid PET SUVr reduction",
-      outcomeClass: "Positive outcome",
-      primaryOutcomeDetail: "Met primary endpoint (CDR-SB difference -0.45 points, 27% slowing of clinical decline, p < 0.001)",
-      efficacySummary: "Statistically significant reduction in brain amyloid plaque burden and modest deceleration in cognitive decline across primary and all secondary scales.",
-      safetySummary: "Infusion-related reactions (26.4%), ARIA-E (12.6% vs 1.7% placebo), ARIA-H microhemorrhages (17.3%). Required ongoing MRI safety monitoring.",
-      docReason: "N/A - Primary endpoint met with statistically significant slowing of decline at 18 months.",
-      failureCategory: "Not applicable (Positive)",
-      bbbFactor: "Moderate: Variable or compromised BBB permeability",
-      contribFactors: "Monoclonal antibody CNS penetration estimated at ~0.1-0.2% plasma AUC across BBB; therapeutic benefit requires prolonged exposure and early initiation prior to extensive neurodegeneration.",
+      studyTitle: "A Study to Confirm Safety and Efficacy of BAN2401 (Lecanemab) in Participants With Early Alzheimer's Disease (Clarity AD)",
+      disease: "Alzheimer's",
       registryUrl: "https://clinicaltrials.gov/study/NCT02484534",
-      doi: "10.1056/NEJMoa2212948",
-      pmid: "36449413",
-      citation: "van Dyck CH, et al. Lecanemab in Early Alzheimer's Disease. N Engl J Med. 2023;388(1):9-21.",
-      extractor: "Student A1",
-      checker: "Student A2",
-      qcStatus: "Verified",
-      qcNotes: "Confirmed endpoints and NEJM publication. High-profile positive benchmark for Group A comparison.",
-      updatedAt: "2026-10-12T10:00:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJMoa2212948",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2022",
+
+      // B. Treatment information
+      drugName: "Lecanemab (Leqembi / BAN2401)",
+      therapeuticApproach: "Antibody",
+      mechanism: "Humanized IgG1 mAb targeting soluble amyloid-beta protofibrils and oligomers",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 1795,
+      patientPopulation: "Early Alzheimer's Disease (MCI and mild AD with confirmed amyloid pathology)",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "Change from baseline in CDR-SB at 18 months",
+      primaryEndpointResult: "Met",
+
+      // D. Clinical outcome
+      overallOutcome: "Positive",
+      clinicalBenefitEvidence: "Statistically significant 27% reduction in clinical decline on CDR-SB at 18 months (-0.45 points, p < 0.001) and substantial amyloid plaque clearance on PET.",
+      safetyConcerns: "ARIA-E (brain edema) occurred in 12.6% of patients; ARIA-H (microhemorrhages) occurred in 17.3%. Required serial MRI safety monitoring.",
+      regulatoryApproval: "Yes",
+      reportedFailureReason: "Not applicable (Trial met primary endpoint)",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "No",
+      factorSafety: "Yes",
+      factorBbb: "Yes",
+      factorHeterogeneity: "No",
+      factorSelection: "No",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "van Dyck CH, et al. N Engl J Med 2023;388:9-21. mAb brain bioavailability ~0.1-0.2% across intact BBB; required bi-weekly high dosing and strict early-stage amyloid confirmation.",
+
+      // F. Scientific interpretation
+      mainFinding: "Targeting soluble protofibrils in early amyloid-confirmed AD moderately slows cognitive and functional decline over 18 months.",
+      whySucceedOrFail: "Succeeded by selecting biologically verified early-stage patients prior to extensive synaptic loss and specifically targeting soluble neurotoxic protofibrils rather than monomeric peptide.",
+      futureLessons: "Biomarker-guided early patient selection and protofibril targeting work, but BBB penetration remains low (<0.2%) and ARIA risk demands careful safety screening.",
+      limitations: "Modest clinical effect size; safety risk in ApoE4 homozygotes and anticoagulated patients; high healthcare resource requirements for infusion and MRI.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student A1",
+      verifiedBy: "Student A2",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-14",
+      comments: "Key positive benchmark trial for Group A (Alzheimer's)."
     },
     {
       id: "trial-ad-2",
+      // A. Trial identification
       nctId: "NCT01224106",
-      title: "A Study of Semagacestat (LY450139) in Alzheimer's Disease (IDENTITY)",
-      disease: "Alzheimer's Disease",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo",
-      status: "Terminated",
-      startDate: "2008-04",
-      completionDate: "2011-03",
-      enrollment: 1537,
-      diseaseStage: "Mild-to-moderate Alzheimer's Disease",
-      eligibility: "Aged 55+, MMSE 16-26, diagnosis of probable AD based on NINCDS-ADRDA.",
-      drugName: "Semagacestat (LY450139)",
-      mechanism: "Gamma-secretase inhibitor (small molecule)",
-      molecularTarget: "Gamma-secretase complex (Presenilin catalytic subunit)",
-      adminRoute: "Oral (PO)",
-      dosingRegimen: "100 mg or 140 mg daily",
-      primaryEndpoint: "ADAS-Cog11 and ADCS-ADL change at 76 weeks",
-      secondaryEndpoints: "CDR-SB, NPI, Volumetric MRI brain volume",
-      outcomeClass: "Negative outcome",
-      primaryOutcomeDetail: "Did not improve cognitive scores; Semagacestat-treated patients experienced statistically significant worsening of cognition and functional ability vs placebo.",
-      efficacySummary: "No clinical cognitive improvement; adverse dose-dependent cognitive decline observed compared with placebo cohort.",
-      safetySummary: "Increased incidence of non-melanoma skin cancer (squamous cell carcinoma), gastrointestinal adverse events, and infection rates.",
-      docReason: "Halted early by Data Monitoring Committee due to lack of efficacy and unexpected worsening of cognition and increased risk of skin cancer.",
-      failureCategory: "Safety / Severe Adverse Events",
-      bbbFactor: "Low / Addressed: Good CNS exposure demonstrated",
-      contribFactors: "Small molecule readily crossed BBB, but non-selective gamma-secretase inhibition disrupted Notch signaling pathway (causing skin cancer and gut toxicity) and prevented cleavage of other vital physiological substrates.",
+      studyTitle: "A Study of Semagacestat (LY450139) in Alzheimer's Disease (IDENTITY)",
+      disease: "Alzheimer's",
       registryUrl: "https://clinicaltrials.gov/study/NCT01224106",
-      doi: "10.1056/NEJMoa1215516",
-      pmid: "23883378",
-      citation: "Doody RS, et al. A phase 3 trial of semagacestat for treatment of Alzheimer's disease. N Engl J Med. 2013;369(4):341-350.",
-      extractor: "Student A2",
-      checker: "Student A1",
-      qcStatus: "Verified",
-      qcNotes: "Cross-checked with NEJM 2013 paper. Seminal example of off-target mechanism toxicity despite excellent BBB penetration.",
-      updatedAt: "2026-10-14T11:20:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJMoa1215516",
+      phase: "Phase III",
+      status: "Terminated",
+      completionYear: "2011",
+
+      // B. Treatment information
+      drugName: "Semagacestat (LY450139)",
+      therapeuticApproach: "Small molecule",
+      mechanism: "Non-selective gamma-secretase inhibitor inhibiting amyloid-beta peptide generation",
+      adminRoute: "Oral",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 1537,
+      patientPopulation: "Mild-to-moderate Alzheimer's disease (MMSE 16–26)",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "ADAS-Cog11 and ADCS-ADL change at 76 weeks",
+      primaryEndpointResult: "Not met",
+
+      // D. Clinical outcome
+      overallOutcome: "Negative",
+      clinicalBenefitEvidence: "No clinical benefit observed. Semagacestat-treated patients experienced statistically significant, dose-dependent cognitive and functional worsening compared with placebo.",
+      safetyConcerns: "Significantly increased rates of non-melanoma skin cancer (squamous cell carcinoma), gastrointestinal toxicity, weight loss, and infections.",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Terminated early by Data Monitoring Committee due to futility, accelerated cognitive decline, and excess skin cancer incidence.",
+      terminationReason: "Adverse cognitive worsening and excess cutaneous malignancy",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "Yes",
+      factorSafety: "Yes",
+      factorBbb: "No",
+      factorHeterogeneity: "No",
+      factorSelection: "Yes",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "Doody RS, et al. N Engl J Med 2013;369:341-350. Small molecule readily penetrated the BBB, but non-selective catalytic inhibition blocked Notch-1 signaling causing epithelial oncogenesis.",
+
+      // F. Scientific interpretation
+      mainFinding: "Non-selective gamma-secretase inhibition accelerated cognitive decline and caused significant off-target toxicity including cutaneous neoplasms.",
+      whySucceedOrFail: "Failed due to off-target biological toxicity: gamma-secretase cleaves essential substrates including Notch-1, cadherins, and APP intracellular domain, leading to severe physiological disruption.",
+      futureLessons: "Adequate brain BBB penetration is insufficient if the enzymatic target lacks substrate selectivity; non-selective secretase inhibitors carry unacceptable systemic hazards.",
+      limitations: "Conducted in mild-to-moderate patients without mandatory amyloid PET pre-screening.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student A2",
+      verifiedBy: "Student A1",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-15",
+      comments: "Classic negative example demonstrating mechanism-based off-target toxicity despite excellent BBB penetration."
     },
     {
       id: "trial-ad-3",
+      // A. Trial identification
       nctId: "NCT00676143",
-      title: "A Study of Bapineuzumab in Patients With Mild to Moderate Alzheimer's Disease (ApoE4 Non-Carriers)",
-      disease: "Alzheimer's Disease",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo",
-      status: "Completed",
-      startDate: "2007-12",
-      completionDate: "2012-04",
-      enrollment: 1396,
-      diseaseStage: "Mild-to-moderate Alzheimer's Disease",
-      eligibility: "MMSE 16-26, aged 50-88, ApoE epsilon 4 non-carriers.",
-      drugName: "Bapineuzumab (AAB-001)",
-      mechanism: "Humanized anti-amyloid-beta N-terminal monoclonal antibody (IgG1)",
-      molecularTarget: "Amyloid-beta amino-terminal residues 1-5",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "0.5 mg/kg or 1.0 mg/kg every 13 weeks",
-      primaryEndpoint: "ADAS-Cog11 and DAD (Disability Assessment for Dementia) change at Week 78",
-      secondaryEndpoints: "CDR-SB, Neuropsychiatric Inventory, Brain atrophy on MRI",
-      outcomeClass: "Negative outcome",
-      primaryOutcomeDetail: "Primary endpoints missed: no significant difference between bapineuzumab and placebo on ADAS-Cog11 (p=0.64) or DAD (p=0.45).",
-      efficacySummary: "Modest reduction in phosphorylated tau in CSF and brain amyloid PET signal, but completely failed to modify clinical or functional decline in mild-to-moderate AD.",
-      safetySummary: "High incidence of ARIA-E (amyloid-related imaging abnormalities with vasogenic edema) requiring dose reductions.",
-      docReason: "Trial completed but reported failure to meet both co-primary efficacy endpoints (ADAS-Cog11 and DAD) in final analysis.",
-      failureCategory: "Lack of Efficacy",
-      bbbFactor: "High: Suspected insufficient BBB penetration",
-      contribFactors: "Extremely poor BBB permeability (<0.1% penetration into cerebral parenchyma) coupled with intervention late in disease trajectory when neurodegeneration had already progressed beyond recovery.",
+      studyTitle: "A Study of Bapineuzumab in Patients With Mild to Moderate Alzheimer's Disease (ApoE4 Non-Carriers)",
+      disease: "Alzheimer's",
       registryUrl: "https://clinicaltrials.gov/study/NCT00676143",
-      doi: "10.1056/NEJMoa1304559",
-      pmid: "24450890",
-      citation: "Salloway S, et al. Two phase 3 trials of bapineuzumab in mild-to-moderate Alzheimer's disease. N Engl J Med. 2014;370(4):322-333.",
-      extractor: "Student A1",
-      checker: "Student A2",
-      qcStatus: "Pending Verification",
-      qcNotes: "Drafted by Student A1. Awaiting peer review on dosing specifics and secondary endpoints.",
-      updatedAt: "2026-10-15T09:15:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJMoa1304559",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2012",
+
+      // B. Treatment information
+      drugName: "Bapineuzumab (AAB-001)",
+      therapeuticApproach: "Antibody",
+      mechanism: "Humanized IgG1 mAb targeting N-terminal residues 1–5 of amyloid-beta",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 1396,
+      patientPopulation: "Mild-to-moderate Alzheimer's disease (ApoE4 non-carriers)",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "ADAS-Cog11 and DAD (Disability Assessment for Dementia) at 78 weeks",
+      primaryEndpointResult: "Not met",
+
+      // D. Clinical outcome
+      overallOutcome: "Negative",
+      clinicalBenefitEvidence: "No significant difference between bapineuzumab and placebo cohorts on cognitive (p=0.64) or functional (p=0.45) primary outcomes.",
+      safetyConcerns: "High incidence of vasogenic cerebral edema (ARIA-E), necessitating protocol amendments and dose caps.",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Trial completed without demonstrating statistically significant improvement in either co-primary outcome.",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "Yes",
+      factorSafety: "Yes",
+      factorBbb: "Yes",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "Salloway S, et al. N Engl J Med 2014;370:322-333. Low brain penetration (<0.1%) combined with administration at moderate disease stage where neurodegeneration was already irreversible.",
+
+      // F. Scientific interpretation
+      mainFinding: "N-terminal amyloid antibody cleared modest brain fibril burden but completely failed to halt cognitive deterioration in mild-to-moderate AD.",
+      whySucceedOrFail: "Failed because intervention occurred too late in the disease trajectory and low BBB delivery prevented adequate engagement with neurotoxic oligomeric pools.",
+      futureLessons: "Anti-amyloid therapeutics must be tested in prodromal/early disease stages and target soluble neurotoxic conformers rather than mature plaques alone.",
+      limitations: "Did not pre-screen with amyloid PET; retrospective analyses suggested up to 20% of clinically diagnosed patients lacked amyloid burden.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student A1",
+      verifiedBy: "Student A2",
+      verificationStatus: "Pending",
+      lastUpdated: "2026-10-15",
+      comments: "Needs partner review on ARIA-E subgroup percentages."
     },
 
-    // --- GLIOBLASTOMA (Group B) ---
+    // --- 04_GBM (Group B) ---
     {
       id: "trial-gbm-1",
+      // A. Trial identification
       nctId: "NCT02017717",
-      title: "An Investigational Immuno-therapy Study of Nivolumab Compared to Bevacizumab in Patients With Recurrent Glioblastoma (CheckMate 143)",
-      disease: "Glioblastoma",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Open-label",
-      comparator: "Active comparator (Bevacizumab 10 mg/kg)",
-      status: "Completed",
-      startDate: "2014-01",
-      completionDate: "2018-05",
-      enrollment: 369,
-      diseaseStage: "First recurrence of glioblastoma following standard radiation and temozolomide",
-      eligibility: "Histologically confirmed GBM, first recurrence, KPS >= 70.",
-      drugName: "Nivolumab (Opdivo)",
-      mechanism: "Immune checkpoint inhibitor (anti-PD-1 human IgG4 monoclonal antibody)",
-      molecularTarget: "Programmed Death-1 (PD-1) receptor on T-lymphocytes",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "3 mg/kg every 2 weeks",
-      primaryEndpoint: "Overall Survival (OS)",
-      secondaryEndpoints: "Progression-Free Survival (PFS), Objective Response Rate (ORR)",
-      outcomeClass: "Negative outcome",
-      primaryOutcomeDetail: "Median OS was 9.8 months for nivolumab vs 10.0 months for bevacizumab (HR 1.04; 95% CI 0.83-1.30; p = 0.76). Did not improve OS.",
-      efficacySummary: "Nivolumab monotherapy failed to prolong survival or improve ORR compared to active anti-angiogenic control bevacizumab.",
-      safetySummary: "Grade 3-4 treatment-related adverse events occurred in 18.1% of nivolumab patients (fatigue, rash, increased transaminases).",
-      docReason: "Failed to meet primary endpoint of superior Overall Survival compared to Bevacizumab.",
-      failureCategory: "Lack of Efficacy",
-      bbbFactor: "High: Suspected insufficient BBB penetration",
-      contribFactors: "Intact BBB/Blood-Tumor Barrier limits antibody penetration into non-enhancing infiltrative margins; glioblastoma microenvironment is deeply immunosuppressive ('cold' tumor with high myeloid-derived suppressor cells, microglia/macrophages, and low tumor mutational burden).",
+      studyTitle: "An Investigational Immuno-therapy Study of Nivolumab Compared to Bevacizumab in Patients With Recurrent Glioblastoma (CheckMate 143)",
+      disease: "GBM",
       registryUrl: "https://clinicaltrials.gov/study/NCT02017717",
-      doi: "10.1093/neuonc/noaa106",
-      pmid: "32437536",
-      citation: "Reardon DA, et al. Effect of Nivolumab vs Bevacizumab on Overall Survival in Recurrent Glioblastoma: CheckMate 143. Neuro Oncol. 2020;22(11):1672-1683.",
-      extractor: "Student B1",
-      checker: "Student B2",
-      qcStatus: "Verified",
-      qcNotes: "Verified by Student B2 against Neuro-Oncology 2020 paper. Key trial illustrating CNS immunotherapy challenges.",
-      updatedAt: "2026-10-13T14:30:00Z"
+      publicationUrl: "https://doi.org/10.1093/neuonc/noaa106",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2018",
+
+      // B. Treatment information
+      drugName: "Nivolumab (Opdivo)",
+      therapeuticApproach: "Antibody",
+      mechanism: "Anti-PD-1 human IgG4 monoclonal antibody blocking immune checkpoint inhibition",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 369,
+      patientPopulation: "First recurrence of glioblastoma following standard radiation and temozolomide",
+      studyDesign: "Randomized",
+      controlGroup: "Active comparator",
+      primaryEndpoint: "Overall Survival (OS)",
+      primaryEndpointResult: "Not met",
+
+      // D. Clinical outcome
+      overallOutcome: "Negative",
+      clinicalBenefitEvidence: "Median OS was 9.8 months with nivolumab vs 10.0 months with bevacizumab (HR 1.04; 95% CI 0.83–1.30; p = 0.76). No survival advantage.",
+      safetyConcerns: "Grade 3–4 treatment-related adverse events occurred in 18.1% of patients (fatigue, rash, elevation in liver transaminases).",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Trial failed to demonstrate statistically significant improvement in Overall Survival compared with Bevacizumab control.",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "Yes",
+      factorSafety: "No",
+      factorBbb: "Yes",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "Reardon DA, et al. Neuro Oncol 2020;22:1672-1683. Intact blood-tumor barrier at non-enhancing margins; profound immunosuppression in GBM microenvironment (macrophages/MDSCs); low tumor mutational burden.",
+
+      // F. Scientific interpretation
+      mainFinding: "PD-1 checkpoint inhibition monotherapy failed to prolong survival in recurrent glioblastoma compared to active anti-angiogenic comparator.",
+      whySucceedOrFail: "Failed due to the immunologically 'cold' GBM tumor microenvironment, low tumor mutational burden, severe myeloid-driven immunosuppression, and limited antibody penetration across the infiltrative blood-tumor barrier.",
+      futureLessons: "Systemic immune checkpoint inhibitors cannot overcome GBM immunosuppression as monotherapy; combination approaches with local BBB disruption or myeloid repolarizers are required.",
+      limitations: "Did not pre-select patients based on PD-L1 expression, MGMT methylation, or tumor mutational burden status.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student B1",
+      verifiedBy: "Student B2",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-14",
+      comments: "Key trial demonstrating challenges of systemic immunotherapy in primary brain tumors."
     },
     {
       id: "trial-gbm-2",
+      // A. Trial identification
       nctId: "NCT01480479",
-      title: "A Study of Rindopepimut/GM-CSF in Patients With Newly Diagnosed Glioblastoma (ACT IV)",
-      disease: "Glioblastoma",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Control (Keyhole Limpet Hemocyanin KLH)",
-      status: "Terminated",
-      startDate: "2011-12",
-      completionDate: "2016-03",
-      enrollment: 745,
-      diseaseStage: "Newly diagnosed EGFRvIII-positive Glioblastoma (post-surgical resection and chemoradiation)",
-      eligibility: "Confirmed EGFRvIII expression, KPS >= 70, completed standard TMZ/RT.",
-      drugName: "Rindopepimut (CDX-110)",
-      mechanism: "Peptide-based active immunotherapy vaccine targeting EGFRvIII mutation",
-      molecularTarget: "EGFRvIII mutated oncogene splice junction",
-      adminRoute: "Subcutaneous (SC)",
-      dosingRegimen: "500 mcg monthly with GM-CSF adjuvant",
-      primaryEndpoint: "Overall Survival (OS) in minimal residual disease cohort",
-      secondaryEndpoints: "PFS, Safety, Humoral immune response (anti-EGFRvIII titers)",
-      outcomeClass: "Terminated / Discontinued",
-      primaryOutcomeDetail: "Terminated for futility: median OS was 20.1 months for rindopepimut vs 20.0 months for KLH control (HR 1.01; p = 0.93).",
-      efficacySummary: "Despite generating robust anti-EGFRvIII antibody titers, there was no difference in OS between treatment and control arms.",
-      safetySummary: "Well tolerated with predominantly mild local injection site reactions; minimal grade 3+ toxicity.",
-      docReason: "Terminated early based on planned interim analysis recommendation from independent Data Safety Monitoring Board for futility (no survival benefit).",
-      failureCategory: "Futility Interim Analysis",
-      bbbFactor: "Moderate: Variable or compromised BBB permeability",
-      contribFactors: "Tumor heterogeneity and antigen loss: glioblastoma recurrence was frequently driven by EGFRvIII-negative subclonal cell populations that escaped immune selection pressure.",
+      studyTitle: "A Study of Rindopepimut/GM-CSF in Patients With Newly Diagnosed Glioblastoma (ACT IV)",
+      disease: "GBM",
       registryUrl: "https://clinicaltrials.gov/study/NCT01480479",
-      doi: "10.1016/S1470-2045(17)30517-X",
-      pmid: "28859942",
-      citation: "Weller M, et al. Rindopepimut with temozolomide for patients with newly diagnosed, EGFRvIII-expressing glioblastoma (ACT IV). Lancet Oncol. 2017;18(10):1373-1385.",
-      extractor: "Student B2",
-      checker: "Student B1",
-      qcStatus: "Verified",
-      qcNotes: "Lancet Oncology paper checked. Perfect example of clonal target heterogeneity overcoming vaccine therapy.",
-      updatedAt: "2026-10-14T16:45:00Z"
+      publicationUrl: "https://doi.org/10.1016/S1470-2045(17)30517-X",
+      phase: "Phase III",
+      status: "Terminated",
+      completionYear: "2016",
+
+      // B. Treatment information
+      drugName: "Rindopepimut (CDX-110)",
+      therapeuticApproach: "Biologic",
+      mechanism: "Peptide vaccine targeting the tumor-specific EGFRvIII deletion mutation",
+      adminRoute: "Other",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 745,
+      patientPopulation: "Newly diagnosed EGFRvIII-expressing glioblastoma (post-surgical resection and chemoradiation)",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "Overall Survival (OS) in minimal residual disease population",
+      primaryEndpointResult: "Not met",
+
+      // D. Clinical outcome
+      overallOutcome: "Negative",
+      clinicalBenefitEvidence: "Despite inducing strong anti-EGFRvIII humoral immune responses, median OS was identical: 20.1 months (rindopepimut) vs 20.0 months (control; HR 1.01; p = 0.93).",
+      safetyConcerns: "Well tolerated; mostly low-grade injection-site reactions; no serious neurological autoimmune toxicities.",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Terminated early based on recommendation of independent Data Safety Monitoring Board for futility (HR 1.01).",
+      terminationReason: "Futility at planned interim analysis",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "Yes",
+      factorSafety: "No",
+      factorBbb: "Unclear",
+      factorHeterogeneity: "Yes",
+      factorSelection: "No",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "Weller M, et al. Lancet Oncol 2017;18:1373-1385. Recurrent tumors demonstrated loss of EGFRvIII antigen expression in 57% of patients due to subclonal escape and intratumoral heterogeneity.",
+
+      // F. Scientific interpretation
+      mainFinding: "Targeted EGFRvIII peptide vaccine successfully generated anti-tumor antibody titers but failed to improve survival due to subclonal antigen loss.",
+      whySucceedOrFail: "Failed because glioblastoma is characterized by extreme clonal heterogeneity; eliminating EGFRvIII-positive cells merely created an evolutionary bottleneck that selected for EGFRvIII-negative resistant clones.",
+      futureLessons: "Single-antigen targeted therapies are susceptible to immune escape in heterogeneous brain tumors; multi-epitope vaccines or polyvalent targeting strategies are essential.",
+      limitations: "Only assessed newly diagnosed patients with confirmed EGFRvIII mutation at initial surgery.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student B2",
+      verifiedBy: "Student B1",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-15",
+      comments: "Seminal illustration of clonal heterogeneity defeating targeted therapy in Glioblastoma."
     },
     {
       id: "trial-gbm-3",
+      // A. Trial identification
       nctId: "NCT00006353",
-      title: "Radiotherapy With Concomitant and Adjuvant Temozolomide for Glioblastoma (EORTC 26981 / NCIC CE.3 / Stupp Protocol)",
-      disease: "Glioblastoma",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Open-label",
-      comparator: "Active comparator (Radiotherapy alone 60 Gy)",
-      status: "Completed",
-      startDate: "2000-08",
-      completionDate: "2004-03",
-      enrollment: 573,
-      diseaseStage: "Newly diagnosed histologically verified Glioblastoma Multiforme",
-      eligibility: "Aged 18-70, WHO performance 0-2, newly diagnosed supratentorial GBM.",
-      drugName: "Temozolomide (Temodar)",
-      mechanism: "Alkylating imidazotetrazine prodrug causing O6-methylguanine DNA adducts",
-      molecularTarget: "Nuclear DNA guanine bases (O6 position)",
-      adminRoute: "Oral (PO)",
-      dosingRegimen: "75 mg/m2 daily during RT (6 wks), followed by 150-200 mg/m2 5 days/28-day cycle for 6 cycles",
-      primaryEndpoint: "Overall Survival (OS)",
-      secondaryEndpoints: "Progression-Free Survival (PFS), Safety, Quality of Life",
-      outcomeClass: "Positive outcome",
-      primaryOutcomeDetail: "Met primary endpoint: Median OS increased from 12.1 months (RT alone) to 14.6 months (RT + TMZ) (HR 0.63; 95% CI 0.52-0.75; p < 0.001). 2-year survival 26.5% vs 10.4%.",
-      efficacySummary: "Established global standard of care (Stupp protocol). Subsequent analysis proved patients with methylated MGMT gene promoter derived dramatic benefit.",
-      safetySummary: "Moderate myelosuppression (thrombocytopenia, leukopenia Grade 3-4 in 7% of patients during adjuvant phase).",
-      docReason: "N/A - Primary endpoint met with robust, statistically significant survival gain.",
-      failureCategory: "Not applicable (Positive)",
-      bbbFactor: "Low / Addressed: Good CNS exposure demonstrated",
-      contribFactors: "Temozolomide has low molecular weight (194 Da), lipophilic properties, non-ionized at physiological pH, resulting in rapid and nearly 100% oral bioavailability and approximately 20-30% brain-to-plasma CSF penetration.",
+      studyTitle: "Radiotherapy With Concomitant and Adjuvant Temozolomide for Glioblastoma (EORTC 26981 / Stupp Protocol)",
+      disease: "GBM",
       registryUrl: "https://clinicaltrials.gov/study/NCT00006353",
-      doi: "10.1056/NEJMoa043330",
-      pmid: "15758009",
-      citation: "Stupp R, et al. Radiotherapy plus concomitant and adjuvant temozolomide for glioblastoma. N Engl J Med. 2005;352(10):987-996.",
-      extractor: "Student B1",
-      checker: "Student B2",
-      qcStatus: "Pending Verification",
-      qcNotes: "Positive control benchmark for Glioblastoma. Needs checker sign-off.",
-      updatedAt: "2026-10-15T11:00:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJMoa043330",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2004",
+
+      // B. Treatment information
+      drugName: "Temozolomide (Temodar)",
+      therapeuticApproach: "Small molecule",
+      mechanism: "Alkylating imidazotetrazine prodrug inducing O6-methylguanine DNA cross-links and apoptosis",
+      adminRoute: "Oral",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 573,
+      patientPopulation: "Newly diagnosed, histologically confirmed supratentorial Glioblastoma",
+      studyDesign: "Randomized",
+      controlGroup: "Standard treatment",
+      primaryEndpoint: "Overall Survival (OS)",
+      primaryEndpointResult: "Met",
+
+      // D. Clinical outcome
+      overallOutcome: "Positive",
+      clinicalBenefitEvidence: "Statistically significant prolongation of median OS from 12.1 months (RT alone) to 14.6 months (RT + TMZ; HR 0.63; 95% CI 0.52–0.75; p < 0.001). 2-year survival increased from 10.4% to 26.5%.",
+      safetyConcerns: "Myelosuppression (Grade 3–4 thrombocytopenia/leukopenia in 7% during adjuvant phase); manageable nausea and fatigue.",
+      regulatoryApproval: "Yes",
+      reportedFailureReason: "Not applicable (Trial established global standard of care)",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "No",
+      factorSafety: "No",
+      factorBbb: "No",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "Stupp R, et al. N Engl J Med 2005;352:987-996. Small lipophilic molecule (194 Da) with 100% oral bioavailability and 20–30% CSF/plasma ratio; MGMT promoter methylation strongly predictive of benefit.",
+
+      // F. Scientific interpretation
+      mainFinding: "Concomitant and adjuvant temozolomide with radiotherapy produced significant, durable survival benefits, establishing the international standard of care.",
+      whySucceedOrFail: "Succeeded due to favorable CNS pharmacokinetics (small, non-ionized, crosses blood-tumor barrier) and synergistic DNA radiosensitization, particularly in tumors with epigenetic MGMT silencing.",
+      futureLessons: "Adequate brain tissue penetration paired with biomarker stratification (MGMT methylation) is the cornerstone of clinical efficacy in neuro-oncology.",
+      limitations: "Conducted prior to 2010 window; included as foundational historical benchmark as authorized in Handbook Section 4.2.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student B1",
+      verifiedBy: "Student B2",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-15",
+      comments: "Benchmark comparison standard for Glioblastoma."
     },
 
-    // --- STROKE (Group C) ---
+    // --- 05_STROKE (Group C) ---
     {
       id: "trial-stroke-1",
+      // A. Trial identification
       nctId: "NCT00064324",
-      title: "Efficacy and Safety of NXY-059 in Patients With Acute Ischemic Stroke (SAINT II)",
+      studyTitle: "Efficacy and Safety of NXY-059 in Patients With Acute Ischemic Stroke (SAINT II)",
       disease: "Stroke",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo (matching saline infusion)",
-      status: "Completed",
-      startDate: "2003-09",
-      completionDate: "2006-11",
-      enrollment: 3195,
-      diseaseStage: "Acute Ischemic Stroke treated within 6 hours of symptom onset",
-      eligibility: "NIHSS score >= 6, clinical diagnosis of acute ischemic stroke, age >= 18.",
-      drugName: "NXY-059 (Cerovive)",
-      mechanism: "Free radical spin-trapping neuroprotectant (disodium 2,4-disulfophenyl-N-tert-butylnitrone)",
-      molecularTarget: "Reactive oxygen species (ROS) and reactive nitrogen species",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "72-hour continuous IV infusion initiated within 6 hours",
-      primaryEndpoint: "Modified Rankin Scale (mRS) disability score distribution at 90 days",
-      secondaryEndpoints: "NIHSS score change, Barthel Index score at 90 days, mortality",
-      outcomeClass: "Negative outcome",
-      primaryOutcomeDetail: "No significant difference in 90-day mRS distribution vs placebo (odds ratio for disability improvement 0.94; 95% CI 0.83-1.06; p = 0.33).",
-      efficacySummary: "NXY-059 was completely ineffective for acute ischemic stroke and failed to replicate the preliminary positive findings from SAINT I.",
-      safetySummary: "Adverse events comparable to placebo, no significant excess hemorrhages or mortality.",
-      docReason: "Completed trial concluded with unequivocal failure to meet primary efficacy endpoint on mRS.",
-      failureCategory: "Lack of Efficacy",
-      bbbFactor: "High: Suspected insufficient BBB penetration",
-      contribFactors: "NXY-059 was highly polar/hydrophilic with two sulfonic acid groups, resulting in virtually undetectable penetration across the intact blood-brain barrier; preclinical rodent MCAO studies had major methodological flaws and publication bias (STAIR criteria failures).",
       registryUrl: "https://clinicaltrials.gov/study/NCT00064324",
-      doi: "10.1056/NEJMoa070638",
-      pmid: "17687130",
-      citation: "Shuaib A, et al. NXY-059 for the treatment of acute ischemic stroke (SAINT II). N Engl J Med. 2007;357(6):562-571.",
-      extractor: "Student C1",
-      checker: "Student C2",
-      qcStatus: "Verified",
-      qcNotes: "Cross-checked with NEJM 2007. The quintessential example of preclinical translation failure in neuroprotection due to polar BBB impermeability.",
-      updatedAt: "2026-10-12T15:20:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJMoa070638",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2006",
+
+      // B. Treatment information
+      drugName: "NXY-059 (Cerovive)",
+      therapeuticApproach: "Small molecule",
+      mechanism: "Free radical spin-trapping neuroprotectant (disodium 2,4-disulfophenyl-N-tert-butylnitrone)",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Neuroprotective",
+
+      // C. Clinical trial design
+      numParticipants: 3195,
+      patientPopulation: "Acute Ischemic Stroke presenting within 6 hours of symptom onset",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "Modified Rankin Scale (mRS) disability score distribution at 90 days",
+      primaryEndpointResult: "Not met",
+
+      // D. Clinical outcome
+      overallOutcome: "Negative",
+      clinicalBenefitEvidence: "No statistically significant difference in 90-day mRS disability distribution vs placebo (odds ratio 0.94; 95% CI 0.83–1.06; p = 0.33).",
+      safetyConcerns: "Adverse event rates comparable to placebo; no excess intracranial hemorrhage or systemic toxicity.",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Completed trial concluded with unequivocal failure to meet the primary efficacy endpoint on mRS.",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "Yes",
+      factorSafety: "No",
+      factorBbb: "Yes",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "Yes",
+      factorOperational: "No",
+      supportingEvidence: "Shuaib A, et al. N Engl J Med 2007;357:562-571. Highly polar disulfonate molecule with virtually zero penetration across intact BBB; rodent MCAO models had publication bias and lacked reperfusion realism.",
+
+      // F. Scientific interpretation
+      mainFinding: "Free radical scavenger NXY-059 was completely ineffective for acute ischemic stroke and failed to replicate early SAINT I findings.",
+      whySucceedOrFail: "Failed because the molecule is highly polar and hydrophilic, preventing parenchymal BBB penetration to reach intracellular free radicals; preclinical rodent stroke experiments suffered from methodological bias.",
+      futureLessons: "Neuroprotectants must cross the BBB into penumbral parenchyma and must be tested in clinically realistic models (including aged animals with comorbidities and reperfusion).",
+      limitations: "6-hour treatment window was likely too wide for neuroprotection in the absence of documented vessel recanalization.",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student C1",
+      verifiedBy: "Student C2",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-14",
+      comments: "The benchmark case study for preclinical translation failure in neuroprotection."
     },
     {
       id: "trial-stroke-2",
+      // A. Trial identification
       nctId: "NCT02809833",
-      title: "Efficacy and Safety of Nerinetide for the Treatment of Acute Ischaemic Stroke (ESCAPE-NA1)",
+      studyTitle: "Efficacy and Safety of Nerinetide for the Treatment of Acute Ischaemic Stroke (ESCAPE-NA1)",
       disease: "Stroke",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo (saline control)",
-      status: "Completed",
-      startDate: "2017-03",
-      completionDate: "2019-11",
-      enrollment: 1105,
-      diseaseStage: "Acute Ischemic Stroke with large vessel occlusion undergoing endovascular thrombectomy (EVT)",
-      eligibility: "EVT eligible within 12 hours of onset, selected by multi-phase CT angiography.",
-      drugName: "Nerinetide (NA-1 / Tat-NR2B9c)",
-      mechanism: "Post-synaptic density-95 (PSD-95) inhibitor / excitotoxicity uncoupler (cell-permeant peptide)",
-      molecularTarget: "PSD-95 PDZ domain interaction with NMDA NR2B subunits",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "Single IV infusion 2.6 mg/kg over 10 minutes",
-      primaryEndpoint: "Proportion of participants with good functional recovery (mRS 0-2 at 90 days)",
-      secondaryEndpoints: "Infarct volume on 24h CT/MRI, 90-day mortality, Barthel Index",
-      outcomeClass: "Mixed / Inconclusive",
-      primaryOutcomeDetail: "In the overall cohort, mRS 0-2 was 61.4% (nerinetide) vs 59.2% (placebo) (adjusted risk ratio 1.04; p = 0.35). Primary endpoint not met overall.",
-      efficacySummary: "Pre-specified subgroup analysis revealed striking drug-drug interaction: in patients NOT receiving alteplase, nerinetide significantly improved good outcome (59.3% vs 49.8%, RR 1.18, p=0.03) and reduced mortality (8.8% vs 15.9%).",
-      safetySummary: "Alteplase cleaved the Tat-peptide carrier of nerinetide, inactivating the molecule in co-administered patients. Nerinetide monotherapy showed safety without increased bleeding.",
-      docReason: "Overall trial missed primary endpoint due to proteolytic cleavage and degradation of the therapeutic peptide by co-administered plasminogen activator (Alteplase).",
-      failureCategory: "Lack of Efficacy",
-      bbbFactor: "Low / Addressed: Good CNS exposure demonstrated",
-      contribFactors: "Tat carrier peptide provided excellent neuronal and BBB entry, but simultaneous systemic thrombolysis degraded the peptide in circulation before brain delivery in thrombolysis-treated cohort.",
       registryUrl: "https://clinicaltrials.gov/study/NCT02809833",
-      doi: "10.1016/S0140-6736(20)30258-0",
-      pmid: "32087124",
-      citation: "Hill MD, et al. Efficacy and safety of nerinetide for the treatment of acute ischaemic stroke (ESCAPE-NA1): a multicentre, randomised, double-blind, placebo-controlled, phase 3 trial. Lancet. 2020;395(10227):878-887.",
-      extractor: "Student C2",
-      checker: "Student C1",
-      qcStatus: "Verified",
-      qcNotes: "Lancet 2020 verified. Extremely fascinating translational interaction between neuroprotection and reperfusion.",
-      updatedAt: "2026-10-14T09:40:00Z"
+      publicationUrl: "https://doi.org/10.1016/S0140-6736(20)30258-0",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "2019",
+
+      // B. Treatment information
+      drugName: "Nerinetide (NA-1 / Tat-NR2B9c)",
+      therapeuticApproach: "Biologic",
+      mechanism: "Cell-permeant peptide disrupting PSD-95 coupling to NMDA receptors, uncoupling excitotoxicity",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Neuroprotective",
+
+      // C. Clinical trial design
+      numParticipants: 1105,
+      patientPopulation: "Acute Ischemic Stroke with large vessel occlusion undergoing endovascular thrombectomy (EVT)",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "Proportion of participants with favorable functional outcome (mRS 0–2 at 90 days)",
+      primaryEndpointResult: "Inconclusive",
+
+      // D. Clinical outcome
+      overallOutcome: "Mixed / Inconclusive",
+      clinicalBenefitEvidence: "Overall primary endpoint was not met (mRS 0–2: 61.4% nerinetide vs 59.2% placebo, p=0.35). However, in pre-specified patients NOT receiving alteplase, nerinetide significantly improved functional outcome (59.3% vs 49.8%, p=0.03) and halved mortality.",
+      safetyConcerns: "Well tolerated; no increase in symptomatic intracranial hemorrhage or hemodynamic instability.",
+      regulatoryApproval: "No",
+      reportedFailureReason: "Missed primary endpoint in the combined intention-to-treat cohort due to a major proteolytic drug-drug interaction with co-administered alteplase.",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "No",
+      factorSafety: "No",
+      factorBbb: "No",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "Yes",
+      factorOperational: "No",
+      supportingEvidence: "Hill MD, et al. Lancet 2020;395:878-887. Tat carrier peptide crossed the BBB efficiently, but plasmin generated by intravenous alteplase cleaved and inactivated nerinetide in systemic circulation.",
+
+      // F. Scientific interpretation
+      mainFinding: "Nerinetide improved stroke outcomes only in patients who did not receive intravenous alteplase, revealing a critical enzymatic drug cleavage interaction.",
+      whySucceedOrFail: "Demonstrated biological efficacy when delivered alone with endovascular reperfusion, but failed in the combined cohort because co-administered thrombolytic enzyme proteolytically destroyed the peptide in plasma.",
+      futureLessons: "Neuroprotective biologics must be screened for pharmacokinetic interactions with standard thrombolytic reperfusion agents.",
+      limitations: "Subgroup benefit was pre-specified but requires replication in an independent trial of thrombectomy without alteplase (ESCAPE-NEXT).",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student C2",
+      verifiedBy: "Student C1",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-15",
+      comments: "Fascinating example of translational pharmacology and drug-drug enzymatic interaction in acute stroke."
     },
     {
       id: "trial-stroke-3",
+      // A. Trial identification
       nctId: "NCT00000606",
-      title: "The National Institute of Neurological Disorders and Stroke (NINDS) rt-PA Stroke Study",
+      studyTitle: "The National Institute of Neurological Disorders and Stroke (NINDS) rt-PA Stroke Study",
       disease: "Stroke",
-      phase: "Phase 3",
-      randomization: "Randomized",
-      blinding: "Double-blind",
-      comparator: "Placebo",
-      status: "Completed",
-      startDate: "1991-01",
-      completionDate: "1995-10",
-      enrollment: 624,
-      diseaseStage: "Acute Ischemic Stroke treated within 3 hours of symptom onset",
-      eligibility: "Ischemic stroke with deficit, treatment within 180 min, non-contrast CT negative for intracranial hemorrhage.",
-      drugName: "Alteplase (Recombinant Tissue Plasminogen Activator / rt-PA)",
-      mechanism: "Fibrin-specific thrombolytic enzyme converting plasminogen to active plasmin",
-      molecularTarget: "Intravascular fibrin clots in cerebral arterial circulation",
-      adminRoute: "Intravenous (IV) infusion",
-      dosingRegimen: "0.9 mg/kg (max 90 mg; 10% as bolus over 1 min, 90% over 60 min)",
-      primaryEndpoint: "Complete or near-complete recovery at 3 months (mRS 0-1, Barthel Index 95-100, NIHSS 0-1, Glasgow 1)",
-      secondaryEndpoints: "Early neurological improvement (>=4 points on NIHSS at 24 hours), mortality",
-      outcomeClass: "Positive outcome",
-      primaryOutcomeDetail: "Met primary endpoint: Patients treated with rt-PA were 30% more likely to have minimal or no disability at 3 months (mRS 0-1 OR 1.7; 95% CI 1.2-2.6; p = 0.008).",
-      efficacySummary: "Established the cornerstone for acute ischemic stroke reperfusion. Provided proof that rapid arterial recanalization salvages ischemic penumbra.",
-      safetySummary: "Symptomatic intracranial hemorrhage occurred in 6.4% of rt-PA patients vs 0.6% in placebo (p < 0.001); however, overall 3-month mortality was not increased (17% vs 21%).",
-      docReason: "N/A - Primary efficacy endpoint demonstrated robust statistical significance and clinical benefit.",
-      failureCategory: "Not applicable (Positive)",
-      bbbFactor: "Not applicable",
-      contribFactors: "Intravascular target (clot dissolution) does not require crossing the BBB, but compromised BBB integrity increases risk of secondary hemorrhagic transformation.",
       registryUrl: "https://clinicaltrials.gov/study/NCT00000606",
-      doi: "10.1056/NEJM199512143332401",
-      pmid: "7477192",
-      citation: "The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group. Tissue plasminogen activator for acute ischemic stroke. N Engl J Med. 1995;333(24):1581-1587.",
-      extractor: "Student C1",
-      checker: "Student C2",
-      qcStatus: "Needs Revision",
-      qcNotes: "Note from Student C2: Study started in 1991 (outside the preferred 2010-2026 window). Should be kept as historical contextual benchmark as per Handbook Section 4.2.",
-      updatedAt: "2026-10-15T08:30:00Z"
+      publicationUrl: "https://doi.org/10.1056/NEJM199512143332401",
+      phase: "Phase III",
+      status: "Completed",
+      completionYear: "1995",
+
+      // B. Treatment information
+      drugName: "Alteplase (Recombinant Tissue Plasminogen Activator / rt-PA)",
+      therapeuticApproach: "Biologic",
+      mechanism: "Recombinant serine protease converting plasminogen to plasmin, dissolving intravascular fibrin clots",
+      adminRoute: "Intravenous",
+      treatmentObjective: "Disease-modifying",
+
+      // C. Clinical trial design
+      numParticipants: 624,
+      patientPopulation: "Acute Ischemic Stroke treated within 3 hours of symptom onset",
+      studyDesign: "Randomized",
+      controlGroup: "Placebo",
+      primaryEndpoint: "Global favorable outcome at 3 months (mRS 0–1, Barthel Index >= 95, NIHSS <= 1)",
+      primaryEndpointResult: "Met",
+
+      // D. Clinical outcome
+      overallOutcome: "Positive",
+      clinicalBenefitEvidence: "Patients treated with rt-PA were 30% more likely to achieve complete or near-complete neurological recovery at 3 months (OR 1.7; 95% CI 1.2–2.6; p = 0.008).",
+      safetyConcerns: "Symptomatic intracranial hemorrhage occurred in 6.4% of rt-PA patients vs 0.6% on placebo (p < 0.001); however, 3-month mortality was not increased (17% vs 21%).",
+      regulatoryApproval: "Yes",
+      reportedFailureReason: "Not applicable (Established gold standard for acute ischemic stroke reperfusion)",
+      terminationReason: "Not applicable",
+
+      // E. Factors potentially influencing success or failure
+      factorEfficacy: "No",
+      factorSafety: "Yes",
+      factorBbb: "No",
+      factorHeterogeneity: "Yes",
+      factorSelection: "Yes",
+      factorDesign: "No",
+      factorOperational: "No",
+      supportingEvidence: "NINDS rt-PA Stroke Study Group. N Engl J Med 1995;333:1581-1587. Intravascular target (clot) does not require crossing the BBB, but compromised BBB integrity within infarcted tissue mediates hemorrhagic transformation.",
+
+      // F. Scientific interpretation
+      mainFinding: "Intravenous thrombolysis within 3 hours significantly increased the odds of disability-free recovery despite an elevated risk of symptomatic hemorrhage.",
+      whySucceedOrFail: "Succeeded because rapid arterial recanalization salvages ischemic penumbra; efficacy strictly depended on immediate administration within the tight <3 hour therapeutic window.",
+      futureLessons: "Time is brain: acute therapies require rapid triage and imaging; intravascular targets avoid the BBB hurdle but vascular integrity dictates hemorrhagic safety.",
+      limitations: "Narrow therapeutic window (expanded later to 4.5h); strict exclusion criteria (bleeding risk, blood pressure, recent surgery).",
+
+      // G. Data quality and teamwork
+      extractedBy: "Student C1",
+      verifiedBy: "Student C2",
+      verificationStatus: "Verified",
+      lastUpdated: "2026-10-15",
+      comments: "Foundational benchmark comparator for Stroke."
     }
   ],
 
-  // QC Verification Log Records
-  qcLog: [
-    {
-      id: "qc-1",
-      trialId: "trial-ad-1",
-      nctId: "NCT02484534",
-      date: "2026-10-12 14:15",
-      extractor: "Student A1",
-      checker: "Student A2",
-      decision: "Verified",
-      notes: "Verified against NEJM 2023 manuscript. Endpoint numbers (CDR-SB -0.45 difference) and ARIA incidence rates verified accurate."
-    },
-    {
-      id: "qc-2",
-      trialId: "trial-ad-2",
-      nctId: "NCT01224106",
-      date: "2026-10-14 16:30",
-      extractor: "Student A2",
-      checker: "Student A1",
-      decision: "Verified",
-      notes: "Checked safety reason for early termination. Added skin cancer documentation (Notch pathway disruption)."
-    },
-    {
-      id: "qc-3",
-      trialId: "trial-gbm-1",
-      nctId: "NCT02017717",
-      date: "2026-10-13 18:00",
-      extractor: "Student B1",
-      checker: "Student B2",
-      decision: "Verified",
-      notes: "Confirmed trial design (open-label active comparator with bevacizumab). Primary endpoint OS confirmed non-significant."
-    },
-    {
-      id: "qc-4",
-      trialId: "trial-gbm-2",
-      nctId: "NCT01480479",
-      date: "2026-10-15 09:45",
-      extractor: "Student B2",
-      checker: "Student B1",
-      decision: "Verified",
-      notes: "Checked futility termination documentation. Confirmed loss of EGFRvIII target as primary translational contributing factor."
-    },
-    {
-      id: "qc-5",
-      trialId: "trial-stroke-1",
-      nctId: "NCT00064324",
-      date: "2026-10-13 11:20",
-      extractor: "Student C1",
-      checker: "Student C2",
-      decision: "Verified",
-      notes: "Checked SAINT II trial mRS outcome and polar BBB impermeability literature references."
-    },
-    {
-      id: "qc-6",
-      trialId: "trial-stroke-3",
-      nctId: "NCT00000606",
-      date: "2026-10-15 08:35",
-      extractor: "Student C1",
-      checker: "Student C2",
-      decision: "Needs Revision",
-      notes: "Noted that completion date is prior to 2010. Flagged to ensure it is kept as contextual benchmark rather than primary analytical set."
-    }
+  // 02_SEARCH_LOG cumulative filter matrix (Handbook Section 6 Week 1)
+  searchMatrix: [
+    { stepNumber: 1, stepName: "All registered trials", adCount: 3120, gbmCount: 1850, strokeCount: 4200 },
+    { stepNumber: 2, stepName: "Interventional studies", adCount: 2240, gbmCount: 1420, strokeCount: 2900 },
+    { stepNumber: 3, stepName: "Phase II / III", adCount: 840, gbmCount: 490, strokeCount: 920 },
+    { stepNumber: 4, stepName: "Completed / Terminated", adCount: 510, gbmCount: 320, strokeCount: 610 },
+    { stepNumber: 5, stepName: "Drug / Biological", adCount: 435, gbmCount: 285, strokeCount: 410 },
+    { stepNumber: 6, stepName: "Completion 2010–2026", adCount: 295, gbmCount: 195, strokeCount: 280 },
+    { stepNumber: 7, stepName: "Outcomes / Reasons Available", adCount: 180, gbmCount: 125, strokeCount: 160 }
   ],
 
-  // 12-Week Roadmap Plan & Deliverables (Handbook Section 6)
-  weeks: [
-    {
-      weekNumber: 1,
-      phase: 1,
-      title: "Understanding the Clinical Trial Landscape",
-      dates: "October 12–18, 2026",
-      learningGoal: "Understand how clinical trial databases work and how inclusion criteria influence research findings.",
-      deliverables: "One-page Clinical Trial Landscape Summary; Completed SEARCH_LOG; Two example clinical trials; Flowchart showing filtering attrition.",
-      tasks: [
-        { id: "w1-t1", text: "Perform 7-step systematic search on ClinicalTrials.gov for assigned disease", completed: true },
-        { id: "w1-t2", text: "Record exact search terms, dates, and study counts in SEARCH_LOG", completed: true },
-        { id: "w1-t3", text: "Identify and thoroughly review two example clinical trials", completed: true },
-        { id: "w1-t4", text: "Create study count attrition flowchart from Step 1 to Step 7", completed: false }
-      ]
-    },
-    {
-      weekNumber: 2,
-      phase: 1,
-      title: "Developing the Research Strategy",
-      dates: "October 19–25, 2026",
-      officialEvent: "Proposal Report Writing Lecture — October 19",
-      learningGoal: "Learn how to design a reproducible scientific investigation.",
-      deliverables: "Draft research protocol; Inclusion/exclusion criteria; Preliminary reference list; Common classification calibration notes.",
-      tasks: [
-        { id: "w2-t1", text: "Define the specific research question for assigned disease", completed: false },
-        { id: "w2-t2", text: "Formulate formalized inclusion and exclusion criteria", completed: false },
-        { id: "w2-t3", text: "Independently classify a common calibration trial with your partner and compare notes", completed: false },
-        { id: "w2-t4", text: "Compile initial scientific references on disease pathology and current therapies", completed: false }
-      ]
-    },
-    {
-      weekNumber: 3,
-      phase: 1,
-      title: "Selecting Clinical Trials and Testing the Database",
-      dates: "October 26 – November 1, 2026",
-      learningGoal: "Learn systematic data extraction, source verification, and consistent classification.",
-      deliverables: "Candidate clinical trial list; Three verified database entries; Preliminary literature summary; Notes on successful approaches.",
-      tasks: [
-        { id: "w3-t1", text: "Identify 10–15 candidate trials relevant to your disease", completed: false },
-        { id: "w3-t2", text: "Extract full data for at least 3 trials using standard data collection form", completed: false },
-        { id: "w3-t3", text: "Perform independent peer verification for each extracted trial", completed: false },
-        { id: "w3-t4", text: "Identify at least two clinically successful therapeutic approaches for benchmark comparison", completed: false }
-      ]
-    },
-    {
-      weekNumber: 4,
-      phase: 1,
-      title: "Preparing the Proposal Report",
-      dates: "November 2–8, 2026",
-      majorDeadline: "Friday, November 6 — Proposal Report Submission",
-      learningGoal: "Communicate a scientific research plan in a structured and reproducible manner.",
-      deliverables: "Official Proposal Report submission (10 required sections).",
-      tasks: [
-        { id: "w4-t1", text: "Draft sections 1-5: Scientific background, research questions, search strategy, and landscape", completed: false },
-        { id: "w4-t2", text: "Draft sections 6-10: Data methodology, success/failure comparison plan, timeline, references", completed: false },
-        { id: "w4-t3", text: "Conduct peer and partner review of proposal report draft", completed: false },
-        { id: "w4-t4", text: "Submit final Proposal Report by Friday, November 6 deadline", completed: false }
-      ]
-    },
-    {
-      weekNumber: 5,
-      phase: 2,
-      title: "Beginning Full Data Collection",
-      dates: "November 9–15, 2026",
-      officialEvent: "Proposal grading deadline: November 13",
-      learningGoal: "Scale systematic data extraction and documented failure reason logging.",
-      deliverables: "Updated research protocol; First validated dataset; Record of corrections.",
-      tasks: [
-        { id: "w5-t1", text: "Review feedback on proposal and update protocol if needed", completed: false },
-        { id: "w5-t2", text: "Extract complete information for 4-5 eligible clinical trials per group", completed: false },
-        { id: "w5-t3", text: "Verify all records with your teammate and record in QC Log", completed: false },
-        { id: "w5-t4", text: "Begin documenting explicitly reported reasons for negative outcomes / early termination", completed: false }
-      ]
-    },
-    {
-      weekNumber: 6,
-      phase: 2,
-      title: "Expanding Dataset and Understanding Outcomes",
-      dates: "November 16–22, 2026",
-      officialEvent: "Individual Progress Interviews — Week 8 preparation",
-      learningGoal: "Investigate missing outcomes and compare therapeutic mechanisms.",
-      deliverables: "Updated dataset (8–10 trials); Preliminary comparison notes; Individual progress log.",
-      tasks: [
-        { id: "w6-t1", text: "Expand dataset to 8–10 trials per group", completed: false },
-        { id: "w6-t2", text: "Investigate missing or unclear outcome information via primary literature", completed: false },
-        { id: "w6-t3", text: "Compare therapeutic mechanisms, patient populations, and clinical endpoints", completed: false },
-        { id: "w6-t4", text: "Document individual activity logs for upcoming progress interviews", completed: false }
-      ]
-    },
-    {
-      weekNumber: 7,
-      phase: 2,
-      title: "Completing and Validating the Database",
-      dates: "November 23–29, 2026",
-      officialEvent: "Individual Progress Interviews — Week 9",
-      learningGoal: "Develop reliable data management and cross-group critical evaluation skills.",
-      deliverables: "Completed first version of disease-specific dataset; QC summary; One-page scientific discussion outline.",
-      tasks: [
-        { id: "w7-t1", text: "Reach target of 10–15 well-documented trial records per group", completed: false },
-        { id: "w7-t2", text: "Exchange sample entries with another disease group for cross-group independent checking", completed: false },
-        { id: "w7-t3", text: "Resolve any classification inconsistencies in the QC Log", completed: false },
-        { id: "w7-t4", text: "Prepare 1-page outline on clinical successes and failures for your disease", completed: false }
-      ]
-    },
-    {
-      weekNumber: 8,
-      phase: 3,
-      title: "Data Analysis and Descriptive Statistics",
-      dates: "November 30 – December 6, 2026",
-      officialEvent: "Final Report Writing Lecture — November 30",
-      learningGoal: "Synthesize trial data into descriptive statistics and clean analytical tables.",
-      deliverables: "Cleaned database; Descriptive summary tables; Initial figures.",
-      tasks: [
-        { id: "w8-t1", text: "Clean and finalize the analysis-ready COMBINED_DATABASE", completed: false },
-        { id: "w8-t2", text: "Summarize trial characteristics, phases, and outcomes", completed: false },
-        { id: "w8-t3", text: "Calculate descriptive statistics and quantify missing data", completed: false },
-        { id: "w8-t4", text: "Generate initial summary charts and frequency distributions", completed: false }
-      ]
-    },
-    {
-      weekNumber: 9,
-      phase: 3,
-      title: "Comparing Clinical Successes and Failures",
-      dates: "December 7–13, 2026",
-      officialEvent: "Presentation Skills Lecture — December 7",
-      learningGoal: "Synthesize translational mechanisms across diseases and draft scientific discussion.",
-      deliverables: "Comparative analysis; At least three figures; First discussion draft.",
-      tasks: [
-        { id: "w9-t1", text: "Compare successful vs failed therapeutic strategies within assigned disease", completed: false },
-        { id: "w9-t2", text: "Investigate biological explanations (BBB delivery, target engagement, timing)", completed: false },
-        { id: "w9-t3", text: "Coordinate with other 2 groups to perform cross-disease comparison (AD vs GBM vs Stroke)", completed: false },
-        { id: "w9-t4", text: "Draft at least 3 publication-quality figures and the first discussion draft", completed: false }
-      ]
-    },
-    {
-      weekNumber: 10,
-      phase: 3,
-      title: "Preparing Scientific Poster and Final Report Draft",
-      dates: "December 14–20, 2026",
-      majorDeadline: "Supervisor deadline: Project Outcome Selection — December 14",
-      learningGoal: "Draft visual scientific poster and comprehensive research report.",
-      deliverables: "Poster draft; Final report draft; Updated figures and references.",
-      tasks: [
-        { id: "w10-t1", text: "Design scientific poster layout and disease-specific panels", completed: false },
-        { id: "w10-t2", text: "Draft final report sections (Intro, Methods, Results, Discussion)", completed: false },
-        { id: "w10-t3", text: "Discuss evidence limitations, sample biases, and translational takeaways", completed: false },
-        { id: "w10-t4", text: "Submit drafts to Dr. Nur Mustafaoğlu for supervisor review", completed: false }
-      ]
-    },
-    {
-      weekNumber: 11,
-      phase: 3,
-      title: "Final Scientific Review and Rehearsal",
-      dates: "December 21–27, 2026",
-      learningGoal: "Polish scientific claims, verify references, and practice oral communication.",
-      deliverables: "Final poster; Near-final report; Completed quality-control check.",
-      tasks: [
-        { id: "w11-t1", text: "Perform rigorous fact-checking and reference citation verification", completed: false },
-        { id: "w11-t2", text: "Ensure terminological and classification consistency across all 3 diseases", completed: false },
-        { id: "w11-t3", text: "Finalize high-resolution figures and summary tables", completed: false },
-        { id: "w11-t4", text: "Conduct group rehearsal for oral poster presentations", completed: false }
-      ]
-    },
-    {
-      weekNumber: 12,
-      phase: 3,
-      title: "Final Deliverables & Presentation",
-      dates: "December 28–31, 2026",
-      majorDeadline: "Poster Day: Wednesday Dec 30 · Report Submission: Thursday Dec 31 · Talks: Jan 4–8, 2027",
-      learningGoal: "Demonstrate scientific mastery in presentation and final submitted document.",
-      deliverables: "Final Scientific Poster; Final Report Submission; Oral defense slides.",
-      tasks: [
-        { id: "w12-t1", text: "Present on Poster Day (Wednesday, December 30)", completed: false },
-        { id: "w12-t2", text: "Submit final scientific report (Thursday, December 31)", completed: false },
-        { id: "w12-t3", text: "Complete Section 11 Final Student Checklist sign-off", completed: false },
-        { id: "w12-t4", text: "Participate in final oral presentations (January 4–8, 2027)", completed: false }
-      ]
-    }
-  ],
-
-  // Section 11 Final Student Checklist items
-  finalChecklist: [
-    { id: "chk-1", text: "Our clinical trial search and selection process is reproducible.", checked: true },
-    { id: "chk-2", text: "Our database contains verified information and traceable sources (DOIs/PMIDs).", checked: true },
-    { id: "chk-3", text: "We have documented both positive and negative clinical outcomes.", checked: true },
-    { id: "chk-4", text: "We have critically discussed successful and unsuccessful therapeutic approaches.", checked: false },
-    { id: "chk-5", text: "We have strictly distinguished documented reasons from possible contributing factors.", checked: true },
-    { id: "chk-6", text: "Our cross-disease comparisons are scientifically justified.", checked: false },
-    { id: "chk-7", text: "Our figures and tables are clear, consistent, and correctly labelled.", checked: false },
-    { id: "chk-8", text: "We have acknowledged missing data and study limitations.", checked: false },
-    { id: "chk-9", text: "Our proposal, poster, final report, and individual contribution logs are complete.", checked: false }
-  ],
-
-  // ClinicalTrials.gov Search Log (SEARCH_LOG)
+  // 02_SEARCH_LOG search log entries (exact search terms, dates, filters, URL)
   searchLogs: [
     {
       id: "search-1",
       date: "2026-10-12",
-      disease: "Alzheimer's Disease",
-      query: '"Alzheimer Disease" [Condition] | Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010-2026',
-      url: "https://clinicaltrials.gov/search?cond=Alzheimer+Disease&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
-      step1Count: 3120, // All registered
-      step2Count: 2240, // Interventional
-      step3Count: 840,  // Phase II/III
-      step4Count: 510,  // Completed/Terminated
-      step5Count: 435,  // Drug/biological
-      step6Count: 295,  // 2010-2026
-      step7Count: 180,  // Accessible outcomes / published
-      notes: "High proportion of completed trials lack posted results on ClinicalTrials.gov; PubMed screening necessary for Step 7.",
-      loggedBy: "Student A1"
+      disease: "Alzheimer's",
+      searchTerms: '"Alzheimer Disease" [Condition]',
+      filtersApplied: "Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010–2026",
+      sourceUrl: "https://clinicaltrials.gov/search?cond=Alzheimer+Disease&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
+      resultsCount: 180,
+      student: "Student A1",
+      notes: "High number of completed trials do not have posted results on ClinicalTrials.gov; manual PubMed cross-checking required."
     },
     {
       id: "search-2",
       date: "2026-10-13",
-      disease: "Glioblastoma",
-      query: '"Glioblastoma" [Condition] | Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010-2026',
-      url: "https://clinicaltrials.gov/search?cond=Glioblastoma&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
-      step1Count: 1850,
-      step2Count: 1420,
-      step3Count: 490,
-      step4Count: 320,
-      step5Count: 285,
-      step6Count: 195,
-      step7Count: 125,
-      notes: "Important to separate newly diagnosed from recurrent GBM cohorts in Step 7 screening.",
-      loggedBy: "Student B1"
+      disease: "GBM",
+      searchTerms: '"Glioblastoma" OR "GBM" [Condition]',
+      filtersApplied: "Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010–2026",
+      sourceUrl: "https://clinicaltrials.gov/search?cond=Glioblastoma&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
+      resultsCount: 125,
+      student: "Student B1",
+      notes: "Need to separate newly diagnosed from recurrent disease during screening."
     },
     {
       id: "search-3",
       date: "2026-10-13",
       disease: "Stroke",
-      query: '"Stroke" OR "Acute Ischemic Stroke" [Condition] | Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010-2026',
-      url: "https://clinicaltrials.gov/search?cond=Stroke&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
-      step1Count: 4200,
-      step2Count: 2900,
-      step3Count: 920,
-      step4Count: 610,
-      step5Count: 410,
-      step6Count: 280,
-      step7Count: 160,
-      notes: "Strict filtering required to exclude stroke rehabilitation and secondary prevention trials to maintain acute-treatment focus.",
-      loggedBy: "Student C1"
+      searchTerms: '"Stroke" OR "Acute Ischemic Stroke" [Condition]',
+      filtersApplied: "Interventional | Phase 2, Phase 3 | Completed, Terminated | Drug, Biological | 2010–2026",
+      sourceUrl: "https://clinicaltrials.gov/search?cond=Stroke&type=Intr&phase=1&phase=2&stat=c&stat=t&int=drug&int=bio",
+      resultsCount: 160,
+      student: "Student C1",
+      notes: "Excluded physical therapy, rehabilitation, and secondary prevention trials to maintain acute-treatment scope."
     }
   ],
 
-  // Weekly Progress Deliverable Submissions (WEEKLY_PROGRESS)
+  // 08_WEEKLY_PROGRESS — Exactly 1 row per student per week
   weeklyProgress: [
     {
       id: "wp-1",
-      weekNumber: 1,
-      group: "Group A (Alzheimer's)",
-      submittedBy: "Student A1",
-      submissionDate: "2026-10-18",
-      identifiedCount: 18,
-      screenedCount: 10,
-      validatedCount: 3,
-      completedTasks: "Completed 7-step systematic search on ClinicalTrials.gov. Initialized SEARCH_LOG. Analyzed Lecanemab and Semagacestat trials.",
-      problems: "Many older trials do not post tabular results on ClinicalTrials.gov; had to search PubMed and NEJM archives.",
-      contributions: "Student A1 performed query filtering and extracted Lecanemab; Student A2 performed QC check and extracted Semagacestat.",
-      nextSteps: "Define inclusion/exclusion criteria for early vs moderate AD and calibrate trial outcome definitions."
+      week: 1,
+      student: "Student A1",
+      group: "Alzheimer's",
+      tasksCompleted: "Completed 7-step systematic ClinicalTrials.gov search. Initialized 02_SEARCH_LOG.",
+      trialsAddedVerified: "2 identified (Lecanemab, Bapineuzumab)",
+      challenges: "Many older trials lack posted results on registry; searched PubMed.",
+      nextSteps: "Define inclusion/exclusion criteria for early vs moderate AD."
     },
     {
       id: "wp-2",
-      weekNumber: 1,
-      group: "Group B (Glioblastoma)",
-      submittedBy: "Student B1",
-      submissionDate: "2026-10-18",
-      identifiedCount: 15,
-      screenedCount: 8,
-      validatedCount: 3,
-      completedTasks: "Filtered Glioblastoma trial landscape. Identified CheckMate-143 (Nivolumab) and ACT IV (Rindopepimut) as classic failed trials.",
-      problems: "Distinguishing pseudoprogression endpoints from actual tumor progression in clinical results.",
-      contributions: "Student B1 ran registry searches; Student B2 extracted Nivolumab trial data and cross-checked primary endpoints.",
-      nextSteps: "Establish clear definition between newly diagnosed and recurrent glioblastoma criteria."
+      week: 1,
+      student: "Student A2",
+      group: "Alzheimer's",
+      tasksCompleted: "Extracted Semagacestat trial data; verified Lecanemab entry.",
+      trialsAddedVerified: "1 extracted (Semagacestat), 1 verified (Lecanemab)",
+      challenges: "Interpreting why Semagacestat failed despite lowering amyloid.",
+      nextSteps: "Calibrate trial outcome definitions with teammate."
     },
     {
       id: "wp-3",
-      weekNumber: 1,
-      group: "Group C (Stroke)",
-      submittedBy: "Student C1",
-      submissionDate: "2026-10-18",
-      identifiedCount: 16,
-      screenedCount: 9,
-      validatedCount: 3,
-      completedTasks: "Completed systematic landscape filtering. Documented NXY-059 and Nerinetide ESCAPE-NA1 studies.",
-      problems: "Huge number of rehabilitation and non-drug trials required aggressive filtering.",
-      contributions: "Student C1 searched acute stroke trials and extracted NXY-059; Student C2 investigated Nerinetide interaction.",
-      nextSteps: "Focus exclusively on acute ischemic stroke treatment windows (<4.5h or <12h with EVT)."
+      week: 1,
+      student: "Student B1",
+      group: "GBM",
+      tasksCompleted: "Completed systematic landscape filtering for Glioblastoma. Documented CheckMate-143.",
+      trialsAddedVerified: "2 identified, 1 extracted (Nivolumab)",
+      challenges: "Distinguishing pseudoprogression from true tumor progression in clinical endpoints.",
+      nextSteps: "Establish criteria to separate newly diagnosed from recurrent GBM."
+    },
+    {
+      id: "wp-4",
+      week: 1,
+      student: "Student B2",
+      group: "GBM",
+      tasksCompleted: "Extracted Rindopepimut ACT IV study and verified Nivolumab CheckMate-143.",
+      trialsAddedVerified: "1 extracted (Rindopepimut), 1 verified (Nivolumab)",
+      challenges: "Investigating reasons for early futility termination in ACT IV.",
+      nextSteps: "Identify clinically successful benchmark approach (Temozolomide/TTFields)."
+    },
+    {
+      id: "wp-5",
+      week: 1,
+      student: "Student C1",
+      group: "Stroke",
+      tasksCompleted: "Filtered acute ischemic stroke trial landscape. Extracted NXY-059 SAINT II study.",
+      trialsAddedVerified: "2 identified, 1 extracted (NXY-059)",
+      challenges: "Filtering out non-drug physical therapy trials.",
+      nextSteps: "Focus exclusively on acute ischemic stroke treatment windows (<4.5h)."
+    },
+    {
+      id: "wp-6",
+      week: 1,
+      student: "Student C2",
+      group: "Stroke",
+      tasksCompleted: "Extracted Nerinetide ESCAPE-NA1 study and verified NXY-059 trial.",
+      trialsAddedVerified: "1 extracted (Nerinetide), 1 verified (NXY-059)",
+      challenges: "Understanding the drug-drug interaction between nerinetide and alteplase.",
+      nextSteps: "Compare neuroprotective agents vs reperfusion therapies."
     }
   ]
 };
 
+// Standardized Dropdown Options for Form and Codebook
+const DROPDOWN_OPTIONS = {
+  disease: ["Alzheimer's", "GBM", "Stroke"],
+  phase: ["Phase II", "Phase III", "Phase II–III"],
+  status: ["Completed", "Terminated"],
+  therapeuticApproach: ["Small molecule", "Antibody", "Biologic", "Cell therapy", "Other"],
+  adminRoute: ["Oral", "Intravenous", "Intrathecal", "Intranasal", "Other"],
+  treatmentObjective: ["Disease-modifying", "Symptomatic", "Neuroprotective", "Other"],
+  studyDesign: ["Randomized", "Non-randomized"],
+  controlGroup: ["Placebo", "Standard treatment", "Active comparator", "None"],
+  primaryEndpointResult: ["Met", "Not met", "Inconclusive", "Not reported"],
+  overallOutcome: ["Positive", "Negative", "Mixed / Inconclusive", "Not assessable"],
+  regulatoryApproval: ["Yes", "No", "Not applicable"],
+  factors: ["Yes", "No", "Unclear"],
+  verificationStatus: ["Pending", "Verified", "Needs revision"]
+};
+
 // Profile definitions mapping
 const USER_PROFILES = {
-  student_a1: { name: "Student A1", group: "Group A (Alzheimer's)", role: "Student Researcher", diseaseScope: "Alzheimer's Disease" },
-  student_a2: { name: "Student A2", group: "Group A (Alzheimer's)", role: "Student Researcher", diseaseScope: "Alzheimer's Disease" },
-  student_b1: { name: "Student B1", group: "Group B (Glioblastoma)", role: "Student Researcher", diseaseScope: "Glioblastoma" },
-  student_b2: { name: "Student B2", group: "Group B (Glioblastoma)", role: "Student Researcher", diseaseScope: "Glioblastoma" },
-  student_c1: { name: "Student C1", group: "Group C (Stroke)", role: "Student Researcher", diseaseScope: "Stroke" },
-  student_c2: { name: "Student C2", group: "Group C (Stroke)", role: "Student Researcher", diseaseScope: "Stroke" },
+  student_a1: { name: "Student A1", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
+  student_a2: { name: "Student A2", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
+  student_b1: { name: "Student B1", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
+  student_b2: { name: "Student B2", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
+  student_c1: { name: "Student C1", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
+  student_c2: { name: "Student C2", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
   supervisor: { name: "Dr. Nur Mustafaoğlu", group: "Supervisor", role: "Faculty / Project Supervisor", diseaseScope: "ALL" }
 };
