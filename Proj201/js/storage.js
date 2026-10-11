@@ -73,6 +73,7 @@ class StorageManager {
     }
 
     this.saveData(data);
+    if (window.cloudSync) window.cloudSync.syncTrial(trial);
     return trial;
   }
 
@@ -80,6 +81,7 @@ class StorageManager {
     const data = this.getData();
     data.trials = (data.trials || []).filter(t => t.id !== id);
     this.saveData(data);
+    if (window.cloudSync) window.cloudSync.deleteTrial(id);
   }
 
   // QC Log CRUD
@@ -97,6 +99,7 @@ class StorageManager {
     }
     data.qcLog.unshift(entry);
     this.saveData(data);
+    if (window.cloudSync) window.cloudSync.syncQcEntry(entry);
     return entry;
   }
 
@@ -113,6 +116,7 @@ class StorageManager {
       if (task) {
         task.completed = completed;
         this.saveData(data);
+        if (window.cloudSync) window.cloudSync.syncTasks(data.weeks, data.finalChecklist);
       }
     }
   }
@@ -127,6 +131,7 @@ class StorageManager {
     if (item) {
       item.checked = checked;
       this.saveData(data);
+      if (window.cloudSync) window.cloudSync.syncTasks(data.weeks, data.finalChecklist);
     }
   }
 
@@ -141,6 +146,7 @@ class StorageManager {
     if (!report.submissionDate) report.submissionDate = new Date().toISOString().split('T')[0];
     data.weeklyProgress.unshift(report);
     this.saveData(data);
+    if (window.cloudSync) window.cloudSync.syncWeeklyReport(report);
     return report;
   }
 
@@ -155,6 +161,7 @@ class StorageManager {
     if (!log.id) log.id = 'search-' + Date.now();
     data.searchLogs.unshift(log);
     this.saveData(data);
+    if (window.cloudSync) window.cloudSync.syncSearchLog(log);
     return log;
   }
 

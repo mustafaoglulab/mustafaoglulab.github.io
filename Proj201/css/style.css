@@ -1680,3 +1680,84 @@ a:hover {
   font-weight: 600;
   color: var(--color-text-main);
 }
+
+/* ==========================================================================
+   FIREBASE CLOUD DATABASE SYNC STYLES
+   ========================================================================== */
+
+.cloud-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.cloud-status-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.cloud-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cloud-status-pill.status-connected {
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #a7f3d0;
+}
+
+.cloud-status-pill.status-connected .cloud-status-dot {
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+  animation: pulseAnim 2s infinite;
+}
+
+.cloud-status-pill.status-disconnected {
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fde68a;
+}
+
+.cloud-status-pill.status-disconnected .cloud-status-dot {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+}
+
+.cloud-status-pill.status-syncing .cloud-status-dot {
+  background-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+  animation: pulseAnim 0.8s infinite;
+}
+
+.cloud-status-card {
+  background: #f8fafc;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.cloud-status-dot-large {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.bg-success { background-color: #10b981 !important; box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
+.bg-warning { background-color: #f59e0b !important; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
+.bg-danger { background-color: #ef4444 !important; }
+

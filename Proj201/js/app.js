@@ -15,6 +15,7 @@ class AppController {
       this.initUserProfile();
       this.initDataToolsDropdown();
       this.initImportModal();
+      this.initCloudModal();
       this.initGlobalEvents();
 
       // Trigger initial renders
@@ -220,6 +221,133 @@ class AppController {
   closeImportModal() {
     const modalBackdrop = document.getElementById('importModalBackdrop');
     if (modalBackdrop) modalBackdrop.classList.add('d-none');
+  }
+
+  initCloudModal() {
+    const btnStatus = document.getElementById('btnCloudStatus');
+    const btnOpenConfig = document.getElementById('btnOpenCloudConfig');
+    const btnClose = document.getElementById('btnCloseCloudModal');
+    const btnCancel = document.getElementById('btnCancelCloudModal');
+    const btnSave = document.getElementById('btnSaveCloudConfig');
+    const btnDisconnect = document.getElementById('btnDisconnectCloud');
+    const btnPush = document.getElementById('btnPushLocalToCloud');
+
+    if (btnStatus) btnStatus.addEventListener('click', () => this.openCloudModal());
+    if (btnOpenConfig) btnOpenConfig.addEventListener('click', () => this.openCloudModal());
+    if (btnClose) btnClose.addEventListener('click', () => this.closeCloudModal());
+    if (btnCancel) btnCancel.addEventListener('click', () => this.closeCloudModal());
+
+    if (btnSave) {
+      btnSave.addEventListener('click', async () => {
+        const rawInput = document.getElementById('firebaseConfigInput').value.trim();
+        if (!rawInput) {
+          alert('Please paste your Firebase configuration object.');
+          return;
+        }
+
+        let parsedConfig = null;
+        try {
+          // Attempt standard JSON parse
+          parsedConfig = JSON.parse(rawInput);
+        } catch (e) {
+          // Attempt regex extraction of key properties from JavaScript snippet
+          try {
+            const extract = (key) => {
+              const match = rawInput.match(new RegExp(`${key}\\s*:\\s*["']([^"']+)["']`));
+              return match ? match[1] : '';
+            };
+            parsedConfig = {
+              apiKey: extract('apiKey'),
+              authDomain: extract('authDomain'),
+              projectId: extract('projectId'),
+              storageBucket: extract('storageBucket'),
+              messagingSenderId: extract('messagingSenderId'),
+              appId: extract('appId')
+            };
+            if (!parsedConfig.apiKey || !parsedConfig.projectId) {
+              throw new Error('Missing apiKey or projectId in config.');
+            }
+          } catch (err) {
+            alert('Failed to parse Firebase configuration. Please ensure you paste valid JSON or the standard firebaseConfig snippet from Firebase console.');
+            return;
+          }
+        }
+
+        btnSave.disabled = true;
+        btnSave.textContent = 'Testing & Connecting...';
+
+        const result = await window.cloudSync.saveConfig(parsedConfig);
+        btnSave.disabled = false;
+        btnSave.textContent = 'Test & Connect to Firebase';
+
+        if (result.success) {
+          this.updateCloudModalView();
+          this.showToast('Successfully connected to Google Firebase Firestore! Real-time sync enabled.', 'success');
+        } else {
+          alert('Connection failed: ' + result.error);
+        }
+      });
+    }
+
+    if (btnDisconnect) {
+      btnDisconnect.addEventListener('click', () => {
+        const confirmed = confirm('Disconnect from Firebase cloud database? The app will operate in local browser mode.');
+        if (confirmed) {
+          window.cloudSync.clearConfig();
+          this.updateCloudModalView();
+          this.showToast('Disconnected from cloud. Switched to local mode.', 'info');
+        }
+      });
+    }
+
+    if (btnPush) {
+      btnPush.addEventListener('click', async () => {
+        btnPush.disabled = true;
+        btnPush.textContent = 'Uploading...';
+        const res = await window.cloudSync.pushAllLocalDataToCloud();
+        btnPush.disabled = false;
+        btnPush.textContent = 'Upload Current Local Trials to Cloud';
+
+        if (res.success) {
+          this.showToast(`Uploaded ${res.count} trials to Firebase cloud successfully!`, 'success');
+        } else {
+          alert('Upload error: ' + res.error);
+        }
+      });
+    }
+  }
+
+  openCloudModal() {
+    this.updateCloudModalView();
+    const modal = document.getElementById('cloudSettingsModalBackdrop');
+    if (modal) modal.classList.remove('d-none');
+  }
+
+  closeCloudModal() {
+    const modal = document.getElementById('cloudSettingsModalBackdrop');
+    if (modal) modal.classList.add('d-none');
+  }
+
+  updateCloudModalView() {
+    const isConn = window.cloudSync && window.cloudSync.isConnected;
+    const dot = document.getElementById('modalCloudDot');
+    const statusText = document.getElementById('modalCloudStatusText');
+    const subText = document.getElementById('modalCloudSubText');
+    const btnDisconnect = document.getElementById('btnDisconnectCloud');
+    const textarea = document.getElementById('firebaseConfigInput');
+
+    if (dot) dot.className = `cloud-status-dot-large ${isConn ? 'bg-success' : 'bg-warning'}`;
+    if (statusText) statusText.textContent = isConn ? 'Connected to Firebase Firestore' : 'Not Connected to Firebase';
+    if (subText) subText.textContent = isConn ? 'Live real-time sync active across all student browsers.' : 'Operating in local browser storage mode.';
+    if (btnDisconnect) {
+      if (isConn) btnDisconnect.classList.remove('d-none');
+      else btnDisconnect.classList.add('d-none');
+    }
+
+    const cfg = window.cloudSync ? window.cloudSync.getConfig() : null;
+    if (textarea && cfg) {
+      textarea.value = JSON.stringify(cfg, null, 2);
+    }
   }
 
   initGlobalEvents() {

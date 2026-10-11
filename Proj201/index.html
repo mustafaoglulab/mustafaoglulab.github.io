@@ -14,6 +14,10 @@
   
   <!-- Chart.js for Interactive Analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Google Firebase Cloud Database (Compat SDK for GitHub Pages static hosting) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -59,6 +63,12 @@
           </select>
         </div>
 
+        <!-- Cloud Database Status Pill -->
+        <button id="btnCloudStatus" class="cloud-status-pill status-disconnected" title="Click to configure or view Firebase Cloud Database status">
+          <span class="cloud-status-dot"></span>
+          <span id="cloudStatusText">Cloud Setup</span>
+        </button>
+
         <button id="btnNewTrial" class="btn btn-primary" title="Add a new clinical trial entry">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
           Add Clinical Trial
@@ -70,6 +80,10 @@
             Data Tools
           </button>
           <div class="dropdown-menu" id="dataActionsDropdown">
+            <button class="dropdown-item" id="btnOpenCloudConfig">
+              <span>Firebase Cloud DB Settings</span>
+            </button>
+            <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="btnExportJSON">
               <span>Export All as JSON (Full Backup)</span>
             </button>
@@ -1555,11 +1569,80 @@
     </div>
   </div>
 
+  <!-- MODAL 7: FIREBASE CLOUD DATABASE SETTINGS -->
+  <div class="modal-backdrop d-none" id="cloudSettingsModalBackdrop">
+    <div class="modal-dialog modal-lg" role="dialog" aria-modal="true" aria-labelledby="cloudModalTitle">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-amber">
+          <div>
+            <h3 class="modal-title text-dark" id="cloudModalTitle">Google Firebase Cloud Database Configuration</h3>
+            <p class="modal-subtitle text-dark text-opacity-75">100% Free Real-Time Sync between all 6 students and Dr. Nur Mustafaoğlu.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnCloseCloudModal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Connection Status Card -->
+          <div class="cloud-status-card mb-3" id="cloudStatusCard">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-2">
+                <span class="cloud-status-dot-large" id="modalCloudDot"></span>
+                <div>
+                  <strong id="modalCloudStatusText">Not Connected to Firebase</strong>
+                  <div class="text-xs text-muted" id="modalCloudSubText">Operating in local browser storage mode.</div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-danger btn-sm d-none" id="btnDisconnectCloud">Disconnect Cloud</button>
+            </div>
+          </div>
+
+          <!-- Quick 3-Minute Setup Guide -->
+          <div class="alert alert-important mb-3">
+            <h5 class="mb-1 text-primary">How to set up your free Firebase Database (3 minutes, no credit card):</h5>
+            <ol class="text-xs mb-0 pl-3">
+              <li>Visit <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer"><strong>console.firebase.google.com &nearr;</strong></a> and log in with your Google / Sabancı account.</li>
+              <li>Click <strong>Add project</strong> (e.g. <code>proj201-sabanci</code>), click continue, then disable Google Analytics and click <strong>Create project</strong>.</li>
+              <li>In the left sidebar, click <strong>Build &rarr; Firestore Database</strong>, then click <strong>Create database</strong>. Choose <strong>Start in test mode</strong> (or allow read/write rules).</li>
+              <li>Click Project Overview ⚙️ (Settings) &rarr; <strong>Project settings</strong> &rarr; scroll to <em>Your apps</em> &rarr; click Web (<code>&lt;/&gt;</code>) icon &rarr; Register app &rarr; copy the <code>firebaseConfig = { ... }</code> snippet and paste it below!</li>
+            </ol>
+          </div>
+
+          <div class="form-group">
+            <label for="firebaseConfigInput">Paste your <code>firebaseConfig</code> object or JSON here:</label>
+            <textarea id="firebaseConfigInput" rows="6" class="form-control font-mono text-xs" placeholder='const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "proj201-trials.firebaseapp.com",
+  projectId: "proj201-trials",
+  storageBucket: "proj201-trials.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};'></textarea>
+            <small class="form-hint">Tip: You can paste the whole snippet or just the JSON object. The system will automatically parse it.</small>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" id="btnPushLocalToCloud">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              Upload Current Local Trials to Cloud
+            </button>
+            <span class="text-xs text-muted">Real-time sync occurs automatically when connected!</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelCloudModal">Close</button>
+          <button type="button" class="btn btn-primary" id="btnSaveCloudConfig">
+            Test &amp; Connect to Firebase
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- JAVASCRIPT APPLICATION MODULES -->
   <script src="js/data.js"></script>
+  <script src="js/cloudSync.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/trialTable.js"></script>
   <script src="js/trialForm.js"></script>
