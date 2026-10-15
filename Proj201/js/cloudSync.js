@@ -82,13 +82,170 @@ class CloudSyncAdapter {
 
   init() {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => this.autoConnect());
+      document.addEventListener('DOMContentLoaded', () => this.startAuth());
     } else {
-      this.autoConnect();
+      this.startAuth();
+    }
+  }
+
+  // ==========================================
+  // AUTHENTICATION (Google Sign-In, email allowlist enforced by DB rules)
+  // ==========================================
+  ensureApp(config) {
+    if (typeof firebase === 'undefined') return null;
+    if (!this.app) {
+      this.app = (firebase.apps && firebase.apps.length) ? firebase.app() : firebase.initializeApp(config || DEFAULT_FIREBASE_CONFIG);
+    }
+    return this.app;
+  }
+
+  startAuth() {
+    this.user = null;
+    this.injectAuthUI();
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
+      this.showAuthGate('Sign-in library failed to load. Please check your connection and reload.');
+      return;
+    }
+    this.ensureApp(this.getConfig() || DEFAULT_FIREBASE_CONFIG);
+    firebase.auth().onAuthStateChanged(user => {
+      this.user = user;
+      this.renderUserBadge();
+      if (user) {
+        this.hideAuthGate();
+        this.autoConnect();
+      } else {
+        this.disconnect();
+        this.updateStatusUI(false, 'Signed Out');
+        this.showAuthGate();
+      }
+    });
+  }
+
+  async signIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account', hd: 'sabanciuniv.edu' });
+    try {
+      await firebase.auth().signInWithPopup(provider);
+    } catch (e) {
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
+        return firebase.auth().signInWithRedirect(provider);
+      }
+      if (e && e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+        this.showAuthGate('Sign-in failed: ' + (e.message || e.code));
+      }
+    }
+  }
+
+  signOut() {
+    if (typeof firebase !== 'undefined' && firebase.auth) firebase.auth().signOut();
+  }
+
+  async getToken() {
+    if (!this.user) return null;
+    try { return await this.user.getIdToken(); } catch (e) { return null; }
+  }
+
+  // Builds an authenticated REST URL for the Realtime Database
+  async restUrl(dbUrl, path, extra = '') {
+    const token = await this.getToken();
+    const params = [];
+    if (token) params.push('auth=' + encodeURIComponent(token));
+    if (extra) params.push(extra);
+    return `${dbUrl}/${path}.json${params.length ? '?' + params.join('&') : ''}`;
+  }
+
+  handleDenied() {
+    const email = this.user ? this.user.email : '';
+    this.disconnect();
+    this.updateStatusUI(false, 'Access Denied');
+    this.showAuthGate(`<strong>${email}</strong> is not on the PROJ 201 access list. Please sign in with your approved Sabancı account or contact Dr. Nur Mustafaoglu.`, true);
+  }
+
+  injectAuthUI() {
+    if (document.getElementById('authGate')) return;
+    const style = document.createElement('style');
+    style.textContent = `
+      #authGate{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;
+        background:radial-gradient(circle at 30% 20%,rgba(99,102,241,.35),transparent 55%),radial-gradient(circle at 75% 80%,rgba(20,184,166,.3),transparent 55%),rgba(10,12,24,.92);
+        backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-family:inherit}
+      #authGate.open{display:flex;animation:authFade .35s ease}
+      @keyframes authFade{from{opacity:0}to{opacity:1}}
+      .auth-card{width:min(420px,92vw);padding:40px 34px;border-radius:22px;text-align:center;color:#e8eaf6;
+        background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 70px rgba(0,0,0,.45)}
+      .auth-card h2{margin:0 0 6px;font-size:1.6rem;letter-spacing:.3px}
+      .auth-card p{margin:0 0 26px;color:#aab0d0;font-size:.95rem;line-height:1.5}
+      .auth-msg{margin:-8px 0 20px;padding:12px 14px;border-radius:12px;font-size:.88rem;background:rgba(244,63,94,.14);border:1px solid rgba(244,63,94,.35);color:#fecdd3;display:none}
+      .auth-msg.show{display:block}
+      .auth-google{display:inline-flex;align-items:center;gap:12px;padding:13px 26px;border:none;border-radius:999px;cursor:pointer;
+        background:#fff;color:#1f2937;font-weight:600;font-size:.98rem;transition:transform .15s ease,box-shadow .2s ease}
+      .auth-google:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(99,102,241,.45)}
+      .auth-foot{margin-top:22px;font-size:.78rem;color:#7c83a8}
+      #authUserBadge{display:none;align-items:center;gap:8px;font-size:.8rem;margin-left:10px;color:inherit}
+      #authUserBadge img{width:26px;height:26px;border-radius:50%}
+      #authUserBadge button{background:transparent;border:1px solid rgba(127,127,160,.45);color:inherit;border-radius:999px;padding:4px 10px;cursor:pointer;font-size:.75rem}
+      #authUserBadge button:hover{background:rgba(127,127,160,.18)}
+    `;
+    document.head.appendChild(style);
+
+    const gate = document.createElement('div');
+    gate.id = 'authGate';
+    gate.setAttribute('role', 'dialog');
+    gate.setAttribute('aria-modal', 'true');
+    gate.innerHTML = `
+      <div class="auth-card">
+        <h2>PROJ 201 Trial Database</h2>
+        <p>Mustafaoglu Lab · Sabancı University<br>Sign in with your approved Sabancı Google account to continue.</p>
+        <div class="auth-msg" id="authMsg"></div>
+        <button class="auth-google" id="btnGoogleSignIn" type="button">
+          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+          <span id="btnGoogleSignInLabel">Sign in with Google</span>
+        </button>
+        <div class="auth-foot">Access is limited to the PROJ 201 team.</div>
+      </div>`;
+    document.body.appendChild(gate);
+    document.getElementById('btnGoogleSignIn').addEventListener('click', () => {
+      if (this.user) { firebase.auth().signOut().then(() => this.signIn()); } else { this.signIn(); }
+    });
+
+    const badge = document.createElement('div');
+    badge.id = 'authUserBadge';
+    badge.innerHTML = `<img id="authUserPhoto" alt="" referrerpolicy="no-referrer"><span id="authUserEmail"></span><button id="btnSignOut" type="button">Sign out</button>`;
+    const pill = document.getElementById('btnCloudStatus');
+    if (pill && pill.parentNode) pill.parentNode.insertBefore(badge, pill.nextSibling);
+    else document.body.appendChild(badge);
+    document.getElementById('btnSignOut').addEventListener('click', () => this.signOut());
+  }
+
+  showAuthGate(message = '', switchAccount = false) {
+    const gate = document.getElementById('authGate');
+    const msg = document.getElementById('authMsg');
+    const label = document.getElementById('btnGoogleSignInLabel');
+    if (!gate) return;
+    if (msg) { msg.innerHTML = message; msg.classList.toggle('show', !!message); }
+    if (label) label.textContent = switchAccount ? 'Use a different account' : 'Sign in with Google';
+    gate.classList.add('open');
+  }
+
+  hideAuthGate() {
+    const gate = document.getElementById('authGate');
+    if (gate) gate.classList.remove('open');
+  }
+
+  renderUserBadge() {
+    const badge = document.getElementById('authUserBadge');
+    if (!badge) return;
+    if (this.user) {
+      document.getElementById('authUserEmail').textContent = this.user.email || '';
+      const photo = document.getElementById('authUserPhoto');
+      if (this.user.photoURL) { photo.src = this.user.photoURL; photo.style.display = ''; } else { photo.style.display = 'none'; }
+      badge.style.display = 'inline-flex';
+    } else {
+      badge.style.display = 'none';
     }
   }
 
   autoConnect() {
+    if (!this.user) return;
     const config = this.getConfig();
     if (config) {
       this.connect(config);
@@ -112,13 +269,11 @@ class CloudSyncAdapter {
       }
 
       // 2. Initialize Firebase Web SDK for live realtime WebSocket events
+      if (this.denied) return { success: false, error: 'Access denied' };
       if (typeof firebase !== 'undefined' && typeof firebase.initializeApp === 'function') {
         try {
-          if (firebase.apps && firebase.apps.length) {
-            await Promise.all(firebase.apps.map(a => a.delete().catch(() => {})));
-          }
-
-          this.app = firebase.initializeApp(config);
+          // Reuse the existing app so the signed-in session is preserved
+          this.ensureApp(config);
 
           if (typeof firebase.database === 'function') {
             this.rtdb = firebase.database();
@@ -177,9 +332,15 @@ class CloudSyncAdapter {
 
   // Instant HTTPS REST Fetch Fallback (ultra-reliable, never hangs)
   async fetchRestData(dbUrl, silent = false) {
-    if (!dbUrl) return false;
+    if (!dbUrl || !this.user) return false;
     try {
-      const res = await fetch(`${dbUrl}/.json?_t=${Date.now()}`);
+      this.denied = false;
+      const res = await fetch(await this.restUrl(dbUrl, '', `_t=${Date.now()}`));
+      if (res.status === 401 || res.status === 403) {
+        this.denied = true;
+        this.handleDenied();
+        return false;
+      }
       if (!res.ok) return false;
 
       const cloudData = await res.json();
@@ -351,7 +512,7 @@ class CloudSyncAdapter {
         this.rtdb.ref(`proj201_trials/${trial.id}`).set(trial).catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_trials/${trial.id}.json`, {
+        fetch(await this.restUrl(dbUrl, `proj201_trials/${trial.id}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(trial)
@@ -371,7 +532,7 @@ class CloudSyncAdapter {
         this.rtdb.ref(`proj201_trials/${trialId}`).remove().catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_trials/${trialId}.json`, { method: 'DELETE' }).catch(() => {});
+        fetch(await this.restUrl(dbUrl, `proj201_trials/${trialId}`), { method: 'DELETE' }).catch(() => {});
       }
       setTimeout(() => this.updateStatusUI(true, 'Cloud Synced'), 400);
     } catch (e) {
@@ -386,7 +547,7 @@ class CloudSyncAdapter {
         this.rtdb.ref(`proj201_weekly_progress/${row.id}`).set(row).catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_weekly_progress/${row.id}.json`, {
+        fetch(await this.restUrl(dbUrl, `proj201_weekly_progress/${row.id}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
@@ -404,7 +565,7 @@ class CloudSyncAdapter {
         this.rtdb.ref(`proj201_search_logs/${log.id}`).set(log).catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_search_logs/${log.id}.json`, {
+        fetch(await this.restUrl(dbUrl, `proj201_search_logs/${log.id}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(log)
@@ -422,7 +583,7 @@ class CloudSyncAdapter {
         this.rtdb.ref(`proj201_search_logs/${logId}`).remove().catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_search_logs/${logId}.json`, { method: 'DELETE' }).catch(() => {});
+        fetch(await this.restUrl(dbUrl, `proj201_search_logs/${logId}`), { method: 'DELETE' }).catch(() => {});
       }
     } catch (e) {
       console.error('Error deleting search log:', e);
@@ -437,7 +598,7 @@ class CloudSyncAdapter {
         this.rtdb.ref('proj201_meta/searchMatrix').set(payload).catch(() => {});
       }
       if (dbUrl) {
-        fetch(`${dbUrl}/proj201_meta/searchMatrix.json`, {
+        fetch(await this.restUrl(dbUrl, 'proj201_meta/searchMatrix'), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -469,7 +630,7 @@ class CloudSyncAdapter {
       }
 
       if (dbUrl) {
-        await fetch(`${dbUrl}/.json`, {
+        await fetch(await this.restUrl(dbUrl, ''), {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

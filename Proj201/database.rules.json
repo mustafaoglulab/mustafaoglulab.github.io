@@ -1,0 +1,21 @@
+{
+  "rules": {
+    ".read": "auth != null && auth.token.email_verified === true && root.child('proj201_allowlist').child(auth.token.email.replace('.', ',')).val() === true",
+
+    "proj201_allowlist": {
+      ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'nur.mustafaoglu@sabanciuniv.edu'"
+    },
+    "proj201_trials": {
+      ".write": "auth != null && auth.token.email_verified === true && root.child('proj201_allowlist').child(auth.token.email.replace('.', ',')).val() === true"
+    },
+    "proj201_weekly_progress": {
+      ".write": "auth != null && auth.token.email_verified === true && root.child('proj201_allowlist').child(auth.token.email.replace('.', ',')).val() === true"
+    },
+    "proj201_search_logs": {
+      ".write": "auth != null && auth.token.email_verified === true && root.child('proj201_allowlist').child(auth.token.email.replace('.', ',')).val() === true"
+    },
+    "proj201_meta": {
+      ".write": "auth != null && auth.token.email_verified === true && root.child('proj201_allowlist').child(auth.token.email.replace('.', ',')).val() === true"
+    }
+  }
+}
