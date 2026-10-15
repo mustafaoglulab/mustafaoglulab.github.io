@@ -71,8 +71,8 @@ const SEED_DATA = {
       limitations: "Modest clinical effect size; safety risk in ApoE4 homozygotes and anticoagulated patients; high healthcare resource requirements for infusion and MRI.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student A1",
-      verifiedBy: "Student A2",
+      extractedBy: "Yulian Ye",
+      verifiedBy: "Zara Shaikh",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-14",
       comments: "Key positive benchmark trial for Group A (Alzheimer's)."
@@ -129,8 +129,8 @@ const SEED_DATA = {
       limitations: "Conducted in mild-to-moderate patients without mandatory amyloid PET pre-screening.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student A2",
-      verifiedBy: "Student A1",
+      extractedBy: "Zara Shaikh",
+      verifiedBy: "Yulian Ye",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-15",
       comments: "Classic negative example demonstrating mechanism-based off-target toxicity despite excellent BBB penetration."
@@ -187,8 +187,8 @@ const SEED_DATA = {
       limitations: "Did not pre-screen with amyloid PET; retrospective analyses suggested up to 20% of clinically diagnosed patients lacked amyloid burden.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student A1",
-      verifiedBy: "Student A2",
+      extractedBy: "Yulian Ye",
+      verifiedBy: "Zara Shaikh",
       verificationStatus: "Pending",
       lastUpdated: "2026-10-15",
       comments: "Needs partner review on ARIA-E subgroup percentages."
@@ -247,8 +247,8 @@ const SEED_DATA = {
       limitations: "Did not pre-select patients based on PD-L1 expression, MGMT methylation, or tumor mutational burden status.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student B1",
-      verifiedBy: "Student B2",
+      extractedBy: "Batool Fatima",
+      verifiedBy: "Selim Baykal",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-14",
       comments: "Key trial demonstrating challenges of systemic immunotherapy in primary brain tumors."
@@ -305,8 +305,8 @@ const SEED_DATA = {
       limitations: "Only assessed newly diagnosed patients with confirmed EGFRvIII mutation at initial surgery.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student B2",
-      verifiedBy: "Student B1",
+      extractedBy: "Selim Baykal",
+      verifiedBy: "Batool Fatima",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-15",
       comments: "Seminal illustration of clonal heterogeneity defeating targeted therapy in Glioblastoma."
@@ -363,8 +363,8 @@ const SEED_DATA = {
       limitations: "Conducted prior to 2010 window; included as foundational historical benchmark as authorized in Handbook Section 4.2.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student B1",
-      verifiedBy: "Student B2",
+      extractedBy: "Batool Fatima",
+      verifiedBy: "Selim Baykal",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-15",
       comments: "Benchmark comparison standard for Glioblastoma."
@@ -423,8 +423,8 @@ const SEED_DATA = {
       limitations: "6-hour treatment window was likely too wide for neuroprotection in the absence of documented vessel recanalization.",
 
       // G. Data quality and teamwork
-      extractedBy: "Student C1",
-      verifiedBy: "Student C2",
+      extractedBy: "Ahmet Yusuf Hüseyin",
+      verifiedBy: "Nur Lyana Ameera Binti Abdullah",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-14",
       comments: "The benchmark case study for preclinical translation failure in neuroprotection."
@@ -481,8 +481,8 @@ const SEED_DATA = {
       limitations: "Subgroup benefit was pre-specified but requires replication in an independent trial of thrombectomy without alteplase (ESCAPE-NEXT).",
 
       // G. Data quality and teamwork
-      extractedBy: "Student C2",
-      verifiedBy: "Student C1",
+      extractedBy: "Nur Lyana Ameera Binti Abdullah",
+      verifiedBy: "Ahmet Yusuf Hüseyin",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-15",
       comments: "Fascinating example of translational pharmacology and drug-drug enzymatic interaction in acute stroke."
@@ -539,8 +539,8 @@ const SEED_DATA = {
       limitations: "Narrow therapeutic window (expanded later to 4.5h); strict exclusion criteria (bleeding risk, blood pressure, recent surgery).",
 
       // G. Data quality and teamwork
-      extractedBy: "Student C1",
-      verifiedBy: "Student C2",
+      extractedBy: "Ahmet Yusuf Hüseyin",
+      verifiedBy: "Nur Lyana Ameera Binti Abdullah",
       verificationStatus: "Verified",
       lastUpdated: "2026-10-15",
       comments: "Foundational benchmark comparator for Stroke."
@@ -559,7 +559,7 @@ const SEED_DATA = {
       filtersApplied: "Interventional | Early Phase 1, Phase 1, 2, 3, 4 | Completed, Terminated, Withdrawn | Drug, Biological | 2000–2026 | Outcomes / Reasons Available",
       sourceUrl: "https://clinicaltrials.gov/search?cond=Alzheimer+Disease&type=Intr&stat=c&stat=t&stat=w&int=drug&int=bio",
       resultsCount: 469,
-      student: "Student A1",
+      student: "Yulian Ye",
       notes: "Registry query confirms 469 studies with posted outcome results or failure documentation (2000–2026 cohort)."
     },
     {
@@ -572,7 +572,7 @@ const SEED_DATA = {
       filtersApplied: "Interventional | Early Phase 1, Phase 1, 2, 3, 4 | Completed, Terminated, Withdrawn | Drug, Biological | 2000–2026 | Outcomes / Reasons Available",
       sourceUrl: "https://clinicaltrials.gov/search?cond=Glioblastoma&type=Intr&stat=c&stat=t&stat=w&int=drug&int=bio",
       resultsCount: 354,
-      student: "Student B1",
+      student: "Batool Fatima",
       notes: "Registry query confirms 354 studies with posted outcome results or termination documentation (2000–2026 cohort)."
     },
     {
@@ -585,7 +585,7 @@ const SEED_DATA = {
       filtersApplied: "Interventional | Early Phase 1, Phase 1, 2, 3, 4 | Completed, Terminated, Withdrawn | Drug, Biological | 2000–2026 | Outcomes / Reasons Available",
       sourceUrl: "https://clinicaltrials.gov/search?cond=Stroke&type=Intr&stat=c&stat=t&stat=w&int=drug&int=bio",
       resultsCount: 266,
-      student: "Student C1",
+      student: "Ahmet Yusuf Hüseyin",
       notes: "Registry query confirms 266 studies with posted outcome results or termination documentation (2000–2026 cohort)."
     }
   ],
@@ -595,7 +595,7 @@ const SEED_DATA = {
     {
       id: "wp-1",
       week: 1,
-      student: "Student A1",
+      student: "Yulian Ye",
       group: "Alzheimer's",
       tasksCompleted: "Completed 7-step systematic ClinicalTrials.gov search. Initialized 02_SEARCH_LOG.",
       trialsAddedVerified: "2 identified (Lecanemab, Bapineuzumab)",
@@ -605,7 +605,7 @@ const SEED_DATA = {
     {
       id: "wp-2",
       week: 1,
-      student: "Student A2",
+      student: "Zara Shaikh",
       group: "Alzheimer's",
       tasksCompleted: "Extracted Semagacestat trial data; verified Lecanemab entry.",
       trialsAddedVerified: "1 extracted (Semagacestat), 1 verified (Lecanemab)",
@@ -615,7 +615,7 @@ const SEED_DATA = {
     {
       id: "wp-3",
       week: 1,
-      student: "Student B1",
+      student: "Batool Fatima",
       group: "GBM",
       tasksCompleted: "Completed systematic landscape filtering for Glioblastoma. Documented CheckMate-143.",
       trialsAddedVerified: "2 identified, 1 extracted (Nivolumab)",
@@ -625,7 +625,7 @@ const SEED_DATA = {
     {
       id: "wp-4",
       week: 1,
-      student: "Student B2",
+      student: "Selim Baykal",
       group: "GBM",
       tasksCompleted: "Extracted Rindopepimut ACT IV study and verified Nivolumab CheckMate-143.",
       trialsAddedVerified: "1 extracted (Rindopepimut), 1 verified (Nivolumab)",
@@ -635,7 +635,7 @@ const SEED_DATA = {
     {
       id: "wp-5",
       week: 1,
-      student: "Student C1",
+      student: "Ahmet Yusuf Hüseyin",
       group: "Stroke",
       tasksCompleted: "Filtered acute ischemic stroke trial landscape. Extracted NXY-059 SAINT II study.",
       trialsAddedVerified: "2 identified, 1 extracted (NXY-059)",
@@ -645,7 +645,7 @@ const SEED_DATA = {
     {
       id: "wp-6",
       week: 1,
-      student: "Student C2",
+      student: "Nur Lyana Ameera Binti Abdullah",
       group: "Stroke",
       tasksCompleted: "Extracted Nerinetide ESCAPE-NA1 study and verified NXY-059 trial.",
       trialsAddedVerified: "1 extracted (Nerinetide), 1 verified (NXY-059)",
@@ -674,11 +674,11 @@ const DROPDOWN_OPTIONS = {
 
 // Profile definitions mapping
 const USER_PROFILES = {
-  student_a1: { name: "Student A1", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
-  student_a2: { name: "Student A2", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
-  student_b1: { name: "Student B1", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
-  student_b2: { name: "Student B2", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
-  student_c1: { name: "Student C1", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
-  student_c2: { name: "Student C2", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
+  student_a1: { name: "Yulian Ye", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
+  student_a2: { name: "Zara Shaikh", group: "Alzheimer's", role: "Student Researcher", diseaseScope: "Alzheimer's" },
+  student_b1: { name: "Batool Fatima", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
+  student_b2: { name: "Selim Baykal", group: "GBM", role: "Student Researcher", diseaseScope: "GBM" },
+  student_c1: { name: "Ahmet Yusuf Hüseyin", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
+  student_c2: { name: "Nur Lyana Ameera Binti Abdullah", group: "Stroke", role: "Student Researcher", diseaseScope: "Stroke" },
   supervisor: { name: "Dr. Nur Mustafaoğlu", group: "Supervisor", role: "Faculty / Project Supervisor", diseaseScope: "ALL" }
 };

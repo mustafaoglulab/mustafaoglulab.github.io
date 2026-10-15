@@ -138,12 +138,12 @@ class TrialFormController {
 
     if (verifiedInput) {
       const partnerMap = {
-        'Student A1': 'Student A2',
-        'Student A2': 'Student A1',
-        'Student B1': 'Student B2',
-        'Student B2': 'Student B1',
-        'Student C1': 'Student C2',
-        'Student C2': 'Student C1'
+        'Yulian Ye': 'Zara Shaikh',
+        'Zara Shaikh': 'Yulian Ye',
+        'Batool Fatima': 'Selim Baykal',
+        'Selim Baykal': 'Batool Fatima',
+        'Ahmet Yusuf Hüseyin': 'Nur Lyana Ameera Binti Abdullah',
+        'Nur Lyana Ameera Binti Abdullah': 'Ahmet Yusuf Hüseyin'
       };
       verifiedInput.value = partnerMap[activeProfile.name] || 'Teammate';
     }
