@@ -319,8 +319,8 @@
     {
         "name": "Ahmet Baki",
         "surname": "Sahin",
-        "code": "MSc",
-        "role": "MSc Student",
+        "code": "PhD",
+        "role": "PhD Student",
         "duration": "(09/2023 - )",
         "img": "pictures/AhmetBakiSahin.jpg",
         "about": "is a master's student in the BIO program at SU and received his bachelor's degree from the KFAU. His research interests are neurobiology and drug delivery.",
@@ -370,6 +370,20 @@
         "links": {
             "email": "aysenur.keklik@sabanciuniv.edu",
             "linkedin": "https://www.linkedin.com/in/ayşenur-berra-keklik-99b580223/"
+        }
+    },
+
+    {
+        "name": "Mustafa Eren",
+        "surname": "Yildiz",
+        "code": "MSc",
+        "role": "MSc Student",
+        "duration": "(09/2026 - )",
+        "img": "pictures/MustafaErenYildiz.jpeg",
+        "about": "a MSc student in the BIO program at SU. He received his BSc in MBG from GTU. His research interests include drug delivery systems, neurobiology, stem cells and cancer biology. Outside the lab, he enjoys reading, hiking, and watching classic films.",
+        "links": {
+            "email": "eren.yildiz1@sabanciuniv.edu",
+            "linkedin": "https://www.linkedin.com/in/mustafa-eren-yildiz"
         }
     },
 
